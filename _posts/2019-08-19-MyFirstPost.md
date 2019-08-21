@@ -3,7 +3,9 @@ layout: post
 title:  "Welcome to My Site!"
 ---
 
-{% include branch.liquid %}
+{{ {% include branch.liquid %} }}
+
+{% include_relative test.liquid %}
 
 # Welcome
 
