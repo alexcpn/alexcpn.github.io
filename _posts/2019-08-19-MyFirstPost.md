@@ -11,11 +11,11 @@ title:  "Welcome to My Site!"
 
 I hope you like it!
 
-Using 
+using relative include
 
 {{ raw }}
 {% include_relative test.liquid %}
 {{ endraw }}
-using relative include
+
 
 This is the current branch {{ branchName }}
