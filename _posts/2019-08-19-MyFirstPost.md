@@ -3,6 +3,8 @@ layout: post
 title:  "Welcome to My Site!"
 ---
 
+{% include test.liquid %}
+
 # Welcome
 
 **Hello world**, this is my first Jekyll blog post.
