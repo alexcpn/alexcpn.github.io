@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to My Site!"
+title:  "Test 2 Post"
 ---
 
 {% include_relative test.liquid %}
@@ -17,5 +17,6 @@ using  include; The branch.liquid should be in _inlcudes folder
 {% include branch.liquid %}
 {{ endraw }}
 
+git clone  --single-branch --branch  {{ branchName }} https://github.com/rook/rook.rook
 
 This is the current branch {{ branchName }}
