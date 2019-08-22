@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Cassandra in Docker</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Cassandra in Docker</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Run/Code Snippets
+</section>
+<section data-field="body" class="e-content">
+<section name="3ad6" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="edf2" id="edf2" class="graf graf--h3 graf--leading graf--title">Cassandra in Docker</h3><h4 name="f793" id="f793" class="graf graf--h4 graf-after--h3 graf--subtitle">Run/Code Snippets</h4><p name="77d4" id="77d4" class="graf graf--p graf-after--h4"><strong class="markup--strong markup--p-strong">Starting Cassandra in Docker</strong></p><p name="f85f" id="f85f" class="graf graf--p graf-after--p">Let’s create a NW and Start the Cassandra instance with that name so that process inside other Docker containers are able to contact it.</p><pre name="6a8b" id="6a8b" class="graf graf--pre graf-after--p"><strong class="markup--strong markup--pre-strong">alexcpn@instance-1</strong>:<strong class="markup--strong markup--pre-strong">~</strong>$docker network create <strong class="markup--strong markup--pre-strong">mycassandranw</strong> --driver bridge</pre><pre name="3c71" id="3c71" class="graf graf--pre graf-after--pre"><strong class="markup--strong markup--pre-strong">alexcpn@instance-1</strong>:<strong class="markup--strong markup--pre-strong">~</strong>$ docker run --name mycassandra --network <strong class="markup--strong markup--pre-strong">mycassandranw</strong> -v /home/alex/cassandradata:/var/lib/cassandra -d cassandra</pre><pre name="f8ff" id="f8ff" class="graf graf--pre graf-after--pre"><strong class="markup--strong markup--pre-strong">alexcpn@instance-1</strong>:<strong class="markup--strong markup--pre-strong">~</strong>$ docker run -it --network mycassandranw -rm cassandra cqlsh mycassandra</pre><p name="127a" id="127a" class="graf graf--p graf-after--pre">Note: If you are starting this in a Cloud provider, make sure to stop the VM to save billing. Start it when you need. Only disk will be billed when VM is in stopped state and it is a very low amount.</p><pre name="dc10" id="dc10" class="graf graf--pre graf-after--p">docker stop mycassandra</pre><pre name="5125" id="5125" class="graf graf--pre graf-after--pre">doocker start mycassandra</pre><p name="ee3f" id="ee3f" class="graf graf--p graf-after--pre">Connect CQL when you need</p><pre name="4672" id="4672" class="graf graf--pre graf-after--p">docker run -it --network mycassandranw  --name mycql --rm cassandra cqlsh mycassandra</pre><pre name="ee24" id="ee24" class="graf graf--pre graf-after--pre"><br>create keyspace test with replication = {&#39;class&#39;:&#39;SimpleStrategy&#39;,&#39;replication_factor&#39;:1};</pre><p name="ec29" id="ec29" class="graf graf--p graf-after--pre"><strong class="markup--strong markup--p-strong">Run a Go Client that can connect to this</strong></p><pre name="5021" id="5021" class="graf graf--pre graf-after--p">docker run -it --rm -v /home/alex/coding/:/coding --net=<strong class="markup--strong markup--pre-strong">mycassandranw</strong> golang /bin/bash</pre><pre name="d06b" id="d06b" class="graf graf--pre graf-after--pre">cd coding/your go workspace<br>./cassandratest</pre><p name="950c" id="950c" class="graf graf--p graf-after--pre">Here is a sample one GoCql based <a href="https://github.com/alexcpn/testgo.git" data-href="https://github.com/alexcpn/testgo.git" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://github.com/alexcpn/testgo.git</a></p><pre name="2aea" id="2aea" class="graf graf--pre graf-after--p">oot@86c58471f46d:/coding/testgo/cassandratest# ./cassandratest <br>Cassandra Pagination Test<br>INFO[0000] Number of Rows to Insert 1                   <br>INFO[0000] Number of Rows to Query 1                    <br>INFO[0000] Delete Table after tests false               <br>INFO[0000] Page Number to read 1                        <br>INFO[0000] Successfully connected                       <br>INFO[0000] insertRows Time took 5.603365ms              <br>INFO[0000] Number of rows read  1                       <br>INFO[0000] fetchRows Time took 6.292543ms               <br>INFO[0000] Number of rows read  0</pre><p name="c5ec" id="c5ec" class="graf graf--p graf-after--pre graf--trailing">That’s it</p></div></div></section><section name="0f18" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="f975" id="f975" class="graf graf--p graf--leading">P.S — Some notes on using GCP as a development environment</p><pre name="34e7" id="34e7" class="graf graf--pre graf-after--p">Install code in GCP and view in Chrome</pre><pre name="2e43" id="2e43" class="graf graf--pre graf-after--pre"><a href="https://cloud.google.com/solutions/chrome-desktop-remote-on-compute-engine" data-href="https://cloud.google.com/solutions/chrome-desktop-remote-on-compute-engine" class="markup--anchor markup--pre-anchor" rel="noopener" target="_blank">https://cloud.google.com/solutions/chrome-desktop-remote-on-compute-engine</a><br><br></pre><p name="9439" id="9439" class="graf graf--p graf-after--pre">This is not a good idea as I left it for one night and it uses a lot of CPU and I saw the cost from a few rupees to a few hundred rupees over a night (still it was not much about 1 dollar a night- but this means I cannot keep it running)</p><figure name="9ced" id="9ced" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 169px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 24.099999999999998%;"></div><img class="graf-image" data-image-id="1*T_PrL9rvPRQv9x1m6z3dSA.png" data-width="1175" data-height="283" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*T_PrL9rvPRQv9x1m6z3dSA.png"></div></figure><p name="10b6" id="10b6" class="graf graf--p graf-after--figure">Then used puttygen to create a SSH key pair and added it to the instance and used XMing on windows and Putty with X11Forwarding. However though simple xclock and even sublime works, Visual Studio Code does not work on this. So installed vcxsrv on windows.That works — but it is pretty slow. Not a good idea.</p><p name="6e53" id="6e53" class="graf graf--p graf-after--p graf--trailing">Best I found was to push the code to GitHub, pull it from the GCP instance, build and run. Or sftp the code.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@alexcpn" class="p-author h-card">Alex Punnen</a> on <a href="https://medium.com/p/3e5eb98cdb22"><time class="dt-published" datetime="2019-07-04T08:19:53.466Z">July 4, 2019</time></a>.</p><p><a href="https://medium.com/@alexcpn/cassandra-in-docker-3e5eb98cdb22" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 22, 2019.</p></footer></article></body></html>

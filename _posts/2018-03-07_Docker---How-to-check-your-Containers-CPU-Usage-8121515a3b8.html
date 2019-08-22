@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Docker — How to check your Containers CPU Usage</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Docker — How to check your Containers CPU Usage</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I have used ctop which gives a more graphical way than docker_stats. But I found that it was showing CPU percentage way higher than what…
+</section>
+<section data-field="body" class="e-content">
+<section name="28a4" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1722" id="1722" class="graf graf--h3 graf--leading graf--title">Docker — How to check your Containers CPU Usage</h3><p name="e7ce" id="e7ce" class="graf graf--p graf-after--h3">I have used <a href="https://github.com/bcicen/ctop" data-href="https://github.com/bcicen/ctop" class="markup--anchor markup--p-anchor" rel="nofollow noreferrer noopener" target="_blank"><em class="markup--em markup--p-em">ctop</em></a> which gives a more graphical way than <em class="markup--em markup--p-em">docker_stats.</em> But I found that it was showing CPU percentage way higher than what <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">top</em></strong> was showing for the system. Basically it is showing relative the percentage to the root process. Docker containers run as child process</p><p name="d8fb" id="d8fb" class="graf graf--p graf-after--p">To illustrate with an example</p><p name="9cfd" id="9cfd" class="graf graf--p graf-after--p">1.First find the root process under which all the containers run this is calle<strong class="markup--strong markup--p-strong">d <em class="markup--em markup--p-em">docker-containerd-shim</em></strong></p><blockquote name="a819" id="a819" class="graf graf--blockquote graf-after--p"><em class="markup--em markup--blockquote-em">The Docker architecture is broken into four components: Docker engine, containerd, containerd-shm and runC. The binaries are respectively called docker, docker-containerd, docker-containerd-shim, and docker-runc.</em></blockquote><blockquote name="887a" id="887a" class="graf graf--blockquote graf-after--blockquote"><a href="https://hackernoon.com/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426" data-href="https://hackernoon.com/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426" class="markup--anchor markup--blockquote-anchor" rel="nofollow noreferrer noopener" target="_blank">https://hackernoon.com/docker-containerd-standalone-runtimes-heres-what-you-should-know-b834ef155426</a></blockquote><p name="d24b" id="d24b" class="graf graf--p graf-after--blockquote"><code class="markup--code markup--p-code u-paddingRight0 u-marginRight0">root 1843 <strong class="markup--strong markup--p-strong">1918</strong> 0 Aug31 ? 00:00:00 docker-containerd-shim 611bd9... /var/run/docker/libcontainerd/611bd92.... docker-runc</code></p><p name="3971" id="3971" class="graf graf--p graf-after--p">2.You can see all the containers that are running using the command</p><p name="1ae1" id="1ae1" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code u-paddingRight0 u-marginRight0">pstree -p <strong class="markup--strong markup--p-strong">1918</strong></code></p><p name="ed41" id="ed41" class="graf graf--p graf-after--p">Now say that we are interested in seeing the CPU consumption of say <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">fluentdb</em></strong>.Easy way to get the child pid of this is</p><p name="6145" id="6145" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code u-paddingRight0 u-marginRight0">pstree -p <strong class="markup--strong markup--p-strong">1918</strong> |grep <strong class="markup--strong markup--p-strong">fluentd</strong></code></p><p name="213d" id="213d" class="graf graf--p graf-after--p">Which gives <strong class="markup--strong markup--p-strong">21670</strong></p><p name="dfd7" id="dfd7" class="graf graf--p graf-after--p">Now you can run <code class="markup--code markup--p-code">top -p 21670</code> to see the CPU share of this child process also <code class="markup--code markup--p-code">top -p 1918</code> to see the overall CPU of the parent process.</p><p name="5c15" id="5c15" class="graf graf--p graf-after--p">With <a href="https://github.com/google/cadvisor" data-href="https://github.com/google/cadvisor" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">cadvisor</a> collecting to <a href="https://prometheus.io/" data-href="https://prometheus.io/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Prometheus</a> and view in <a href="https://grafana.com/" data-href="https://grafana.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Grafana</a>, this was the closest and most accurate representation of the actual CPU percentage used by the container; in relation to the host machine.</p><p name="8e4b" id="8e4b" class="graf graf--p graf-after--p">This diagram illustrates this. ctop and docker stats give 23% as the CPU percentage. <strong class="markup--strong markup--p-strong">Actual</strong> CPU percentage of the docker parent process is around<strong class="markup--strong markup--p-strong"> 2% </strong>and cadvisor output from Grafana shows the most ‘accurate’ value of the container CPU percentage related to host.</p><figure name="e525" id="e525" class="graf graf--figure graf-after--p graf--trailing"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 232px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 33.1%;"></div><img class="graf-image" data-image-id="1*FPQnBUsMf6i3RJOpz-uI2Q.png" data-width="2534" data-height="840" src="https://cdn-images-1.medium.com/max/800/1*FPQnBUsMf6i3RJOpz-uI2Q.png"></div><figcaption class="imageCaption">ctop grafana and top and pstree view</figcaption></figure></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@alexcpn" class="p-author h-card">Alex Punnen</a> on <a href="https://medium.com/p/8121515a3b8"><time class="dt-published" datetime="2018-03-07T10:12:44.372Z">March 7, 2018</time></a>.</p><p><a href="https://medium.com/@alexcpn/docker-how-to-check-your-containers-cpu-usage-8121515a3b8" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 22, 2019.</p></footer></article></body></html>

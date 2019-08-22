@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Install the right NVIDIA Driver for CUDA in Ubuntu</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Install the right NVIDIA Driver for CUDA in Ubuntu</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Step 1: First find the right driver for your GPU Card
+</section>
+<section data-field="body" class="e-content">
+<section name="bb84" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="a017" id="a017" class="graf graf--h3 graf--leading graf--title">Install the right NVIDIA Driver for CUDA in Ubuntu</h3><h4 name="cb5a" id="cb5a" class="graf graf--h4 graf-after--h3 graf--subtitle"><strong class="markup--strong markup--h4-strong">Step 1: First find the right driver for your GPU Card</strong></h4><p name="96d2" id="96d2" class="graf graf--p graf-after--h4">Go to <a href="https://www.nvidia.com/Download/index.aspx" data-href="https://www.nvidia.com/Download/index.aspx" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.nvidia.com/Download/index.aspx</a> and fill details</p><figure name="57b6" id="57b6" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 223px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 31.8%;"></div><img class="graf-image" data-image-id="1*FI3ecoYf9QoQAgDJcVwsyg.png" data-width="911" data-height="290" src="https://cdn-images-1.medium.com/max/800/1*FI3ecoYf9QoQAgDJcVwsyg.png"></div></figure><p name="0bb7" id="0bb7" class="graf graf--p graf-after--figure">Search</p><p name="e871" id="e871" class="graf graf--p graf-after--p">You will get the driver version to install; Here it is <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">390</em></strong></p><figure name="e661" id="e661" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 307px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 43.8%;"></div><img class="graf-image" data-image-id="1*j2kdJKawYYGAAAf6k8licg.png" data-width="1015" data-height="445" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*j2kdJKawYYGAAAf6k8licg.png"></div></figure><h4 name="12e2" id="12e2" class="graf graf--h4 graf-after--figure">Step 2: Install the Driver</h4><blockquote name="0dc7" id="0dc7" class="graf graf--blockquote graf-after--h4"><strong class="markup--strong markup--blockquote-strong">Note</strong> — never install directly from NVIDIA’s .run file as it messes with the display — lightdm and instability (unless you are an OS expert, please <a href="https://kislayabhi.github.io/Installing_CUDA_with_Ubuntu/" data-href="https://kislayabhi.github.io/Installing_CUDA_with_Ubuntu/" class="markup--anchor markup--blockquote-anchor" rel="nofollow noopener noopener" target="_blank">see</a> — basically <a href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/" data-href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/" class="markup--anchor markup--blockquote-anchor" rel="nofollow noopener noopener" target="_blank">install</a> without opengl <code class="markup--code markup--blockquote-code">--no-opengl-file</code>) and if you still mess with display there are enough <a href="https://superuser.com/questions/869055/installing-cuda-toolchain-in-linux-without-botching-x" data-href="https://superuser.com/questions/869055/installing-cuda-toolchain-in-linux-without-botching-x" class="markup--anchor markup--blockquote-anchor" rel="nofollow noopener noopener" target="_blank">threads</a> to help you)</blockquote><p name="f851" id="f851" class="graf graf--p graf-after--blockquote">Open a shell prompt and add the <a href="https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa/+packages?field.name_filter=390&amp;field.status_filter=published&amp;field.series_filter=" data-href="https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa/+packages?field.name_filter=390&amp;field.status_filter=published&amp;field.series_filter=" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Personal Package Archive for Graphics Drivers to Ubuntu</a></p><pre name="8783" id="8783" class="graf graf--pre graf-after--p"> sudo add-apt-repository ppa:graphics-drivers<br> sudo apt-get update</pre><p name="8456" id="8456" class="graf graf--p graf-after--pre">Aftet that search if the package is available by adding “nvidia-” to the driver version number (390 see above how we got that)</p><pre name="d813" id="d813" class="graf graf--pre graf-after--p">:~# <strong class="markup--strong markup--pre-strong">sudo apt-cache search nvidia-</strong>390<br>nvidia-387-dev - Transitional package for nvidia-390-dev<br>nvidia-387 - Transitional package for nvidia-390<br>nvidia-390-dev - NVIDIA binary Xorg driver development files<br>nvidia-390 - NVIDIA binary driver - version 390.67</pre><p name="3aea" id="3aea" class="graf graf--p graf-after--pre">Then install it</p><pre name="5ab5" id="5ab5" class="graf graf--pre graf-after--p">sudo apt-get install nvidia-390</pre><p name="ab05" id="ab05" class="graf graf--p graf-after--pre">Reboot the system and check</p><pre name="a1ec" id="a1ec" class="graf graf--pre graf-after--p">lsmod | grep nvidia</pre><p name="a6e0" id="a6e0" class="graf graf--p graf-after--pre">If the installation is successful you, similar to</p><pre name="61f8" id="61f8" class="graf graf--pre graf-after--p">nvidia_uvm            757760  0<br>nvidia_drm              40960  2<br>nvidia_modeset        1110016  5  nvidia_drm<br>drm_kms_helper        167936  2  i915,nvidia_drm<br>nvidia              14352384  148  nvidia_modeset,nvidia_uvm<br>drm                    360448  8  i915,nvidia_drm,drm_kms_helper<br>ipmi_msghandler        45056  2  nvidia,ipmi_devintf</pre><p name="0621" id="0621" class="graf graf--p graf-after--pre">In case you do not want automatic updates for your driver (automatic updates are better not done)</p><pre name="9a95" id="9a95" class="graf graf--pre graf-after--p">sudo apt-mark hold nvidia-390</pre><p name="56ff" id="56ff" class="graf graf--p graf-after--pre graf--trailing">Note — If you go into a Login loop , or no Screen or GUI comes after reboot after updating the driver, follow these steps — <a href="https://askubuntu.com/a/1145520/423906" data-href="https://askubuntu.com/a/1145520/423906" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://askubuntu.com/a/1145520/423906</a></p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@alexcpn" class="p-author h-card">Alex Punnen</a> on <a href="https://medium.com/p/2d9ade437dec"><time class="dt-published" datetime="2018-06-26T08:51:01.735Z">June 26, 2018</time></a>.</p><p><a href="https://medium.com/@alexcpn/install-the-right-nvidia-driver-for-cuda-in-ubuntu-2d9ade437dec" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 22, 2019.</p></footer></article></body></html>

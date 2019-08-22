@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Learning Go — Hello World</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Learning Go — Hello World</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+By a Developer who does not know Go for other Developers
+</section>
+<section data-field="body" class="e-content">
+<section name="9237" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="93f5" id="93f5" class="graf graf--h3 graf--leading graf--title">Learning Go — Hello World</h3><h4 name="cdf1" id="cdf1" class="graf graf--h4 graf-after--h3 graf--subtitle">By a Developer who does not know Go for other Developers</h4><p name="14de" id="14de" class="graf graf--p graf-after--h4">This is outdated; Use <strong class="markup--strong markup--p-strong">Go modules</strong> now. No hell with GOPATH</p><p name="f012" id="f012" class="graf graf--p graf-after--p">Complete example here <a href="https://github.com/alexcpn/golang_grpc_example" data-href="https://github.com/alexcpn/golang_grpc_example" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://github.com/alexcpn/golang_grpc_example</a></p><p name="b27c" id="b27c" class="graf graf--p graf-after--p">I will try to explain this later. But there is a trick here</p><pre name="447a" id="447a" class="graf graf--pre graf-after--p">microservice_x/go.mod file and other </pre><pre name="fa32" id="fa32" class="graf graf--pre graf-after--pre">replace interfaces =&gt; ./generated</pre><pre name="badc" id="badc" class="graf graf--pre graf-after--pre graf--trailing">replace server =&gt; ./server</pre></div></div></section><section name="8b34" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="042a" id="042a" class="graf graf--p graf--leading">— — — — — — — — — — — — -Outdated below — — — — — — —</p><h4 name="0dba" id="0dba" class="graf graf--h4 graf-after--p">Step 1: Set Up Your Environment <strong class="markup--strong markup--h4-strong">or Don’t</strong></h4><p name="55fc" id="55fc" class="graf graf--p graf-after--h4">What does a developer spend the most time when trying to learn new technology?</p><p name="723b" id="723b" class="graf graf--p graf-after--p">Let us skip the setting up part and use Docker</p><pre name="b0bd" id="b0bd" class="graf graf--pre graf-after--p">docker pull golang</pre><p name="33bb" id="33bb" class="graf graf--p graf-after--pre">Actually setting up this in your machine is also not a pain, But I get my GOPATH mixed up and there are too many workspaces. So, for now, I find it sane to work inside Docker.</p><p name="3ab8" id="3ab8" class="graf graf--p graf-after--p">And use Docker volume mapping to work on the code on the host and get it reflected in the container (inside the running docker)</p><p name="2bbf" id="2bbf" class="graf graf--p graf-after--p">I work on a Linux machine- Docker now runs also on Windows 10 .</p><p name="d144" id="d144" class="graf graf--p graf-after--p">My Workspace in host is /home/alex/coding, and I am behind a proxy — if you are not, then no need to add the http_proxy parts.</p><pre name="44a8" id="44a8" class="graf graf--pre graf-after--p">docker run -it --rm -v /home/alex/coding/:/coding --net=host --env http_proxy=<a href="http://10.158.100.6:8080" data-href="http://10.158.100.6:8080" class="markup--anchor markup--pre-anchor" rel="nofollow noopener noopener noopener" target="_blank">http://A.B.C.D:8080</a> --env https_proxy=<a href="http://10.158.100.6:8080" data-href="http://10.158.100.6:8080" class="markup--anchor markup--pre-anchor" rel="nofollow noopener noopener noopener" target="_blank">http://A.B.C.D:8080</a> golang /bin/bash</pre><p name="cbc6" id="cbc6" class="graf graf--p graf-after--pre">Once we are in the container. Let us create a simple Hello World first</p><p name="64ed" id="64ed" class="graf graf--p graf-after--p">Create a directory called go_learn in your host and in the container let us navigate to it</p><pre name="f22c" id="f22c" class="graf graf--pre graf-after--p">cd /coding/go_learn</pre><p name="ee9a" id="ee9a" class="graf graf--p graf-after--pre">Let us follow a convention — All editing in host, all compilation in container</p><p name="9bb5" id="9bb5" class="graf graf--p graf-after--p">I use <a href="https://code.visualstudio.com/" data-href="https://code.visualstudio.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Visual Studo Code</a> as an IDE .It is free , it is cool and you can use it for multiple languages too.</p><figure name="e302" id="e302" class="graf graf--figure graf-after--p"><div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 487px;"><div class="aspectRatioPlaceholder-fill" style="padding-bottom: 69.6%;"></div><img class="graf-image" data-image-id="1*hihZVQsPDuPfPUfTelMGKg.png" data-width="914" data-height="636" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*hihZVQsPDuPfPUfTelMGKg.png"></div></figure><p name="f22b" id="f22b" class="graf graf--p graf-after--figure">If you have not used VS Code this may be a good time to try it out. It has Go support by Microsoft itself</p><h4 name="94f3" id="94f3" class="graf graf--h4 graf-after--p">EPISODE 1: THE DAMNED GOPATH</h4><p name="bcf2" id="bcf2" class="graf graf--p graf-after--h4">Let us create our sweet and simple Hello World — Create a folder hello under <em class="markup--em markup--p-em">go_learn </em>folder and in it create hello.go</p><p name="b866" id="b866" class="graf graf--p graf-after--p">/coding/go_learn/<strong class="markup--strong markup--p-strong">src</strong>/hello/hello.go</p><pre name="e78c" id="e78c" class="graf graf--pre graf-after--p">package main<br>import &quot;fmt&quot;<br>func main() {<br> fmt.Println(&quot;Hello, World&quot;)<br>}</pre><p name="090a" id="090a" class="graf graf--p graf-after--pre">Let us compile it and build an executable</p><pre name="cda7" id="cda7" class="graf graf--pre graf-after--p">go_learn#go install hello</pre><pre name="047f" id="047f" class="graf graf--pre graf-after--pre">can&#39;t load package: package hello:<strong class="markup--strong markup--pre-strong"> cannot find package &quot;hello&quot;</strong> in any of:<br> /usr/local/go/src/hello (from $GOROOT)<br> /go/src/hello (from $GOPATH)</pre><p name="a7eb" id="a7eb" class="graf graf--p graf-after--pre">Go Lang Package Structure</p><p name="1ff6" id="1ff6" class="graf graf--p graf-after--p">These are the rules and you need to follow it to make your coding life easier</p><p name="954e" id="954e" class="graf graf--p graf-after--p">All code in Go is organised under packages under a src folder</p><p name="5615" id="5615" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">A package is a folder</strong></p><p name="e1f3" id="e1f3" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">The name of the package is the name of the folder</strong> (we will see more)</p><p name="bd3f" id="bd3f" class="graf graf--p graf-after--p">Except for package main — which if you put in a folder, make sure there is only one file in that</p><p name="0b07" id="0b07" class="graf graf--p graf-after--p">Take a look a hello.go again. It has a <em class="markup--em markup--p-em">package main</em> is in <strong class="markup--strong markup--p-strong">hello</strong> folder</p><p name="4211" id="4211" class="graf graf--p graf-after--p">And Go is complaining it cannot find it. It looks at the GOPATH env variable</p><p name="2de5" id="2de5" class="graf graf--p graf-after--p">The default GOPATH is /go/src</p><p name="a503" id="a503" class="graf graf--p graf-after--p">Let us reset it to our folder</p><pre name="5df6" id="5df6" class="graf graf--pre graf-after--p">alex@drone-OMEN:~/coding/Prototypes/<strong class="markup--strong markup--pre-strong">go_learn</strong>$ tree<br>.<br>├── bin<br>│   ├── hello<br>└──<strong class="markup--strong markup--pre-strong"> src</strong><br>    ├── command_pattern<br>    │   └── command_pattern.go<br>    ├──<strong class="markup--strong markup--pre-strong"> hello</strong><br>    │   └── hello.go</pre><pre name="d509" id="d509" class="graf graf--pre graf-after--pre">export GOPATH=/coding/Prototypes/go_learn</pre><p name="4dc7" id="4dc7" class="graf graf--p graf-after--pre">and now again try to install it</p><pre name="a87d" id="a87d" class="graf graf--pre graf-after--p">go install hello</pre><p name="b394" id="b394" class="graf graf--p graf-after--pre">Which basically compiles and builds it. There is a difference between install and build, we will check that later</p><p name="735c" id="735c" class="graf graf--p graf-after--p">You will see the executable in <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">bin</em></strong><em class="markup--em markup--p-em"> </em>folder. Lets run it</p><pre name="34ef" id="34ef" class="graf graf--pre graf-after--p">./bin/hello<br>Hello, World</pre><p name="f9ad" id="f9ad" class="graf graf--p graf-after--pre">We have crossed now the hardest barrier to learning GO- GOPATH :). We will encounter this more when we install extra packages and use Go packaging tools.</p><p name="1cd6" id="1cd6" class="graf graf--p graf-after--p">Also, we learned about packages. Next Episode we do a lot more packages and check out Interfaces</p><p name="589f" id="589f" class="graf graf--p graf-after--p">Part 2 of this series : Hello Interface</p><p name="86d4" id="86d4" class="graf graf--p graf-after--p graf--trailing"><a href="https://medium.com/techlogs/learning-go-hello-interface-7074df6752be" data-href="https://medium.com/techlogs/learning-go-hello-interface-7074df6752be" class="markup--anchor markup--p-anchor" target="_blank">https://medium.com/techlogs/learning-go-hello-interface-7074df6752be</a></p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@alexcpn" class="p-author h-card">Alex Punnen</a> on <a href="https://medium.com/p/fde2e29c5eb1"><time class="dt-published" datetime="2019-05-30T10:16:39.967Z">May 30, 2019</time></a>.</p><p><a href="https://medium.com/@alexcpn/learning-go-hello-world-fde2e29c5eb1" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 22, 2019.</p></footer></article></body></html>
