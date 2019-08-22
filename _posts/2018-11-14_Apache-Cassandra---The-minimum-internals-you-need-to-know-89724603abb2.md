@@ -1,4 +1,8 @@
-<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Apache Cassandra — The minimum internals you need to know</title><style>
+---
+layout: post
+title:  "Apache Cassandra — The minimum internals you need to know"
+---
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Apache Cassandra — The minimum internals you need to know</title><style>
       * {
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
       }

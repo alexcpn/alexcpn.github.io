@@ -1,4 +1,7 @@
-+++
+---
+layout: post
+title:  "From medium"
+---
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to be a Good Software Professional</title><style>
       * {
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
