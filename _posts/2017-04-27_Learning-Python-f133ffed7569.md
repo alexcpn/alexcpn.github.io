@@ -1,3 +1,8 @@
+---
+layout: post
+title:  "Welcome to My Site!"
+---
+
 # Learning Python
 
 <div class="section p-summary" data-field="description">
