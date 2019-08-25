@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Learning Python"
+title:  "Learning Python 2"
 ---
 
 # Learning Python
