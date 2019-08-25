@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to My Site!"
+title:  "Learning Python"
 ---
 
 # Learning Python
