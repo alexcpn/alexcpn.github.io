@@ -1,4 +1,9 @@
-# Kubernetes PV,PVC
+---
+layout: post
+title:  "Kubernetes Persistant Volume/ PVC in a Specific Node"
+---
+
+Kubernetes PV,PVC
 ## Trying to make this work with a specific volume
 
 Here is the Yamls for PV
