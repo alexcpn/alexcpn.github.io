@@ -75,15 +75,14 @@ spec:
 
 And here is the output
 
-```
 
-In Specific Node
+In the  Node where our Drive is located
 
 ```
 core@alex-k8s-2 ~ $ vi /mnt/data2/index.html
 core@alex-k8s-2 ~ $ cat /mnt/data2/index.html 
 'Hello from Kubernetes Local storage'
-````
+```
 
 PV,PVC,Status
 
@@ -91,7 +90,6 @@ PV,PVC,Status
 core@alex-k8s-1 ~ $ kcl get pv
 NAME               CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                       STORAGECLASS    REASON   AGE
 pv-specific-node   1Gi        RWO            Retain           Bound    default/pvc-specific-node   local-storage            9m28s
-```
 
 
 core@alex-k8s-1 ~ $ kcl get pvc
@@ -105,3 +103,4 @@ task-pv-pod   1/1     Running   0          12s
 core@alex-k8s-1 ~ $ kcl exec -it task-pv-pod -- /bin/bash
 root@task-pv-pod:/# ls /usr/share/nginx/html
 **index.html**  test.file
+```

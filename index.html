@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Home
+title: "Ed."
 ---
-<h1>{{ "Welcome to my Blog Expiriment" | downcase }}</h1>
+<h1>{{ "Technical Articles" }}</h1>
 
 <section>
   <div class="container">
@@ -18,12 +18,20 @@ title: Home
         </ul>
 	  </div>
 	  
-	  Test List of Sub directory contents
 
-	  {% assign folder1 = site.pages | where_exp: "item" , "item.path contains 'html' "%}
-	  {% for item in folder1 %}
-	  {{item.title}}
-	  {% endfor %}
+   <h2>List of Other Posts exported from Medium</h2> 
+   <a href="https://medium.com/techlogs/archive">Read in Medium</a>
+   Or Read below if you don't have a membership
+
+   <br><br>
+    
+    {% for file in site.static_files %}
+      {% if file.extname == ".html" %}
+        <li>
+          <a href="{{ file.path }}">{{ file.name }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
     </div>
   </div>
 </section>

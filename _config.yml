@@ -1,2 +1,57 @@
-name : Alex Punnens Blog
+# Built with Jekyll 3.2.0
+
+# Setup
+title:               'Technical and Other Articles'
+tagline:             "How To's, Why To's and other Thoughts"
+description:         'Made using Ed'
+url:                 'http://alexcpn.github.io'
+baseurl:             
+
+# About/contact
+author:
+  name:              'Alex Punnen'
+  url:               https://twitter.com/alexcpn
+  email:             alexcpn@gmail.com
+
+# Color scheme. Options: red, orange, magenta, cyan, blue, brown
+color-scheme:
+
+# Permalinks
+permalink: pretty
+permalink: /:title/
+
+# Set encoding to UTF-8
+encoding: utf-8
+
+# Collections for texts
+collections:
+  texts:
+    output: true
+
+# Markdown specs
 markdown: kramdown
+
+kramdown:
+  auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  footnote_backlink: "&#x21a9;&#xfe0e;"
+  toc_levels:     1..6
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+
+# Exclusions from the final site
+exclude:
+  - optional
+  - vendor
+
+# Theme
+# (Used for local or custom-server deployments)
+# Uncomment the `theme` line if using the Ed. theme gem on your own computer or server.
+# See https://jekyllrb.com/docs/themes/
+# theme: "ed."
+
+# Remote Theme
+# (Used only for GitHub deployments)
+# See https://help.github.com/en/articles/adding-a-jekyll-theme-to-your-github-pages-site
+remote_theme: minicomp/ed
