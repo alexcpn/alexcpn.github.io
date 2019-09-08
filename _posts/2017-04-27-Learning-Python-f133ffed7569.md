@@ -1,5 +1,8 @@
 ---
 title: Learning Python
+=======
+layout: post
+title:  "Learning Python 2"
 ---
 
 Learning Python {#learning-python .p-name}
