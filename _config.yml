@@ -30,6 +30,7 @@ collections:
 
 # Markdown specs
 markdown: kramdown
+mathjax: true
 
 kramdown:
   auto_ids:       true
