@@ -33,7 +33,7 @@ $$
 First the dry definitions.
 **Algebraically,** the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.
 
-if $\vec a = \left\langle {{a_1},{a_2},{a_3}} \right\rangle$ and $\vec b = \left\langle {{b_1},{b_2},{b_3}} \right\rangle$, Then
+<span>if $\vec a = \left\langle {{a_1},{a_2},{a_3}} \right\rangle$ and $\vec b = \left\langle {{b_1},{b_2},{b_3}} \right\rangle$, Then </span>
 
 $$
 \vec a\centerdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}
