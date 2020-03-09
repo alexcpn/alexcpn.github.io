@@ -1,4 +1,4 @@
-To answer this question we need to go back to one of the earliest neural networks the Rosenblatt’s perceptron where using vectors and the property of dot product to split hyperplanes of feature vectors were first used.
+To answer this question we need to go back to one of the earliest neural networks the Rosenblatt’s perceptron where using vectors and the property of dot product to split hyperplanes of feature vectors were first used. 
 
 This may be familiar to many, but it for some a refresher may help
 
