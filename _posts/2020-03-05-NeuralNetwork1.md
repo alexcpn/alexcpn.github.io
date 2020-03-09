@@ -22,11 +22,13 @@ The easiest way to understand it is in a geometric context, say 2D or 3D cartesi
 
  Vectors are represented as matrices. Example here is a [Euclidean Vector][5] in three-dimensional Euclidean space (or $R^{3}$), represented as a column vector (usually) or row vector
 
+<p>
 $$
 a = \begin{bmatrix}
 a_{1}\\a_{2}\\a_{3}\ 
 \end{bmatrix} = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix}
 $$
+</p>
 
 **Q. What is a Dot product? and what does it signify ?**
 
