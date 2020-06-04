@@ -1,0 +1,40 @@
+---
+layout: page
+title: "Articles from Medium"
+---
+
+{% assign otherarticles = "" | split: ',' %}
+{% assign software_engineering = "" | split: ',' %}
+
+{% for file in site.static_files %}
+  {% if file.extname == ".html" %}
+    {% if file.path contains "software_engineering" %}
+       {% assign software_engineering = software_engineering | push: file %}
+    {% else %}
+      {% assign otherarticles = otherarticles | push: file %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+<br><br>
+<section>
+<div>
+ Software Enginnering
+    {% for file in software_engineering %}
+    <li>
+      <a href="{{ file.path }}">{{ file.name }}</a>
+    </li>
+    {% endfor %}
+
+</div>
+
+<div>
+Other Articles
+  {% for file in otherarticles %}
+  <li>
+    <a href="{{ file.path }}">{{ file.name }}</a>
+  </li>
+  {% endfor %}
+
+</div>
+</section>
