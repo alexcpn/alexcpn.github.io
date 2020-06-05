@@ -55,6 +55,7 @@ $$
 These definitions are equivalent when using Cartesian coordinates.
 Here is a simple proof that follows from trigonometry -
 [http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx](http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx)
+
 Related Link [https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff](https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff)
 
 **Dot Product and Vector Alignment**
