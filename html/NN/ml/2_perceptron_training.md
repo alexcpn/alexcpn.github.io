@@ -73,7 +73,3 @@ A more rigorous  explanation of the proof is here from the book
   [6]: https://i.imgur.com/OIN3maH.png
 
 ----
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI3OTQ4MDk0OV19
--->

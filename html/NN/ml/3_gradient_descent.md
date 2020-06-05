@@ -100,6 +100,4 @@ But the intuition regarding solving it is the same. Instead of the simple slope 
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf
 [ImageNet Classification with Deep Convolutional Neural Networks]:https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 [History of BackPropogation]: https://en.wikipedia.org/wiki/Backpropagationmas.cs.umass.edu/classes/cs683/lectures-2010/Lec24_Learning3-F2010-4up.pdf
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQxNzE1MDY4Nl19
--->
+
