@@ -101,11 +101,5 @@ But the intuition regarding solving it is the same. Instead of the simple slope 
 [ImageNet Classification with Deep Convolutional Neural Networks]:https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 [History of BackPropogation]: https://en.wikipedia.org/wiki/Backpropagationmas.cs.umass.edu/classes/cs683/lectures-2010/Lec24_Learning3-F2010-4up.pdf
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQxNzE1MDY4Niw3MzgzMTc4NjksNzExMD
-Y5NDc3LDgyNzk3NjQ3Nyw2MjU5NDg0NDMsLTE1MjI1NDg2MDgs
-NjgxMTE2NTUyLDIzOTU0MTY5MCwtMTc1MDI2NTE3NiwtMTc0Mz
-IwNzA0NywxNzc1MDAyMTIzLDg5Mzg3NTE2NywtNDExNTYxNDY5
-LC0xOTA2NzU2MjksLTEwODc3OTg0MjcsLTUzMjA0NTc5MSw1ND
-A2MDg4MDcsMTg4OTYwOTc0OSwtMTg5MzgwNjcyMywtMTQzMzg2
-MjYxNV19
+eyJoaXN0b3J5IjpbMTQxNzE1MDY4Nl19
 -->
