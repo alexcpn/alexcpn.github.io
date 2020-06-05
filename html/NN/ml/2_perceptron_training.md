@@ -75,11 +75,5 @@ A more rigorous  explanation of the proof is here from the book
 ----
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI3OTQ4MDk0OSwyNDM1MDk0MTEsLTcyMD
-cwODE1MCw2Njk1Nzk4NzksMTg3Njg5NzQyMCwyMDY3MjQ3MDMs
-MTI2NDIxMjE4MCw1NzMyMjMwNjcsLTg3NTIwMjcwLDc5MTAxNz
-AzNiwtMTk1NDQ1MjIwMCwtMTgyMjcyMDQ0NSwtMTg1OTQyNjEx
-OSwtODM5NDA3Njk4LDczNTM1MzU2NCwxMjU3NzYzNDYsMjc2OT
-k4OTY0LDIwOTg1NDA4MjgsLTY1MDE1MjUxMywxNjA2OTk2NjQ3
-XX0=
+eyJoaXN0b3J5IjpbLTI3OTQ4MDk0OV19
 -->
