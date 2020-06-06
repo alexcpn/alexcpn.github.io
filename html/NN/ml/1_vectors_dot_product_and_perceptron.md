@@ -17,7 +17,6 @@ Source: 3Blue1Brown’s video on Vectors
 
 ![vector3D][4]
 
-From https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
 
 ¹Maths is abstract and meaningless unless you apply it to a context- this is a reason why you will get tripped if you try to get just a mathematical intuition about the neural network
 
@@ -46,7 +45,7 @@ $$
  \vec a\centerdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
 
- [![dotproduct][6]
+ ![dotproduct][6]
 
 These definitions are equivalent when using Cartesian coordinates.
 Here is a simple proof that follows from trigonometry -
