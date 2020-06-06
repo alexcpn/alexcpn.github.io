@@ -1,3 +1,7 @@
+# The Maths of Machine Learning and Nerual Networks
+- Alex Punnen 
+- 2019-2020
+
 ##   Feature Vectors, Dot products and Perceptron Training
 
 **Q.  How can we train the Perceptron with just simple vector maths?**

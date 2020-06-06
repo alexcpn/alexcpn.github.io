@@ -1,4 +1,8 @@
 
+# The Maths of Machine Learning and Nerual Networks
+- Alex Punnen 
+- 2019-2020
+
 ## Vectors, Dot Products and  the Perceptron
 
 **Q. Why are inputs and weights modelled as Vectors in Neural Networks ?**

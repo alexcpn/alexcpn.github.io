@@ -1,9 +1,6 @@
 
-#  Machine Learning and Nerual Networks
-
- The Math and the main concepts explained lucidly. 
-
-* Alex Punnen 
+#  The Maths of Machine Learning and Nerual Networks
+Alex Punnen \
 2019-2020
 
 ## Contents
