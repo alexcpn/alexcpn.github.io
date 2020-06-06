@@ -7,7 +7,7 @@ Let's follow from the previous chapter of the Perceptron neural network. Please 
  Just to reiterate - Dot product, geometrically, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 \begin{aligned}
 $$
- \vec a\centerdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
+ \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
 
 ![dotproduct][1]
@@ -54,9 +54,9 @@ This is the classical method of perceptron learning
 $$
 \delta w_j =
  \begin{cases}
- \  \ 0 \text{ \ \  \    if instance classified correctly}  \\
-+x_j  \text{ \  \ if +1 instance classified as −1} \\
--x_j \text{ \ \ if -1 instance classified as +1}\\
+ 0 \text{      if instance is classified correctly}  \\
++x_j  \text{   if +1 instance is classified as −1} \\
+-x_j \text{    if -1 instance is classified as +1}\\
 \end{cases}
 $$ [ref 5][5]
 

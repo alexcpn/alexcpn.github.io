@@ -36,13 +36,13 @@ First the dry definitions.
 **Algebraically,** the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.
 
 $$
-\vec a\centerdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}
+\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}
 $$
 
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 \begin{aligned}
 $$
- \vec a\centerdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
+ \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
 
 [![dotproduct][6]][6]
