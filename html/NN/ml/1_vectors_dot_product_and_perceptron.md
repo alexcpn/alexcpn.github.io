@@ -38,11 +38,7 @@ $$
 First the dry definitions.
 **Algebraically,** the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.
 
-if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, Then
-
-$$
-\vec a\centerdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}
-$$
+if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, then $\vec a\centerdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}$
 
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 
@@ -50,7 +46,7 @@ $$
  \vec a\centerdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
 
-[![dotproduct][6]][6]
+ [![dotproduct][6]
 
 These definitions are equivalent when using Cartesian coordinates.
 Here is a simple proof that follows from trigonometry -
@@ -86,7 +82,7 @@ $$
 
 If we take a dummy input $x_0$ as 1, then  we can add the bias as a weight $w_0$ and then this bias can also fit cleanly to the sigma rule
 
-$y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  Else } y=0$
+$y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  else } y=0$
 
 This is the dot product of weight and input vector w.x
 
@@ -122,8 +118,8 @@ In simple terms, it means that an unknown feature vector of an input set belongi
   
   [1]: https://en.wikipedia.org/wiki/Vector_space
   [2]: http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf
-  [3]: https://i.stack.imgur.com/Q1rBUm.png
-  [4]: https://i.stack.imgur.com/t0plRm.png
+  [3]: https://i.stack.imgur.com/Q1rBUm.png#center
+  [4]: https://i.stack.imgur.com/t0plRm.png#center
   [5]: https://en.wikipedia.org/wiki/Euclidean_vector
-  [6]: https://i.stack.imgur.com/kO3ym.png
-  [7]: https://i.stack.imgur.com/Nw2Ls.png
+  [6]: https://i.stack.imgur.com/kO3ym.png#center
+  [7]: https://i.stack.imgur.com/Nw2Ls.png#center
