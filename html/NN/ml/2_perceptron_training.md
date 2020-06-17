@@ -4,7 +4,7 @@
 
 ##   Feature Vectors, Dot products and Perceptron Training
 
-**Q.  How can we train the Perceptron with just simple vector maths?**
+**Q.  How can we train the Perceptron with just simple Vector maths?**
 
 Let's follow from the previous chapter of the Perceptron neural network. Please read it if not done as the importance of vector representation (direction part) and what a vector dot product signifies is needed here again.
  
@@ -34,7 +34,7 @@ So that if we get this weight vector trained with sufficient know samples of P a
 
 ## How are the weights learned?
 
-You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later.
+You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later. 
 
 ----
 
@@ -63,6 +63,8 @@ $$
 -x_j \text{    if -1 instance is classified as +1}\\
 \end{cases}
 $$ [ref 5][5]
+
+This is also called the delta rule. Note that there is some articles that refe to this as gradient descent simplified. But gradient descent dependes on the activation function being differentiable. The step function which is the activation function of the perceptron in non continious and hence non differentiable.
 
 A more rigorous  explanation of the proof is here from the book
 [Neural Networks by R.Rojas][3] and more lucid explanation here

@@ -40,27 +40,39 @@ You can see that in Newton's method we need to take the second derivative of the
 ### Gradient Descent
 The gradient descent method is much simpler than Newton's method. How it relates to ML is by the concept of Cost function or also called the Loss Function
 ### Cost Function
-It is the difference between the expected value and the actual value as the base. 
+It is a function wich represents the difference between the expected value and the actual value as the base. 
+
 $$
-f(x) =  x_1 \quad  (actual \,value) \\
+\text{ say } x_1  \text{  is the actual \,value} \\
+
+\text{Expeceted value } = \hat x \\
+
+\text{Error in the function} = x_1 -\hat  x
+
 $$ 
 
-Expeceted value = $\hat x$
 
-$Error\, in\, the\, function = x_1 -\hat  x$
-
-To make sure that the error is not skewed if the variance is above or below the function, that is positive or negative, we take the square of the difference, and since we are not usually looking at one value, but a set of values, we take the mean of the count of variables. This is the mean square error cost function. This is usually for regression problems in ML. For Classification problems, we have the Cross-Entropy Loss or Hinge Loss/Multi-class SVM Loss. More details regarding different loss functions here [https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f](https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f)
+To make sure that the error is not skewed if the variance is above or below the function, that is positive or negative, we take the square of the difference, and since we are not usually looking at one value, but a set of values, we take the mean of the count of variables. This is the **Mean Square Error** cost function. 
 
 $$
  {MSE} =\frac {\sum _{i=1}^{n}(X_{i}-{\hat {X_{i}}})^{2}}{n}
 $$
+
 We also have Root Mean Square Error ( RMSE)
+
 $$
  {RMSE} =\sqrt\frac {\sum _{i=1}^{n}(X_{i}-{\hat {X_{i}}})^{2}}{n}
 $$
-Where $X_i$ is a vector of calculated values and $\hat Xi$ is the vector of expected values. Now we need to find the values that can minimise the function. 
 
-Let's take a closer look at optimising. Note that Cost function can be applied to any function. Usually, we talk about linear regression (line fitting) in ML and optimising it using  Mean Squared Error via Gradient Descent for a simpler explanation.
+Where $X_i$ is a vector of calculated values and $\hat Xi$ is the vector of expected values.
+
+This is usually for regression problems in ML. For Classification problems, we have cost functions like  Cross-Entropy Loss or Hinge Loss/Multi-class SVM Loss. More details regarding different loss functions here [https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f](https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f)
+
+Note that all the Cost functions used are continious functions, that is they are differentiable. This is an imporant part as else we cannot apply gradient descent. For Classification loss or cost functions, the output is a probabity distubution between 0 and 1.
+
+ Now we need to find the values of weights that can minimise the function. 
+
+Let's take a closer look at optimising the cost function. Let's talk about linear regression (line fitting) ML algorithm and optimising it using  Mean Squared Error via Gradient Descent. This is the simplest to explain visually and hence we too use this for illustrating.
 
 In the diagram below the red line ($y= mx +b$) is the optimal line that one can draw through the sample set. The slope *m* and constant *b* is learned by the gradient descent algorithm. The x y-axis could be some data set like house price to area etc, which we have, and once we find a fitting line, we can plugin other values of x to give predicted y - regression. 
 
@@ -72,7 +84,12 @@ The loss function we use here for regression is a quadratic function (parabolic 
 source - [https://www.analyticsvidhya.com](https://www.analyticsvidhya.com/blog/2019/08/detailed-guide-7-loss-functions-machine-learning-python-code/)
 
 There is a lot written about gradient descent and hence I won't repeat it here. But the below diagrams could jog your memory.
-We start at a random point, get the slope of the function at the point- where the slope is the derivative of the function at that point ( derivative - the rate of change is also geometrically the [slope of a function](https://www.ugrad.math.ubc.ca/coursedoc/math100/notes/derivs/deriv5.html) of two variables) We go towards the negative of the slope (multiplied by a factor called the learning rate)
+
+To explain geomertrically,We start at a random point, get the slope of the cost function at the point.
+
+Note that the slope or gradient is the derivative of the function at that point ( derivative - the rate of change is also geometrically the [slope of a function](https://www.ugrad.math.ubc.ca/coursedoc/math100/notes/derivs/deriv5.html) of two variables) 
+
+We go towards the negative of the slope (multiplied by a factor called the learning rate)
 
 In the case of MSE, we have just two variables weight and loss, which we can plot as below, and the derivative of the function is simply the geometric slope of the function.
 
@@ -84,7 +101,9 @@ In the case of MSE, we have just two variables weight and loss, which we can plo
 source - [https://developers.google.com/machine-learning/crash-course/reducing-loss/gradient-descent](https://developers.google.com/machine-learning/crash-course/reducing-loss/gradient-descent)
 
 In case of more complex loss functions with multiple variables, we need to hold one variable constant and take the derivative of the other, and do likewise for all- basically, we need to take the partial derivatives; and arrange these partial derivatives in a matrix; which is then a gradient vector, again whose negative gives the direction to take to reach the minimum.
+
 Example for a function $F(x,y,z)$ in three variables, the gradient vector is 
+
 $$
 \begin{bmatrix}
 \dfrac{  \partial F}{\partial x}
@@ -94,11 +113,15 @@ $$
 \dfrac{\partial F}{\partial z}
 \end{bmatrix} 
 $$
-And the loss function in say three dimensions will geometrically be like 
+
+And the loss function in say three dimensions will geometrically be something like 
 
 ![loss function heat map](https://algorithmia.com/blog/wp-content/uploads/2018/04/word-image-4.png)
 
-But the intuition regarding solving it is the same. Instead of the simple slope as in the case of two-dimensional loss function like MSE, we take the 'gradient vector' and follow the negative to the gradient, with some constant selected as the learning rate. The constant is so chosen, that we decrement in short steps, and reduce the risk of overshooting the minima.
+But the intuition regarding solving it is the same. Instead of the simple slope as in the case of two-dimensional loss function like MSE, we take the **gradient vector** and follow the negative to the gradient, with some constant selected as the learning rate. The constant is so chosen, that we decrement in short steps, and reduce the risk of overshooting the minima.
+
+In the next part we will see where the gradient descent comes into play in nerual network learning.
+
 
 [Reading Handwritten Digits A Zip Code Recognition System]:http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf

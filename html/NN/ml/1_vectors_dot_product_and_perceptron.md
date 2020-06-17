@@ -11,7 +11,7 @@ To understand the maths or modelling of the neural network, it is best to start 
 
 Before we talk about why NN inputs and weights are modelled as vectors (and represented as matrices) let us first see what these mathematical concepts mean geometrically. This will help us in understanding the intuition of these when they are used in other contexts/ in higher dimensions.
 
-**Q. What does a vector mean?**
+**Q. What does a Vector mean?**
 
 A Vector is meaningless¹ unless you specify the context - [Vector Space][1]. Assume we are thinking about something like [force vector][2], the context is a 2D or 3D Euclidean world
 
@@ -73,23 +73,29 @@ Here is how the Rosenblatt's perceptron is modelled
 Image source [https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model](https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model)
 
 Inputs are $x_1$ to $x_n$ , weights are some values that are learned $w_1$ to $w_n$. There is also a bias (b)  which in above is  -$\theta$
-If we take the bias term out, the equation is 
+The bias can be modelled as a a weight $w_0$ connected to a dummy input $x_0$ set to 1. 
+
+If we ignore bias for a second the output $y$ can be written as the sum of all inputs times the weights thresholded by the sum value being greater than zero or not.
 
 $$
-f(x) =
+y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  else } y=0
+$$
+
+The big blue circle is the primitive brain of the primitive nerual network - the perceptron brain. Which is basically a funcion $\sigma$ (sigma).
+
+ This is what is called as an *Activation Function* in Neural Networks. We will see that later. This is a step function, we use here, output is non continouts (and hence non-differentiable) and is either 1 or 0.
+
+If the inputs are arranged as a column matrix and weights also arranged likewise then both the input and weights can be treated as vector and $\sum_i w_i x_i$ is same as the dot product $\textbf{w}\cdot\textbf{x}$. Hence the activation function can also be written as 
+
+$$
+\sigma (x) =
 \begin{cases}
 1, & \text{if}\ \textbf{w}\cdot\textbf{x}+b ≥ 0 \\
 0, & \text{otherwise} \\
 \end{cases}
 $$
 
-If we take a dummy input $x_0$ as 1, then  we can add the bias as a weight $w_0$ and then this bias can also fit cleanly to the sigma rule
-
-$y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  else } y=0$
-
-This is the dot product of weight and input vector w.x
-
-Note that dot product of two matrices (representing vectors), can be written as that transpose of one multiplied by another 
+Note that dot product of two matrices (representing vectors), can be written as that transpose of one multiplied by another, $w \cdot x = w^Tx$ 
 
 $$
 \sigma(w^Tx + b)=
@@ -101,13 +107,10 @@ $$
 
 All three equations are the same.
 
-From https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
 
-> So, the equation $\bf w⋅x>b$   defines all the points on one side of
-> the hyperplane, and $\bf w⋅x<=b$  all the points on the other side of
-> the hyperplane and on the hyperplane itself. This happens to be the
-> very definition of “linear separability” Thus, the perceptron allows
-> us to separate our feature space in two convex half-spaces
+The equation $\bf w⋅x>b$   defines all the points on one side of the hyperplane, and $\bf w⋅x<=b$  all the points on the other side of  the hyperplane and on the hyperplane itself. This happens to be the  very definition of “linear separability” Thus, the perceptron allows us to separate our feature space in two convex half-spaces.
+
+(From https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html)
 
 If we can calculate the weights then we can have a weight vector, which splits the input feature vectors to two regions by a hyperplane. 
 
