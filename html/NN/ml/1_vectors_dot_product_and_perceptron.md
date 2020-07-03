@@ -68,7 +68,7 @@ The initial neural network - the Rosenblatt's perceptron was doing this and coul
 
 Here is how the Rosenblatt's perceptron is modelled
 
-  [![perceptron2][7]][7]
+  ![perceptron2][7]
 
 Image source [https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model](https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model)
 
