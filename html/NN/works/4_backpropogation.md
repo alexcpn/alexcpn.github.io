@@ -74,14 +74,44 @@ Note that this is the weight of the last layer (layer l). What backpropogation d
 
 We have two layers here. We have got the weight of layer $l$. We need to find how much to adjust the previous layer $l-1$.
 
+The best way to see this visually is the way it is done by the tree representation of 3Blue1Brown video.
+
+Here is the crux of this below. This is a representaion of a single path in the last layer (l); and it shows how the connection from previous layer; that is the activation of the previous layer and the weigh of the current layer is affecting the output; and thereby the final Cost.
+
+The central idea is how a change in weight affects the Cost in this chain depiction.
+
+$$
+\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l 
+
+$$
+
+We need to find how a small change in weight changes the cost. This is equal to the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by chante in $a^l$. This is the chain rule and this graph representation explains this very intutively.
+
+
+![backpropogationgif]
 
 
 
+Now we have the chain rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this there are lot of links from one layer to the next. This calculated number signifies how much a small nude in the weight of a connection changes the output weight.
+
+
+Neurons that fire togehter, wire together.
+
+
+Now we decrease or increase the wieight to reduce the cost, and this is done by gradient descent.
+
+We now adjust the weights in each layer in Propotion to how each layers weight affects the Cost function. (the propotion is what we calcualted by chain rule)
+
+And that's it folks, backpropogation demystified.
  
 
 
 
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png
+[backpropogation]: https://i.imgur.com/1s89fsX.png
+[backpropogationgif]: https://i.imgur.com/jQOLUG3.gif
+
+
 
 
 
