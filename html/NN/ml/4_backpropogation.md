@@ -90,19 +90,30 @@ We need to find how a small change in weight changes the cost. This is equal to 
 
 ![backpropogationgif]
 
+Here is a more detailed depiction of how the small change in weight add's through the chain to affect the final cost.
+
+![backpropogationgif2]
+
+Now we have the chain rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this there are lot of links from one layer to the next. 
+
+This calculated number signifies how much a small nudge in the weight of a connection changes the output weight.
+
+Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example
 
 
-Now we have the chain rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this there are lot of links from one layer to the next. This calculated number signifies how much a small nude in the weight of a connection changes the output weight.
+Neurons that fire togehter, wire together. This is the sort of adage that is going on behind here. Basically the links that are contributing more to the cost change are adjusted more compared to those that are contributing less.
 
+We now adjust the weights in each layer in propotion to how each layers weight affects the Cost function. (the propotion is what we calcualted by chain rule)
 
-Neurons that fire togehter, wire together.
+$$
 
+  W^l_{new} = W^l_{old} - learningRate* \delta C_0/ \delta w^l
 
-Now we decrease or increase the wieight to reduce the cost, and this is done by gradient descent.
-
-We now adjust the weights in each layer in Propotion to how each layers weight affects the Cost function. (the propotion is what we calcualted by chain rule)
+$$
 
 And that's it folks, backpropogation demystified.
+
+
  
 
 
@@ -110,6 +121,7 @@ And that's it folks, backpropogation demystified.
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png
 [backpropogation]: https://i.imgur.com/1s89fsX.png
 [backpropogationgif]: https://i.imgur.com/jQOLUG3.gif
+[backpropogationgif2]: https://i.imgur.com/AgyuOr2.gif
 
 
 
