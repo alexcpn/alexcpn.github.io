@@ -18,10 +18,10 @@ For training a neural network we need a dataset which has the input and expected
 So far so good.
 
  We do this in the last layer of the multi-layer neural network.
- 
+
  Now how do we adjust the weights of the inner layer ? This is where Backpropagation comes in. In a recursive way weights are adjusted as per their contribution to the output. That is weights or connections which have influenced the output more are adjusted more than those which have influenced the output less.
 
- ## How Backpropagation works
+## How Backpropagation works
 
  Let us see the mathematical notation of representing  a neural network.
 
@@ -50,17 +50,16 @@ The calculated output for a network with $l$ layer is $a^l$.
 
 Let's calculate then the loss function. Difference of expected to the calculated.
 
-Let's use the quadratic cost function here. 
-
+Let's use the quadratic cost function here.
 
 $$
- C = \frac{1}{2} \|y-a^L\|^2 
+ C = \frac{1}{2} \|y-a^L\|^2
 $$
 
 ---
 Note
 
-If there are  $j$ output layers, we need to take the sum of all the activations of the $j$ layers. But this complicates the notation and obscures the intution. So lets skip this for now
+If there are  $j$ output layers, we need to take the sum of all the activations of the $j$ layers. But this complicates the notation and obscures the intuition. So lets skip this for now
 
 $$
 C = \frac{1}{2} \sum_j (y_j-a^L_j)^2,
@@ -81,22 +80,19 @@ repeat till cost is reduced
 $$
   Better Weight = Current Weight - (learning Rate)* \Delta C / \Delta w
 $$
------
+---
 
-### Back Propogation
+### Back-Propagation
 
 Let me repeat this in various ways as this is bit tricky to grasp.
 
 The Wikipedia definition - The term backpropagation strictly refers only to the algorithm for computing the gradient - that is computing $\Delta C / \Delta w$, computing the gradient of the Loss or Cost function with respect to the weight.
 
-
  Speaking more generally, what we usually mean by Back Propagation is the mechanism to adjust the weights of all the layers according to how strong was *each*  of their influence on the final Cost.
 
- 
  Speaking more specifically - It is an algorithm to adjust each weight of every layer in a neural network, by using gradient descent, by calculating the gradient of the Cost function in relation to each weight.
 
 If you have not got this explanation fully, this is fine, once you understand it working, the above will be apparent naturally.
-
 
 ### Back-Propagation in Detail
 
@@ -109,12 +105,11 @@ The best way to see this visually is the way it is done by the tree representati
 The central idea is how a change in weight affects the Cost in this chain depiction.
 
 $$
-\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l 
+\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
 
 $$
 
 We need to find how a small change in weight changes the cost. This is equal to the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
-
 
 ![backpropogationgif]
 
@@ -122,12 +117,11 @@ Here is a more detailed depiction of how the small change in weight adds through
 
 ![backpropogationgif2]
 
-Now we have the Chain Rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this, there are lot of links from one layer to the next. 
+Now we have the Chain Rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this, there are lot of links from one layer to the next.
 
 This calculated number signifies how much a small nudge in the weight of a connection changes the output weight.
 
 Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. This is what BackPropagation calculates.Now the definition of Back Propagation may seem more understandable.
-
 
 Neurons that fire together, wire together. This is the sort of adage that is going on behind here. Basically the links (which are the weights in a neural network) that are contributing more to the cost,are adjusted more, compared to those that are contributing less. Basically like strengthening the links that seem destined to be wired together, vaguely similar to how biological neurons wire together.
 
@@ -146,7 +140,7 @@ For adjusting the weight in the  $(l-1)$ layer, we do similar
 First calculate how the weight in this layer contributes to the final Cost or Loss
 
 $$
-\delta C_0/\delta w^{l-1} = \delta z^{l-1}/\delta w^{l-1} . \delta a^{l-1}/\delta z^{l-1} . \delta C_0/\delta a^{l-1} 
+\delta C_0/\delta w^{l-1} = \delta z^{l-1}/\delta w^{l-1} . \delta a^{l-1}/\delta z^{l-1} . \delta C_0/\delta a^{l-1}
 
 $$
 
@@ -169,16 +163,8 @@ http://neuralnetworksanddeeplearning.com/chap2.html
 
 https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 
-
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png
 [backpropogation]: https://i.imgur.com/1s89fsX.png
 [backpropogationgif]: https://i.imgur.com/jQOLUG3.gif
 [backpropogationgif2]: https://i.imgur.com/AgyuOr2.gif
 [weightnotation]: https://i.imgur.com/XZT17pu.png
-
-
-
-
-
-
-
