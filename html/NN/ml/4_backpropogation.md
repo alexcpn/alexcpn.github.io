@@ -40,6 +40,7 @@ Writing this below gives.
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
+
 http://neuralnetworksanddeeplearning.com/chap2.html
 
 So basically neural network is a chain of activations, one feeding into another.
@@ -64,27 +65,18 @@ If there are  $j$ output layers, we need to take the sum of all the activations 
 $$
 C = \frac{1}{2} \sum_j (y_j-a^L_j)^2,
 $$
+
 ---
 
 ### Gradient Descent
 
 Now this Cost needs to be reduced. We can use the **gradient descent** to find the path to the optimal weight that reduces the cost function for a set of training examples.
 
-As we have seen earlier in gradient descent chapter, we get the path to the optimal weight by following the negative of the gradient of the Cost function with respect to the weight
-
-That is path to optimal weight is
-
----
-repeat till cost is reduced
-
-$$
-  Better Weight = Current Weight - (learning Rate)* \Delta C / \Delta w
-$$
----
+As we have seen earlier in gradient descent chapter, we get the path to the optimal weight by following the negative of the gradient of the Cost function with respect to the weight. But in multi-layered neural network  the question gets tricky on how to update the weights in the different layers.This is where Backpropagation algorithm comes in.
 
 ### Back-Propagation
 
-Let me repeat this in various ways as this is bit tricky to grasp.
+There are various definitions. This is not easy to grasp, but by the end of this chapter, you should have a pretty good grasp.
 
 The Wikipedia definition - The term backpropagation strictly refers only to the algorithm for computing the gradient - that is computing $\Delta C / \Delta w$, computing the gradient of the Loss or Cost function with respect to the weight.
 
@@ -96,20 +88,18 @@ If you have not got this explanation fully, this is fine, once you understand it
 
 ### Back-Propagation in Detail
 
-We have two layers here. We have got the weight of layer $l$. We need to find how much to adjust the previous layer $l-1$.
+Consider a neural network with multiple layers. The weight of layer $l$ is $w^l$.  And for the previous layer it is $w^{(l-1)}$.
 
-The best way to see this visually is the way it is done by the tree representation of 3Blue1Brown video linked [here](https://www.youtube.com/watch?v=tIeHLnjs5U8). That is so far the best explanation of this topic.
+The best way to understand backpropagation is visually and by the way it is done by the tree representation of 3Blue1Brown video linked [here](https://www.youtube.com/watch?v=tIeHLnjs5U8).
 
- The below  GIF is a representation of a single path in the last layer (l) of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
+ The below  GIF is a representation of a single path in the last layer($l$ of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
 
 The central idea is how a change in weight affects the Cost in this chain depiction.
 
-$$
-\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
+There are two three things to note. We are talking now about the *Cost* and how the Cost and Weights in different layers are related.
 
-$$
 
-We need to find how a small change in weight changes the cost. This is equal to the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
+We need to find how a small change in weight ($\Delta w$), shown int the top left, changes the Cost. This change of Cost, is the result of the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
 
 ![backpropogationgif]
 
@@ -117,17 +107,34 @@ Here is a more detailed depiction of how the small change in weight adds through
 
 ![backpropogationgif2]
 
-Now we have the Chain Rule, we can calculate how a small change in weight is going to change the Cost. This is for a single link. Like this, there are lot of links from one layer to the next.
+This is the Chain Rule 
 
-This calculated number signifies how much a small nudge in the weight of a connection changes the output weight.
+$$
 
-Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. This is what BackPropagation calculates.Now the definition of Back Propagation may seem more understandable.
+\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
+
+$$
+
+
+Now we have the Chain Rule, we can calculate how a small change in weight is going to change the Cost through a chain of layers
+
+Ignore for the time that this is for a single link. In a production neural network there are lot of links from one layer to the next.
+
+This calculated number $\delta C_0/\delta w^l$ signifies how much a small nudge in the weight of a connection changes the output weight.
+
+This calculation is the key part. It is easy to grasp visually, once you have the connection diagram or *computational graph* of the network in mind.
+
+Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. 
+
+This is what BackPropagation calculates.Now the definition of Back Propagation may seem more understandable.
+
+Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost.
 
 Neurons that fire together, wire together. This is the sort of adage that is going on behind here. Basically the links (which are the weights in a neural network) that are contributing more to the cost,are adjusted more, compared to those that are contributing less. Basically like strengthening the links that seem destined to be wired together, vaguely similar to how biological neurons wire together.
 
 We now adjust the weights in each layer in proportion to how each layers weight affects the Cost function. (the proportion is what we calculated by chain rule - by Back Propagation)
 
-This adjustment then is calculating the new weight by following the negative of the gradient of the cost function - basically the gradient descent.
+This adjustment then is calculating the new weight by following the negative of the gradient of the Cost function - basically by gradient descent.
 
 $$
 
@@ -152,7 +159,9 @@ $$
 
 $$
 
-And that's it folks, backpropagation demystified.Next would be to add more layers and more connections and change the notation to represent the place of each weight in each layer so $w^l$ becomes $w^l_{j,k}$
+And that's it folks, backpropagation demystified. Simple and elegant, but looks pretty complex from the outside.
+
+Next would be to add more layers and more connections and change the notation to represent the place of each weight in each layer so $w^l$ becomes $w^l_{j,k}$
 
 ![weightnotation]
 Source : Michael Nielsen: NeuralNetwork and Deep Learning book
