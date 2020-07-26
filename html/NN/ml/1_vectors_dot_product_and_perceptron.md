@@ -81,9 +81,9 @@ $$
 y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  else } y=0
 $$
 
-The big blue circle is the primitive brain of the primitive nerual network - the perceptron brain. Which is basically a funcion $\sigma$ (sigma).
+The big blue circle is the primitive brain of the primitive neural network - the perceptron brain. Which is basically a function $\sigma$ (sigma).
 
- This is what is called as an *Activation Function* in Neural Networks. We will see that later. This is a step function, we use here, output is non continouts (and hence non-differentiable) and is either 1 or 0.
+ This is what is called as an *Activation Function* in Neural Networks. We will see that later. This is a step function, we use here, output is non continuous (and hence non-differentiable) and is either 1 or 0.
 
 If the inputs are arranged as a column matrix and weights also arranged likewise then both the input and weights can be treated as vector and $\sum_i w_i x_i$ is same as the dot product $\textbf{w}\cdot\textbf{x}$. Hence the activation function can also be written as 
 

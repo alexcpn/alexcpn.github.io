@@ -10,7 +10,7 @@ Between the perceptron discovery in the late 1960s and the AlexNet Convolutional
 
 If you want a quick look at the some of the known contributors you can start from the reverse mode of automatic differentiation - a mathematical paper around the 1970s by Seppo Linnainmaa. This could have been a base for Geoffrey Hinton, David Rumelhart, Ronald J. Williams paper around 1986  for the backpropagation algorithm for neural network, which could be the base for  Yaan Le Cun's convolutional neural network for handwriting recognition of digits around 1998-2000 [Reading Handwritten Digits A Zip Code Recognition System], which could be the base for Geoffrey Hinton's student Alex Krizhevsk's deeper and better Convolutional Neural network [ImageNet Classification with Deep Convolutional Neural Networks]  called AlexNet around 2012. And in 2012 AlexNet left all other ML-based competitors (HOG, HAAR based)  far behind in the ImageNet competition. 
 
-Beyond this very brief and shallow overview, one needs to refer to a deeper study like Deep Neural Network history [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]  and the many people who have contributed. The Wikipedia [history of Backpropogation] shows how many times it has been discovered and re-discovered, from control theory applications to neural nets
+Beyond this very brief and shallow overview, one needs to refer to a deeper study like Deep Neural Network history [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]  and the many people who have contributed. The Wikipedia [history of Backpropagation] shows how many times it has been discovered and re-discovered, from control theory applications to neural nets
 
 Frankly, it does not matter who. It matters how, as it can give an insight into the discovery. But there are quite a lot of overlaps in that short history and quite many brilliant minds contributing, that it is not that linear, to afford us further insight. Suffice it is to say that from 2012 neural network was no more a niche academic field. 
 
@@ -31,7 +31,7 @@ You can see in the figure below where this tangent is touching the x-axis $x_1$ 
 
 ![Netwon Raphson Method](https://i.imgur.com/huJ8gEc.png)
 
-You may think how finding the root can help in optimization. For optimisation of a function $f(x)$, maximum and minima, happens at $f'(x)$= 0. So we can use the same method as above but instead of solving for  $f(x)$=0, we need to solve for $f'(x)$=0. We can use the same equation and substitute $f'(x)$  instead of $f(x)$.
+You may think how finding the root can help in optimization. For optimization of a function $f(x)$, maximum and minima, happens at $f'(x)$= 0. So we can use the same method as above but instead of solving for  $f(x)$=0, we need to solve for $f'(x)$=0. We can use the same equation and substitute $f'(x)$  instead of $f(x)$.
 
 $x_1$ = $x_0$ - $f'(x_0)$/$f''(x_0)$
 
@@ -68,11 +68,11 @@ Where $X_i$ is a vector of calculated values and $\hat Xi$ is the vector of expe
 
 This is usually for regression problems in ML. For Classification problems, we have cost functions like  Cross-Entropy Loss or Hinge Loss/Multi-class SVM Loss. More details regarding different loss functions here [https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f](https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f)
 
-Note that all the Cost functions used are continious functions, that is they are differentiable. This is an imporant part as else we cannot apply gradient descent. For Classification loss or cost functions, the output is a probabity distubution between 0 and 1.
+Note that all the Cost functions used are continuous functions, that is they are differentiable. This is an important part as else we cannot apply gradient descent. For Classification loss or cost functions, the output is a probability distribution between 0 and 1.
 
- Now we need to find the values of weights that can minimise the function. 
+ Now we need to find the values of weights that can minimize the function. 
 
-Let's take a closer look at optimising the cost function. Let's talk about linear regression (line fitting) ML algorithm and optimising it using  Mean Squared Error via Gradient Descent. This is the simplest to explain visually and hence we too use this for illustrating.
+Let's take a closer look at optimizing the cost function. Let's talk about linear regression (line fitting) ML algorithm and optimizing it using  Mean Squared Error via Gradient Descent. This is the simplest to explain visually and hence we too use this for illustrating.
 
 In the diagram below the red line ($y= mx +b$) is the optimal line that one can draw through the sample set. The slope *m* and constant *b* is learned by the gradient descent algorithm. The x y-axis could be some data set like house price to area etc, which we have, and once we find a fitting line, we can plugin other values of x to give predicted y - regression. 
 
@@ -120,7 +120,7 @@ And the loss function in say three dimensions will geometrically be something li
 
 But the intuition regarding solving it is the same. Instead of the simple slope as in the case of two-dimensional loss function like MSE, we take the **gradient vector** and follow the negative to the gradient, with some constant selected as the learning rate. The constant is so chosen, that we decrement in short steps, and reduce the risk of overshooting the minima.
 
-In the next part we will see where the gradient descent comes into play in nerual network learning.
+In the next part we will see where the gradient descent comes into play in neural network learning.
 
 
 [Reading Handwritten Digits A Zip Code Recognition System]:http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf

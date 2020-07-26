@@ -1,27 +1,27 @@
 
-# Backpropogation
+# Back-propagation Demystified
 
-## Activation functions, Cost functions and Backpropogation
+## Activation functions, Cost functions and Back-propagation
 
-We have seen how gradient descent was used to optimise the cost function associated with linear regression and how that leads to find the optimal line seperating the features  in  linear regression.
+We have seen how gradient descent was used to optimise the cost function associated with linear regression and how that leads to find the optimal line separating the features  in  linear regression.
 
-Now this same method is used for Neural Network Learning. We use the method of backpropogation to propogate recursively the optmised weights from gradient descent from output layers to the input layers.
+Now this same method is used for Neural Network Learning. We use the method of back-propagation to propagate recursively the optimise weights from gradient descent from output layers to the input layers.
 
 ## Structure of a Neural Network
 
-Neural network is basically a set of inputs connected through 'weights' to a set of activation functions - the artifical neuron (the round circles you see in the diagram below), whose output will be the input for the next layers and so on. The final layer will be either 2 'neurons' for modelling classification problems, or a set of connections for regression problems - example for number recogintion the output will have 10 neurons (to represent digits 0 to 9). Below is one diagram.
+Neural network is basically a set of inputs connected through 'weights' to a set of activation functions - the artificial neuron (the round circles you see in the diagram below), whose output will be the input for the next layers and so on. The final layer will be either 2 'neurons' for modelling classification problems, or a set of connections for regression problems - example for number recognition the output will have 10 neurons (to represent digits 0 to 9). Below is one diagram.
 
 ![neuralnetwork]
 
-For training a neural network we need a dataset which has the input and expected output. The weights are randomly intialised and the inputs passed into the activation function through the weights gives some ouput. This output or computed values can be compared to the expected results and the difference gives the error of the network. We can create a 'Cost Function' with a simple function of this error like what we saw in the last chapter say the Mean Squared Error. We can use the same Gradient Descent now to adjust the weights so that the error is minimized. 
+For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized and the inputs passed into the activation function through the weights gives some output. This output or computed values can be compared to the expected results and the difference gives the error of the network. We can create a 'Cost Function' with a simple function of this error like what we saw in the last chapter say the Mean Squared Error. We can use the same Gradient Descent now to adjust the weights so that the error is minimized.
 
 So far so good.
 
- We do this in the last layer of the multi-layer neural network. 
+ We do this in the last layer of the multi-layer neural network.
  
- Now how do we adjust the weights of the inner layer ? This is where Backpropogation comes in. In a recursive way weights are adjusted as per their contributiion to the output. That is weights or connections which have influenced the output more are adjusted more than those which have influenced the output less.
+ Now how do we adjust the weights of the inner layer ? This is where Backpropagation comes in. In a recursive way weights are adjusted as per their contribution to the output. That is weights or connections which have influenced the output more are adjusted more than those which have influenced the output less.
 
- ## How Backpropogation works
+ ## How Backpropagation works
 
  Let us see the mathematical notation of representing  a neural network.
 
@@ -42,9 +42,9 @@ $$
 $$
 http://neuralnetworksanddeeplearning.com/chap2.html
 
-So bacically neural network is a chain of activations, one feeding into another.
+So basically neural network is a chain of activations, one feeding into another.
 
-Let the explected output be $y$ for a training example $x$. Notice that we train with a lot of examples. But we are talking here now about only one example in the training set.
+Let the expected output be $y$ for a training example $x$. Notice that we train with a lot of examples. But we are talking here now about only one example in the training set.
 
 The calculated output for a network with $l$ layer is $a^l$.
 
@@ -57,9 +57,8 @@ $$
  C = \frac{1}{2} \|y-a^L\|^2 
 $$
 
-
 ---
-Note 
+Note
 
 If there are  $j$ output layers, we need to take the sum of all the activations of the $j$ layers. But this complicates the notation and obscures the intution. So lets skip this for now
 
@@ -72,7 +71,7 @@ $$
 
 Now this Cost needs to be reduced. We can use the **gradient descent** to find the path to the optimal weight that reduces the cost function for a set of training examples.
 
-As we have seen earlier in gradient descent chapter, we get the path to the optimal weight by following the negative of the gradeint of the Cost function with respect to the weight
+As we have seen earlier in gradient descent chapter, we get the path to the optimal weight by following the negative of the gradient of the Cost function with respect to the weight
 
 That is path to optimal weight is
 
@@ -88,24 +87,24 @@ $$
 
 Let me repeat this in various ways as this is bit tricky to grasp.
 
-The Wikipedia defention - The term backpropagation strictly refers only to the algorithm for computing the gradient - that is computing $\Delta C / \Delta w$, computing the gradeint of the Loss or Cost function with respect to the weight.
+The Wikipedia definition - The term backpropagation strictly refers only to the algorithm for computing the gradient - that is computing $\Delta C / \Delta w$, computing the gradient of the Loss or Cost function with respect to the weight.
 
 
- Speakig more generally, what we usually mean by Back Propogation is the mechanism to adjust the weights of all the layers according to how strong was *each*  of their influence on the final Cost.
+ Speaking more generally, what we usually mean by Back Propagation is the mechanism to adjust the weights of all the layers according to how strong was *each*  of their influence on the final Cost.
 
  
- Speaking more specifically - It is an algorithm to adjust each weight of every layer in a neural network, by using gradient descent, by calculting the gradeient of the Cost function in relation to each weight.
+ Speaking more specifically - It is an algorithm to adjust each weight of every layer in a neural network, by using gradient descent, by calculating the gradient of the Cost function in relation to each weight.
 
-If you have not got this explanation fully, this is fine, once you understand it working, the above will be apparent nauturally.
+If you have not got this explanation fully, this is fine, once you understand it working, the above will be apparent naturally.
 
 
-### Back Propogation in Detail
+### Back-Propagation in Detail
 
 We have two layers here. We have got the weight of layer $l$. We need to find how much to adjust the previous layer $l-1$.
 
 The best way to see this visually is the way it is done by the tree representation of 3Blue1Brown video linked [here](https://www.youtube.com/watch?v=tIeHLnjs5U8). That is so far the best explanation of this topic.
 
- The below  GIF is a representaion of a single path in the last layer (l) of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
+ The below  GIF is a representation of a single path in the last layer (l) of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
 
 The central idea is how a change in weight affects the Cost in this chain depiction.
 
@@ -114,12 +113,12 @@ $$
 
 $$
 
-We need to find how a small change in weight changes the cost. This is equal to the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intutively.
+We need to find how a small change in weight changes the cost. This is equal to the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
 
 
 ![backpropogationgif]
 
-Here is a more detailed depiction of how the small change in weight add's through the chain to affect the final cost.
+Here is a more detailed depiction of how the small change in weight adds through the chain to affect the final cost.
 
 ![backpropogationgif2]
 
@@ -127,14 +126,14 @@ Now we have the Chain Rule, we can calculate how a small change in weight is goi
 
 This calculated number signifies how much a small nudge in the weight of a connection changes the output weight.
 
-Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. This is what BackPropogation calculates.Now the defintion of Back Propogation may seem more understandable.
+Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. This is what BackPropagation calculates.Now the definition of Back Propagation may seem more understandable.
 
 
-Neurons that fire togehter, wire together. This is the sort of adage that is going on behind here. Basically the links (which are the weights in a neural network) that are contributing more to the cost,are adjusted more, compared to those that are contributing less. Basically like strengthening the links that seem destinied to be wired together, vaguely similar to how bilogical neurons wire together.
+Neurons that fire together, wire together. This is the sort of adage that is going on behind here. Basically the links (which are the weights in a neural network) that are contributing more to the cost,are adjusted more, compared to those that are contributing less. Basically like strengthening the links that seem destined to be wired together, vaguely similar to how biological neurons wire together.
 
-We now adjust the weights in each layer in propotion to how each layers weight affects the Cost function. (the propotion is what we calcualted by chain rule - by Back Propogation)
+We now adjust the weights in each layer in proportion to how each layers weight affects the Cost function. (the proportion is what we calculated by chain rule - by Back Propagation)
 
-This adjustment then is calculating the new weight by following the negative of the gradeint of the cost function - basically the gradient descent.
+This adjustment then is calculating the new weight by following the negative of the gradient of the cost function - basically the gradient descent.
 
 $$
 
@@ -159,8 +158,7 @@ $$
 
 $$
 
-
-And that's it folks, backpropogation demystified.Next would be to add more layers and more connections and change the notation to represent the place of each weight in each layer so $w^l$ becomes $w^l_{j,k}$
+And that's it folks, backpropagation demystified.Next would be to add more layers and more connections and change the notation to represent the place of each weight in each layer so $w^l$ becomes $w^l_{j,k}$
 
 ![weightnotation]
 Source : Michael Nielsen: NeuralNetwork and Deep Learning book

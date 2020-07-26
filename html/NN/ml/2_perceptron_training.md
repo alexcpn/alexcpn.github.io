@@ -20,7 +20,7 @@ $$
 
 Now let us see why we want a weight vector first - once again and then we go to how it is obtained.
 
-Assume that there are two sets of feature vectors P and N, where P is set of positive samples (say cat features) and N is non-positve cases (say non-cat features) and P and N are the correctly classified **Training Set**.
+Assume that there are two sets of feature vectors P and N, where P is set of positive samples (say cat features) and N is non-positive cases (say non-cat features) and P and N are the correctly classified **Training Set**.
  
 We can see how hyperplane that is created orthogonal (perpendicular) to the weight vector splits input feature vector space, into two distinct regions.
 
