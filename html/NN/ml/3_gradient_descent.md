@@ -15,10 +15,12 @@ Beyond this very brief and shallow overview, one needs to refer to a deeper stud
 Frankly, it does not matter who. It matters how, as it can give an insight into the discovery. But there are quite a lot of overlaps in that short history and quite many brilliant minds contributing, that it is not that linear, to afford us further insight. Suffice it is to say that from 2012 neural network was no more a niche academic field. 
 
 ## Optimization and Gradient Descent
+
 Before we go to more complex topics like, let us see the simpler problem, the problem of Optimization.
 
-### Newtons Method
-Before the gradient descent method was discovered, optimization of a differentiable function was done by Netwon's method, also called [Netwon -Raphons method](https://en.wikibooks.org/wiki/Calculus/Newton%27s_Method).
+### Newton's Method
+
+Before the gradient descent method was discovered, optimization of a differentiable function was done by Netwon's method, also called [Newton -Raphons method](https://en.wikibooks.org/wiki/Calculus/Newton%27s_Method).
 
 The intuition regarding this is something like below.
 Assume that we need to find the   $\sqrt16$.  This is the same as solving the equation $x^2 − 16 = 0$.
@@ -29,7 +31,7 @@ $x_1$ = $x_0$ - $f(x_0)$/$f'(x_0)$
 
 You can see in the figure below where this tangent is touching the x-axis $x_1$ = 13.04 for $x_0$=0.628. We take the tangent at 13.04 and see where it is touching the x-axis at 7.13 and finally we reach at 4 which is the solution - an [inflexion point](https://en.wikipedia.org/wiki/Inflection_point)   of the function.
 
-![Netwon Raphson Method](https://i.imgur.com/huJ8gEc.png)
+![Newton Raphson Method](https://i.imgur.com/huJ8gEc.png)
 
 You may think how finding the root can help in optimization. For optimization of a function $f(x)$, maximum and minima, happens at $f'(x)$= 0. So we can use the same method as above but instead of solving for  $f(x)$=0, we need to solve for $f'(x)$=0. We can use the same equation and substitute $f'(x)$  instead of $f(x)$.
 
@@ -45,7 +47,7 @@ It is a function wich represents the difference between the expected value and t
 $$
 \text{ say } x_1  \text{  is the actual \,value} \\
 
-\text{Expeceted value } = \hat x \\
+\text{Expected value } = \hat x \\
 
 \text{Error in the function} = x_1 -\hat  x
 
