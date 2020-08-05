@@ -145,20 +145,35 @@ c0 = ((y-a2)**2)/2
 ```
 Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.
 
+Lets write down the Chain rule first.
 $$
-\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
+\delta C/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C/\delta a^l
 $$
 $$
 z^l = a^{l-1}.w^l
 $$
 
-c0w2 = 
+Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
 
-$$
 
-\delta C_0/\delta w^2 = \delta z^2/\delta w^2 . \delta a^2/\delta z^2 . \delta C_0/\delta a^2
+$$\begin{aligned}
+\delta C/\delta w^2 = \delta z^2/\delta w^2 . \delta a^2/\delta z^2 . \delta C/\delta a^2 \\ \\
+\mathsf
+where \quad
+z^2 = a^1.w^2 \\ \\So  \quad 
+\frac {\partial z^2}{\partial w^2}  = \frac {\partial (a^1.w^2 )}{\partial w^2} = a^1 \rightarrow (1)\\ \\
+where  \quad a^2 = sigmoid(z^2) \\ \\
+So \quad  \frac {\partial a^2 }{\partial z^2} =
+\frac{\partial sigmoid(z^2) }{\partial z^2} = \ derivativeSigmoid(a^2) \rightarrow (2) \\ \\
+and \space finally \space we \space have  \\\\
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = 2*\frac{1}{2}(a^2-y) =(a^2-y) \rightarrow (3) \\ \\
+and  \space finally \space we \space have \\ \\
+\frac {\partial C}{\partial w^2} = a^1*derivativeSigmoid(a^2)*(a^2-y) 
 
-$$
+
+\end{aligned}$$
+
+Now we need to code this in.
 
 ```
 a2 = sigmoid(np.dot(a1,w2))

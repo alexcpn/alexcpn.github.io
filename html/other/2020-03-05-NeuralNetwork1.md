@@ -40,7 +40,7 @@ $$
 $$
 
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
-\begin{aligned}
+
 $$
  \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
