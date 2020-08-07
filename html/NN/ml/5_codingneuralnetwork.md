@@ -155,22 +155,83 @@ $$
 
 Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
 
-
 $$\begin{aligned}
 \frac {\partial C}{\partial w^2}= \frac {\partial z^2}{\partial w^2}. \frac {\partial a^2}{\partial z^2}. \frac {\partial C}{\partial a^2} \\ \\
 \mathsf
+
 where \quad
-z^2 = a^1.w^2 \\ \\So  \quad 
+
+z^2 = a^1.w^2 \\ \\
+
+So  \quad 
 \frac {\partial z^2}{\partial w^2}  = \frac {\partial (a^1.w^2 )}{\partial w^2} = a^1 \rightarrow (1)\\ \\
+
 Next \\ 
+
  \quad  \frac {\partial a^2 }{\partial z^2} =
 \frac{\partial sigmoid(z^2) }{\partial z^2} = \ derivativeSigmoid(a^2) \rightarrow (2) \\ \\
-and \space finally \space we \space have  \\\\
+
+and \space finally \space we \space have  \\ \\
+
 \frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = 2*\frac{1}{2}(a^2-y) =(a^2-y) \rightarrow (3) \\ \\
-and  \space finally \space we \space have \\ \\
+and  \space  \space we \space have \\ \\
+
 \frac {\partial C}{\partial w^2} = a^1*derivativeSigmoid(a^2)*(a^2-y) \\ \\
 
 \end{aligned}$$
+
+Now let's do the same for the inner layer.
+
+$$\begin{aligned}
+
+\frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1} \\ \\
+
+\mathsf
+where \quad
+
+z^1 = a^0.w^1 \\ \\So  \quad 
+
+\frac {\partial z^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = a^0 \rightarrow (1)\\ \\
+
+Next \\ 
+
+ \quad  \frac {\partial a^1 }{\partial z^1} =
+\frac{\partial sigmoid(z^1) }{\partial z^1} = \ derivativeSigmoid(a^1) \rightarrow (2) \\ \\
+
+and \space finally \space we \space have  \\\\
+
+\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}\\ \\
+
+
+
+Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \space
+
+\frac {\partial C}{\partial(a^2)} \\ \\
+
+Now \space to \space calculate \space
+
+ \frac{\partial(a^2)}{\partial(a^1)} \\ \\
+
+Note \space that \\ \\
+a^{l} = \sigma(w^l a^{l-1}+b^l) \\ \\
+
+a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
+
+Which \space then \space gives \\ \\
+
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
+
+w^2 . derivativeSigmoid(a^1) \rightarrow (3)\\ \\
+
+Putting \space all \space together \\ \\
+
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . derivativeSigmoid(a^1)
+
+\end{aligned}$$
+
+---
+
+
 
 Now the real meat - we use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calcualte the error gradient $\frac{\partial C}{\partial w}$ and repeat
 
@@ -182,7 +243,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 
 \end{aligned}$$
 
-
+Reference  - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
 
 Now we need to code this in.
 
