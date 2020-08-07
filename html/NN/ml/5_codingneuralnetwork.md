@@ -147,7 +147,7 @@ Now we need to use the back-propagation algorithm to calculate how each weight h
 
 Lets write down the Chain rule first.
 $$
-\partial C/\partial w^l = \partial z^l/\partial w^l . \partial a^l/\partial z^l . \partial C/\partial a^l
+\frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
 $$
 $$
 z^l = a^{l-1}.w^l
@@ -172,7 +172,7 @@ and  \space finally \space we \space have \\ \\
 
 \end{aligned}$$
 
-Now the real meat - we use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then recalcualte the error gradient $\frac{\partial C}{\partial w}$ and repeat
+Now the real meat - we use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calcualte the error gradient $\frac{\partial C}{\partial w}$ and repeat
 
 $$\begin{aligned}
 
