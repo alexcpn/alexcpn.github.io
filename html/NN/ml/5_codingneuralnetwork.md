@@ -109,9 +109,11 @@ $$
 Putting these together we get the final equation for the second layer
 
 ---
+
 $$
 \frac {\partial C}{\partial w^2} = \sigma^{}' (z^{2})*(a^2-y) \quad \rightarrow (3) 
 $$
+
 ----
 
 Now let's do the same for the inner layer.
@@ -139,7 +141,7 @@ $$
 \frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
 $$
 
-$$ \begin{aligned}
+$$\begin{aligned}
 
 Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad 
 
@@ -159,13 +161,14 @@ w^2 . \sigma^{}'(a^1) \rightarrow (4.2)\\ \\
 Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 
 \end{aligned}$$
+
 ---
+
 $$
 \frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma^{}'(z^1) \quad \rightarrow \mathbb (5) 
 $$
+
 ---
-
-
 
 ## Implementation
 
