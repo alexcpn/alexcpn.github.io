@@ -2,7 +2,7 @@
 
 Let's take the simple neural network  and walk through the same, first going through the maths and then the implementation.
 
-Let's write the  equation of the fiollowing neural network
+Let's write the  equation of the following neural network
 
 ```
 x is the Input
@@ -13,7 +13,8 @@ a is the activation function ,(we use sigmoid here)
 
 $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
- $$
+$$
+
  This can be written taking x as $a^0$; and where
 
  $$
@@ -25,6 +26,7 @@ $$
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
+
 We can write this as
 
 $$
@@ -40,7 +42,7 @@ $$
 We can also easily calculate
 
 $$
-\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma' (z^{l}) \quad \rightarrow  (\mathbf {a})
+\mathbf {\frac{\partial a^{l} }{\partial w} = \frac{\partial \sigma (z^{l}) }{\partial w} = \sigma' (z^{l}) \quad \rightarrow  ( {a})}
 $$
 
 Which basically states that if  $a^l$ = sigmoid($z^l$) then
@@ -51,11 +53,11 @@ $$
 
 Where $\sigma'$ = derivativeSigmoid
 
-Regarding the Basis *b*
+Regarding the Basis *b* in
 
-$$
+$
   z^{l} =(w^l a^{l-1}+b^l).
-$$
+$
 
 If we create a dummy input $a^0 =1$  then we can set the basis in the above equation to $w^0 =b$ Thisi s how it is done during implementation. We wont takt that now into use here, so ignore basis for the time being.
 
@@ -64,11 +66,15 @@ If we create a dummy input $a^0 =1$  then we can set the basis in the above equa
 Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first.
 
 ---
+
+## A Two Layered Neural Network
+
 Our two layer neural network can be written as
 
  $$
- a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y
+ \mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
  $$
+
  ---
 
  Note that $a^2$ does not denote the exponent but just that it is of layer 2.
@@ -82,8 +88,15 @@ $$
 This can also be written as
 
 $$
-\frac {\partial C}{\partial w^l} = \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
+\mathbf {\frac {\partial C}{\partial w^l} = \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
+}
 $$
+
+We will use the above equation as the basis for the rest of the chapter.
+
+## Calculate the Gradient Vector of Loss function
+
+### In Output Layer
 
 Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
 
@@ -94,11 +107,9 @@ $$
 from equation (a) 
 
 $$
+\mathbb{
 \frac{\partial a^{2} }{\partial w^2} = \sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
-$$
-
-$$
-\sigma'  =derivativeSigmoid
+}
 $$
 
 Next 
@@ -111,11 +122,15 @@ Putting these together we get the final equation for the second layer
 
 ---
 
-$$
-\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) 
+$$ \mathbf{
+\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) }
 $$
 
 ----
+
+## Calculate the Gradient Vector of Loss function
+
+### In Inner Layer
 
 Now let's do the same for the inner layer.
 
@@ -150,7 +165,7 @@ Note \space that \space in \space the\space  previous \space section \space \spa
 
 Now \space to \space calculate \space
 
- \frac{\partial(a^2)}{\partial(a^1)} \\ \\
+ \frac{\partial(a^2)}{\partial(a^1)} \space where \space
 
 a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
@@ -166,10 +181,22 @@ Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 ---
 
 $$
+\mathbf{
 \frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1) \quad \rightarrow \mathbb (5) 
+}
 $$
 
 ---
+
+With equations (3) and (5) we can calculate the Gradient of the Loss function with respect to weights in any layer and using this update the weights in any layer iteratively.
+
+$$
+
+  W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
+
+$$
+
+
 
 ## Implementation
 
@@ -250,8 +277,6 @@ def derv_sigmoid(x):
 
 With this we can have the output of first, second and third layer, using our equation of neural network forward propagation.
 
-(Note - ignore the basis term for now)
-
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
@@ -298,13 +323,11 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 
 \end{aligned}$$
 
-Reference  - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
-
-Now we need to code this in.
-
-```
-a2 = sigmoid(np.dot(a1,w2))
-z2 = np.dot(a1,w2)
-```
-
 TODO
+
+
+Reference  
+- https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
+
+
+
