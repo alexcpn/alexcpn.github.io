@@ -1,9 +1,7 @@
 
-# The Maths of Machine Learning and Nerual Networks
-- Alex Punnen 
-- 2019-2020
+# Chapter 1: Vectors, Dot Products and  the Perceptron
 
-## Vectors, Dot Products and  the Perceptron
+Let's go through some basics first and jump to the first ariticial neuron the Perceptron.
 
 **Q. Why are inputs and weights modelled as Vectors in Neural Networks ?**
 

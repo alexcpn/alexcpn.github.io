@@ -1,8 +1,4 @@
-# The Maths of Machine Learning and Nerual Networks
-- Alex Punnen 
-- 2019-2020
-
-## A little about Gradient Descent, Gradient Vector and Loss Function
+# Chapter 3: Gradient Descent, Gradient Vector and Loss Function
 
 It is not clear when gradient descent became popular for training neural networks.  It is clear that the limitation of Perceptron showed the limitations of shallow layered neural networks, and for deeper layers, an effective way of training was the hard part.
 

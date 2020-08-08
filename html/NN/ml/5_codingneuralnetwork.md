@@ -1,31 +1,162 @@
-# Walk through of a Simple Neural Network
+# Chapter 5: Back Propagation for a Two layered Neural Network
 
-Let's take the simple neural network in Python given here and walk through the same. 
-
-I am using the example here http://iamtrask.github.io/2015/07/12/basic-python-network/ as the base of this article
-
-## Step 1.
+Let's take the simple neural network  and walk through the same, first going through the maths and then the implementation.
 
 Let's write the  equation of the neural network
 
 ```
-x is the Input.
+x is the Input
 y is the Output.
-l is a layer of the Neural Network.
-a is the activation function
+l is the number of layers of the Neural Network.
+a is the activation function ,(we use sigmoid here)
 ```
 
 $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
  $$
- 
+ This can be written taking x as $a^0$
+ $$
+ a^0 \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
+ $$
+
  and in the activation function we take the sigmoid of the input of the previous layer $a^{l-1}$. That is in layer 2, the input $x$ is the input
 
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
+We can write this as
 
-This is not so difficult to code up. Let's do this. I am following the blog and code here http://iamtrask.github.io/2015/07/12/basic-python-network/ adding little more explanation for each of the steps, from what we have learned.
+$$
+a^{l} = \sigma(z^l)
+$$
+
+where
+$$
+z^l =w^l a^{l-1}
+$$
+
+We can also easily calculate
+$$
+\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma^{}' (z^{l}) \quad \rightarrow  (\mathbf  {a})
+$$
+Which basically states that if  $a^l$ = sigmoid($z^l$) then
+$$
+\frac{\partial a^{l} }{\partial w} = derivativeSigmoid(z^l)
+$$
+Where $\sigma^{}'$ = derivativeSigmoid
+
+Regarding the Basis *b*
+
+$$
+  z^{l} =(w^l a^{l-1}+b^l).
+$$
+
+If we create a dummy input $a^0 =1$  then we can set the basis in the above equation to $w^0 =b$ Thisi s how it is done during implementation. We wont takt that now into use here, so ignore basis for the time being.
+
+
+---
+Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first.
+
+---
+Our two layer neural network can be written as
+
+ $$
+ a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y
+ $$
+ ---
+ Note that here $a^2$ does not denote the exponent but just that it is of layer 2.
+
+Lets write down the Chain rule first.
+$$
+\frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
+$$
+This can also be written as
+$$
+\frac {\partial C}{\partial w^l} = \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
+$$
+
+Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
+
+$$
+\frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
+$$
+from equation (a) 
+
+$$
+\frac{\partial a^{2} }{\partial w^2} = \sigma^{}' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
+$$
+$$
+\sigma^{}'  =derivativeSigmoid
+$$
+Next 
+
+$$
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (2) 
+$$
+
+Putting these together we get the final equation for the second layer
+
+---
+$$
+\frac {\partial C}{\partial w^2} = \sigma^{}' (z^{2})*(a^2-y) \quad \rightarrow (3) 
+$$
+----
+
+Now let's do the same for the inner layer.
+
+$$
+
+\frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1} 
+$$
+
+This can also be written as
+$$
+\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}
+$$
+
+We can calculate the first part of this like below
+$$
+\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = \sigma^{}'(z^1)  \quad \rightarrow (4.1)
+$$
+
+Now this a slightly tricky part and we use Chain Rule to split this up like below, the first part of which we calculated in the earlier step.
+
+$$
+\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
+$$
+
+$$ \begin{aligned}
+
+Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad 
+
+
+\frac {\partial C}{\partial(a^2)}  \\ \\
+
+Now \space to \space calculate \space
+
+ \frac{\partial(a^2)}{\partial(a^1)} \\ \\
+
+a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
+
+
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
+
+w^2 . \sigma^{}'(a^1) \rightarrow (4.2)\\ \\
+
+Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
+
+\end{aligned}$$
+---
+$$
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma^{}'(z^1) \quad \rightarrow \mathbb (5) 
+$$
+---
+
+
+
+## Implementation
+
+With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here http://iamtrask.github.io/2015/07/12/basic-python-network/ adding little more explanation for each of the steps, from what we have learned.
 
 We will use matrices to code up our network
 
@@ -57,16 +188,7 @@ A neural network can be implemented as a set of arrays representing the weights 
 
 Let's create a 2 layered network. Before that please not the formula for the neural network
 
-$$
-  z^{l} =(w^l a^{l-1}+b^l).
-$$
 
-If we create a dummy input $a^0 =1$, then we can shift the basis in the above equation to $w^0$. 
-
-$$
-  \sum _{l=1}^{n}z^{l} =(w^l a^{l-1}).
-$$
-Ignore basis for the time being.
 
 So basically the output at layer l is the dot product of the weight matrix of layer l and input of the previous layer.
 
@@ -144,90 +266,6 @@ $$
 c0 = ((y-a2)**2)/2
 ```
 Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.
-
-Lets write down the Chain rule first.
-$$
-\frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
-$$
-$$
-z^l = a^{l-1}.w^l
-$$
-
-Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
-
-$$\begin{aligned}
-\frac {\partial C}{\partial w^2}= \frac {\partial z^2}{\partial w^2}. \frac {\partial a^2}{\partial z^2}. \frac {\partial C}{\partial a^2} \\ \\
-\mathsf
-
-where \quad
-
-z^2 = a^1.w^2 \\ \\
-
-So  \quad 
-\frac {\partial z^2}{\partial w^2}  = \frac {\partial (a^1.w^2 )}{\partial w^2} = a^1 \rightarrow (1)\\ \\
-
-Next \\ 
-
- \quad  \frac {\partial a^2 }{\partial z^2} =
-\frac{\partial sigmoid(z^2) }{\partial z^2} = \ derivativeSigmoid(a^2) \rightarrow (2) \\ \\
-
-and \space finally \space we \space have  \\ \\
-
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = 2*\frac{1}{2}(a^2-y) =(a^2-y) \rightarrow (3) \\ \\
-and  \space  \space we \space have \\ \\
-
-\frac {\partial C}{\partial w^2} = a^1*derivativeSigmoid(a^2)*(a^2-y) \\ \\
-
-\end{aligned}$$
-
-Now let's do the same for the inner layer.
-
-$$\begin{aligned}
-
-\frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1} \\ \\
-
-\mathsf
-where \quad
-
-z^1 = a^0.w^1 \\ \\So  \quad 
-
-\frac {\partial z^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = a^0 \rightarrow (1)\\ \\
-
-Next \\ 
-
- \quad  \frac {\partial a^1 }{\partial z^1} =
-\frac{\partial sigmoid(z^1) }{\partial z^1} = \ derivativeSigmoid(a^1) \rightarrow (2) \\ \\
-
-and \space finally \space we \space have  \\\\
-
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}\\ \\
-
-
-
-Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \space
-
-\frac {\partial C}{\partial(a^2)} \\ \\
-
-Now \space to \space calculate \space
-
- \frac{\partial(a^2)}{\partial(a^1)} \\ \\
-
-Note \space that \\ \\
-a^{l} = \sigma(w^l a^{l-1}+b^l) \\ \\
-
-a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
-
-Which \space then \space gives \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
-
-w^2 . derivativeSigmoid(a^1) \rightarrow (3)\\ \\
-
-Putting \space all \space together \\ \\
-
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . derivativeSigmoid(a^1)
-
-\end{aligned}$$
 
 ---
 

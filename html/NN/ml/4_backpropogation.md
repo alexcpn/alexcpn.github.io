@@ -1,5 +1,6 @@
 
-# Back-propagation Demystified
+# Chapter 4: Back-propagation Explained
+
 
 ## Activation functions, Cost functions and Back-propagation
 
@@ -102,10 +103,12 @@ There are two three things to note. We are talking now about the *Cost* and how 
 We need to find how a small change in weight ($\Delta w$), shown int the top left, changes the Cost. This change of Cost, is the result of the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
 
 ![backpropogationgif]
+Source : Alex Punnen: Neural Networks from the Ground Up
 
 Here is a more detailed depiction of how the small change in weight adds through the chain to affect the final cost.
 
 ![backpropogationgif2]
+Source : Alex Punnen: Neural Networks from the Ground Up
 
 This is the Chain Rule 
 
@@ -166,7 +169,10 @@ Next would be to add more layers and more connections and change the notation to
 ![weightnotation]
 Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 
-Some other references.
+In the next chapter we will go a little deeper into Chain Rule and show how we adjust the weights at each layer
+
+
+References
 
 http://neuralnetworksanddeeplearning.com/chap2.html
 
