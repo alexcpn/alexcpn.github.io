@@ -2,7 +2,7 @@
 
 Let's take the simple neural network  and walk through the same, first going through the maths and then the implementation.
 
-Let's write the  equation of the neural network
+Let's write the  equation of the fiollowing neural network
 
 ```
 x is the Input
@@ -14,12 +14,13 @@ a is the activation function ,(we use sigmoid here)
 $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
  $$
- This can be written taking x as $a^0$
+ This can be written taking x as $a^0$; and where
+
  $$
  a^0 \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
  $$
 
- and in the activation function we take the sigmoid of the input of the previous layer $a^{l-1}$. That is in layer 2, the input $x$ is the input
+
 
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
@@ -36,13 +37,17 @@ z^l =w^l a^{l-1}
 $$
 
 We can also easily calculate
+
 $$
-\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma^{}' (z^{l}) \quad \rightarrow  (\mathbf  {a})
+\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma^{}' (z^{l}) \quad \rightarrow  (\mathbf {a})
 $$
+
 Which basically states that if  $a^l$ = sigmoid($z^l$) then
+
 $$
 \frac{\partial a^{l} }{\partial w} = derivativeSigmoid(z^l)
 $$
+
 Where $\sigma^{}'$ = derivativeSigmoid
 
 Regarding the Basis *b*
@@ -64,13 +69,17 @@ Our two layer neural network can be written as
  a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y
  $$
  ---
- Note that here $a^2$ does not denote the exponent but just that it is of layer 2.
+
+ Note that $a^2$ does not denote the exponent but just that it is of layer 2.
 
 Lets write down the Chain rule first.
+
 $$
 \frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
 $$
+
 This can also be written as
+
 $$
 \frac {\partial C}{\partial w^l} = \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
 $$
@@ -80,14 +89,17 @@ Lets substitute $l$ and get the gradient of the Cost with respect to weights in 
 $$
 \frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
 $$
+
 from equation (a) 
 
 $$
 \frac{\partial a^{2} }{\partial w^2} = \sigma^{}' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
 $$
+
 $$
 \sigma^{}'  =derivativeSigmoid
 $$
+
 Next 
 
 $$
@@ -110,11 +122,13 @@ $$
 $$
 
 This can also be written as
+
 $$
 \frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}
 $$
 
 We can calculate the first part of this like below
+
 $$
 \frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = \sigma^{}'(z^1)  \quad \rightarrow (4.1)
 $$
@@ -128,7 +142,6 @@ $$
 $$ \begin{aligned}
 
 Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad 
-
 
 \frac {\partial C}{\partial(a^2)}  \\ \\
 
