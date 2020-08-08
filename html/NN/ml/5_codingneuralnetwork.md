@@ -32,6 +32,7 @@ a^{l} = \sigma(z^l)
 $$
 
 where
+
 $$
 z^l =w^l a^{l-1}
 $$
@@ -39,7 +40,7 @@ $$
 We can also easily calculate
 
 $$
-\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma^{}' (z^{l}) \quad \rightarrow  (\mathbf {a})
+\frac{\partial a^{l} }{\partial w} = \frac{\partial \space\sigma (z^{l}) }{\partial w} = \sigma' (z^{l}) \quad \rightarrow  (\mathbf {a})
 $$
 
 Which basically states that if  $a^l$ = sigmoid($z^l$) then
@@ -48,7 +49,7 @@ $$
 \frac{\partial a^{l} }{\partial w} = derivativeSigmoid(z^l)
 $$
 
-Where $\sigma^{}'$ = derivativeSigmoid
+Where $\sigma'$ = derivativeSigmoid
 
 Regarding the Basis *b*
 
@@ -93,11 +94,11 @@ $$
 from equation (a) 
 
 $$
-\frac{\partial a^{2} }{\partial w^2} = \sigma^{}' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
+\frac{\partial a^{2} }{\partial w^2} = \sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
 $$
 
 $$
-\sigma^{}'  =derivativeSigmoid
+\sigma'  =derivativeSigmoid
 $$
 
 Next 
@@ -111,7 +112,7 @@ Putting these together we get the final equation for the second layer
 ---
 
 $$
-\frac {\partial C}{\partial w^2} = \sigma^{}' (z^{2})*(a^2-y) \quad \rightarrow (3) 
+\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) 
 $$
 
 ----
@@ -132,7 +133,7 @@ $$
 We can calculate the first part of this like below
 
 $$
-\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = \sigma^{}'(z^1)  \quad \rightarrow (4.1)
+\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = \sigma'(z^1)  \quad \rightarrow (4.1)
 $$
 
 Now this a slightly tricky part and we use Chain Rule to split this up like below, the first part of which we calculated in the earlier step.
@@ -156,7 +157,7 @@ a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
 \frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
 
-w^2 . \sigma^{}'(a^1) \rightarrow (4.2)\\ \\
+w^2 . \sigma'(a^1) \rightarrow (4.2)\\ \\
 
 Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 
@@ -165,7 +166,7 @@ Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 ---
 
 $$
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma^{}'(z^1) \quad \rightarrow \mathbb (5) 
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1) \quad \rightarrow \mathbb (5) 
 $$
 
 ---
