@@ -1,6 +1,6 @@
 # Chapter 5: Back Propagation for a Two layered Neural Network
 
-Let's take the simple neural network  and walk through the same, first going through the maths and then the implementation.
+Let's take the simple neural network and walk through the same, first going through the maths and then the implementation. 
 
 Let's write the  equation of the following neural network
 
@@ -15,27 +15,16 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 $$
 
- This can be written taking x as $a^0$; and where
-
- $$
- a^0 \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
- $$
-
-
-
+Where the activation $a^l$ is
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
 
-We can write this as
+If we take the activation function as sigmoid then we can also write $a^l$ as
 
-$$
-a^{l} = \sigma(z^l)
-$$
+$$ 
+a^{l} = \sigma(z^l) \quad where \quad 
 
-where
-
-$$
 z^l =w^l a^{l-1}
 $$
 
@@ -45,6 +34,7 @@ $$
 \mathbf {\frac{\partial a^{l} }{\partial w} = \frac{\partial \sigma (z^{l}) }{\partial w} = \sigma' (z^{l}) \quad \rightarrow  ( {a})}
 $$
 
+
 Which basically states that if  $a^l$ = sigmoid($z^l$) then
 
 $$
@@ -52,6 +42,8 @@ $$
 $$
 
 Where $\sigma'$ = derivativeSigmoid
+
+---
 
 Regarding the Basis *b* in
 
@@ -82,21 +74,15 @@ Our two layer neural network can be written as
 Lets write down the Chain rule first.
 
 $$
+\mathbf {
 \frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
-$$
-
-This can also be written as
-
-$$
-\mathbf {\frac {\partial C}{\partial w^l} = \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
+= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
 }
 $$
 
 We will use the above equation as the basis for the rest of the chapter.
 
-## Calculate the Gradient Vector of Loss function
-
-### In Output Layer
+## Gradient Vector of Loss function In Output Layer
 
 Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
 
@@ -115,7 +101,8 @@ $$
 Next 
 
 $$
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (2) 
+\mathbf{
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (2) }
 $$
 
 Putting these together we get the final equation for the second layer
@@ -128,9 +115,7 @@ $$
 
 ----
 
-## Calculate the Gradient Vector of Loss function
-
-### In Inner Layer
+## Gradient Vector of Loss function in Inner Layer
 
 Now let's do the same for the inner layer.
 
@@ -182,9 +167,10 @@ Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 
 $$
 \mathbf{
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1) \quad \rightarrow \mathbb (5) 
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5) 
 }
 $$
+We substitute the first term equation (2).
 
 ---
 
@@ -202,7 +188,7 @@ $$
 
 With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here http://iamtrask.github.io/2015/07/12/basic-python-network/ adding little more explanation for each of the steps, from what we have learned.
 
-We will use matrices to code up our network
+We will use matrices to represent input and weight matrices. 
 
 ```python
 x = np.array(
@@ -228,9 +214,10 @@ y = np.array(
 ```
 This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.
 
-A neural network can be implemented as a set of arrays representing the weights of the network.
+**A neural network is implemented as a set of matrices representing the weights of the network.**
 
-Let's create a 2 layered network. Before that please not the formula for the neural network
+
+Let's create a two layered network. Before that please not the formula for the neural network
 
 
 
@@ -255,6 +242,7 @@ n=3
 x=?
 y=1
 ```
+
 Lets then create our two weight matrices of the above shapes, that represent the two layers of the neural network.
 
 ```
@@ -277,24 +265,11 @@ def derv_sigmoid(x):
 
 With this we can have the output of first, second and third layer, using our equation of neural network forward propagation.
 
-$$
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
-$$
 
 ```
 a0 = x
-```
-$$
-  a^{1} = \sigma(w^1 a^{0}+b^l).
-$$
-
-```
 a1 = sigmoid(np.dot(a0,w1))
-```
-$$
-  a^{2} = \sigma(w^2 a^{1}+b^l).
-$$
-```
+
 a2 = sigmoid(np.dot(a1,w2))
 ```
 
@@ -313,7 +288,7 @@ Now we need to use the back-propagation algorithm to calculate how each weight h
 
 
 
-Now the real meat - we use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calcualte the error gradient $\frac{\partial C}{\partial w}$ and repeat
+We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calcualte the error gradient $\frac{\partial C}{\partial w}$ and repeat
 
 $$\begin{aligned}
 
@@ -323,8 +298,26 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 
 \end{aligned}$$
 
-TODO
+Let's update the weights as per the formula (3) and (5)
 
+$$\begin{aligned}
+
+\mathbf{
+\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) } \\ \\
+
+\mathbf{
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5) 
+}
+\end{aligned}$$
+
+
+```
+dc_dw2 =  (a2-y)*der_sigmoid(np.dot(a1,w2))
+dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
+
+```
+
+Todo - Finish program
 
 Reference  
 - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
