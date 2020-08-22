@@ -1,5 +1,5 @@
 
-# Neural Networks from the Ground Up
+# Neural Networks Explained
 ##  The Maths behind Machine Learning and Neural Networks
 
 
