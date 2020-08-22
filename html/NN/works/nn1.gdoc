@@ -1,0 +1,17 @@
+{"url": "https://docs.google.com/open?id=17pTA40b6NMH-RYHqtIaYt68wrJWDjbVsW5YroofU_FA", "doc_id": "17pTA40b6NMH-RYHqtIaYt68wrJWDjbVsW5YroofU_FA", "email": "alexcpn@gmail.com"}
+
+  <!--
+    <h3>Blog Posts</h3>
+    <div class="row">
+      <div class="text-left">
+        <ul style="list-style-position: inside">
+          {% for post in site.posts %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            - {{ post.date | date: "%d %B %Y" }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  -->
