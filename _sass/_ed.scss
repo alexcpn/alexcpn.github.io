@@ -127,6 +127,7 @@ h1 {
 
 h1.text-title {
   font-size: 1.4rem;
+  color: $title-color;
 }
 
 h2 {
@@ -257,7 +258,7 @@ tbody tr:nth-child(odd) th {
 }
 
 .masthead-title a {
-  color: $link-color;
+  color: $title-color;
 }
 
 .masthead-title small {
