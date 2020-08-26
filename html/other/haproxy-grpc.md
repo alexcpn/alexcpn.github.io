@@ -135,5 +135,152 @@ EOF
 
 ## Test 
 
+### HTTP 1.1 Servr Does not work
+```
+C:\Users\acp\Documents\Coding\daas_project\infra-common>curl -kv  https://nginx2.10.131.232.223.nip.io/
+*   Trying 10.131.232.223...
+* TCP_NODELAY set
+* Connected to nginx2.10.131.232.223.nip.io (10.131.232.223) port 443 (#0)
+* schannel: SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443 (step 1/3)
+* schannel: disabled server certificate revocation checks
+* schannel: verifyhost setting prevents Schannel from comparing the supplied target name with the subject names in server certificates.
+* schannel: sending initial handshake data: sending 184 bytes...
+* schannel: sent initial handshake data: sent 184 bytes
+* schannel: SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: failed to receive handshake, need more data
+* schannel: SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: encrypted data got 1315
+* schannel: encrypted data buffer: offset 1315 length 4096
+* schannel: sending next handshake data: sending 93 bytes...
+* schannel: SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: encrypted data got 51
+* schannel: encrypted data buffer: offset 51 length 4096
+* schannel: SSL/TLS handshake complete
+* schannel: SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443 (step 3/3)
+* schannel: stored credential handle in session cache
+> GET / HTTP/1.1
+> Host: nginx2.10.131.232.223.nip.io
+> User-Agent: curl/7.55.1
+> Accept: */*
+>
+* schannel: client wants to read 102400 bytes
+* schannel: encdata_buffer resized 103424
+* schannel: encrypted data buffer: offset 0 length 103424
+* schannel: encrypted data got 253
+* schannel: encrypted data buffer: offset 253 length 103424
+* schannel: decrypted data length: 193
+* schannel: decrypted data added: 193
+* schannel: decrypted data cached: offset 193 length 102400
+* schannel: encrypted data length: 31
+* schannel: encrypted data cached: offset 31 length 103424
+* schannel: server closed the connection
+* schannel: schannel_recv cleanup
+* schannel: decrypted data returned 193
+* schannel: decrypted data buffer: offset 0 length 102400
+* HTTP 1.0, assume close after body
+< HTTP/1.0 503 Service Unavailable
+< cache-control: no-cache
+< content-type: text/html
+<
+<html><body><h1>503 Service Unavailable</h1>
+No server is available to handle this request.
+</body></html>
+* schannel: client wants to read 102400 bytes
+* schannel: server indicated shutdown in a prior call
+* schannel: schannel_recv cleanup
+* Closing connection 0
+* schannel: shutting down SSL/TLS connection with nginx2.10.131.232.223.nip.io port 443
+* schannel: clear security context handle
+```
+### HTTP2 Capable Nginx works
+
 ```
 
+C:\Users\acp\Documents\Coding\daas_project\infra-common>curl -kv  https://nginx.10.131.232.223.nip.io/
+*   Trying 10.131.232.223...
+* TCP_NODELAY set
+* Connected to nginx.10.131.232.223.nip.io (10.131.232.223) port 443 (#0)
+* schannel: SSL/TLS connection with nginx.10.131.232.223.nip.io port 443 (step 1/3)
+* schannel: disabled server certificate revocation checks
+* schannel: verifyhost setting prevents Schannel from comparing the supplied target name with the subject names in server certificates.
+* schannel: sending initial handshake data: sending 183 bytes...
+* schannel: sent initial handshake data: sent 183 bytes
+* schannel: SSL/TLS connection with nginx.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: failed to receive handshake, need more data
+* schannel: SSL/TLS connection with nginx.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: encrypted data got 1315
+* schannel: encrypted data buffer: offset 1315 length 4096
+* schannel: sending next handshake data: sending 93 bytes...
+* schannel: SSL/TLS connection with nginx.10.131.232.223.nip.io port 443 (step 2/3)
+* schannel: encrypted data got 51
+* schannel: encrypted data buffer: offset 51 length 4096
+* schannel: SSL/TLS handshake complete
+* schannel: SSL/TLS connection with nginx.10.131.232.223.nip.io port 443 (step 3/3)
+* schannel: stored credential handle in session cache
+> GET / HTTP/1.1
+> Host: nginx.10.131.232.223.nip.io
+> User-Agent: curl/7.55.1
+> Accept: */*
+>
+* schannel: client wants to read 102400 bytes
+* schannel: encdata_buffer resized 103424
+* schannel: encrypted data buffer: offset 0 length 103424
+* schannel: encrypted data got 286
+* schannel: encrypted data buffer: offset 286 length 103424
+* schannel: decrypted data length: 257
+* schannel: decrypted data added: 257
+* schannel: decrypted data cached: offset 257 length 102400
+* schannel: encrypted data buffer: offset 0 length 103424
+* schannel: decrypted data buffer: offset 257 length 102400
+* schannel: schannel_recv cleanup
+* schannel: decrypted data returned 257
+* schannel: decrypted data buffer: offset 0 length 102400
+< HTTP/1.1 200
+< server: nginx/1.19.2
+< date: Wed, 26 Aug 2020 07:24:00 GMT
+< content-type: text/html
+< content-length: 612
+< last-modified: Tue, 11 Aug 2020 15:16:45 GMT
+< etag: "5f32b65d-264"
+< accept-ranges: bytes
+< strict-transport-security: max-age=15768000
+<
+* schannel: client wants to read 612 bytes
+* schannel: encrypted data buffer: offset 0 length 103424
+* schannel: encrypted data got 641
+* schannel: encrypted data buffer: offset 641 length 103424
+* schannel: decrypted data length: 612
+* schannel: decrypted data added: 612
+* schannel: decrypted data cached: offset 612 length 102400
+* schannel: encrypted data buffer: offset 0 length 103424
+* schannel: decrypted data buffer: offset 612 length 102400
+* schannel: schannel_recv cleanup
+* schannel: decrypted data returned 612
+* schannel: decrypted data buffer: offset 0 length 102400
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+* Connection #0 to host nginx.10.131.232.223.nip.io left intact
+```
