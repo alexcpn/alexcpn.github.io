@@ -5,36 +5,35 @@
 
 Configruation - https://haproxy-ingress.github.io/docs/configuration/keys/#backend-protocol
 
+## Result summary
+
+This is not possible now directly configuring HAProxy Ingress Controller. from the author
+
+***jcmoraisjr commented 
+Note that tls-alpn does the alpn configuration in the frontend - so you can use both h1 and h2 requests to haproxy. The backend side is another story and you globally configured to use h2. Currently haproxy ingress doesn't have a syntax sugar to configure alpn per backend but you can use config-backend and configure a default-server yourself with haproxy's alpn option. Note also that you need to configure secure-backend otherwise the alpn configuration will not take effect.***
+
+
+Related Git issue - https://github.com/jcmoraisjr/haproxy-ingress/issues/643
+
+Summary Result as of now - HAProxyIngress Controller can be configured with backend as either supporting HTTP2 or HTTP1.1
+Next Steps - Need to config-backend and default-server to check
+
+From  https://www.haproxy.com/blog/haproxy-1-9-2-adds-grpc-support/
 ```
-Defines the HTTP protocol version of the backend. Note that HTTP/2 is only supported if HTX is enabled. A case insensitive match is used, so either h1 or H1 configures HTTP/1 protocol. A non SSL/TLS configuration does not overrides secure-backends, so h1 and secure-backends true will still configures SSL/TLS.
-
-Options:
-
-h1: the default value, configures HTTP/1 protocol. http is an alias to h1.
-h1-ssl: configures HTTP/1 over SSL/TLS. https is an alias to h1-ssl.
-h2: configures HTTP/2 protocol. grpc is an alias to h2.
-h2-ssl: configures HTTP/2 over SSL/TLS. grpcs is an alias to h2-ssl.
-
-
-```
-related Git issue - https://github.com/jcmoraisjr/haproxy-ingress/issues/643
-
-Summary - HAProxyIngress Controller can be configured with backend as either supporting HTTP2 or HTTP1.1
-
-https://www.haproxy.com/blog/haproxy-1-9-2-adds-grpc-support/
-
 After the release of version 1.8, users of HAProxy could already see performance gains simply by switching on HTTP/2 in a frontend. However, protocols like gRPC require that HTTP/2 be used for the backend services as well. The open-source community and engineers at HAProxy Technologies got to work on the problem.
 
 https://haproxy-ingress.github.io/docs/configuration/keys/#backend-protocol
 
 Defines the HTTP protocol version of the backend. Note that HTTP/2 is only supported if HTX is enabled. A case insensitive match is used, so either h1 or H1 configures HTTP/1 protocol. A non SSL/TLS configuration does not overrides secure-backends, so h1 and secure-backends true will still configures SSL/TLS.
+
 Options:
+
 h1: the default value, configures HTTP/1 protocol. http is an alias to h1.
 h1-ssl: configures HTTP/1 over SSL/TLS. https is an alias to h1-ssl.
 h2: configures HTTP/2 protocol. grpc is an alias to h2.
 h2-ssl: configures HTTP/2 over SSL/TLS. grpcs is an alias to h2-ssl.
 
-
+```
 
 ## Configure HA Proxy with HTTP2 (H2) , UseHTX and ALPN with TLS
 
