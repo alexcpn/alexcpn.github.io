@@ -90,7 +90,7 @@ service/csi-snapshotter created
 statefulset.apps/csi-snapshotter created
 ```
 
-If you want to use CSI Snapshotting feature, you need to install the VolumeSnapShotClass and VolumeSnapshot also
+If you want to use CSI Snapshotting feature, you need to install the VolumeSnapShotClass and VolumeSnapshot also (from Rook)
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/csi/rbd/snapshotclass.yaml
@@ -118,7 +118,11 @@ default   aws        velero2         ReadWrite
 ```
 velero backup create test-4 --include-namespaces test-nginx --wait
 ````
+Note that if you are using Restic,as of now you need to annotate the PV's that you need to collect in backup
 
+```
+kubectl -n test-nginx  annotate pod/nginx-test backup.velero.io/backup-volumes=mystorage
+```
 
 ### How to restore ?
 
