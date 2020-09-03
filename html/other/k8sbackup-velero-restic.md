@@ -29,6 +29,35 @@ https://velero.io/docs/v1.4/restic/
 Restic scans each file in a single thread. This means that large files (such as ones storing a database) will take a long time to scan for data deduplication, even if the actual difference is small.
 If you plan to use the Velero restic integration to backup 100GB of data or more, you may need to customize the resource limits to make sure backups complete successfully.
 
+Here is a test with 5G and 10G data
+
+```
+
+5GB in 5 mts
+
+[root@green--1 ~]# date &&  velero backup create test-5g-2  --include-namespaces test-nginx --wait && date
+Thu Sep  3 12:44:24 IST 2020
+Backup request "test-5g-2" submitted successfully.
+Waiting for backup to complete. You may safely press ctrl-c to stop waiting - your backup will continue in the background.
+............................................................................................................................................................................................................................................................................................................
+Backup completed with status: Completed. You may check for more information using the commands `velero backup describe test-5g-2` and `velero backup logs test-5g-2`.
+Thu Sep  3 12:49:24 IST 2020
+
+8.5 GB test ~ 9 minutes (delted old backup to prevent incremental)
+
+[root@green--1 velero]# date &&  velero backup create test-10g-8  --include-namespaces test-nginx --wait && date
+Thu Sep  3 18:27:42 IST 2020
+Backup request "test-10g-8" submitted successfully.
+Waiting for backup to complete. You may safely press ctrl-c to stop waiting - your backup will continue in the background.
+.................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Backup completed with status: Completed. You may check for more information using the commands `velero backup describe test-10g-8` and `velero backup logs test-10g-8`.
+Thu Sep  3 18:36:31 IST 2020
+
+
+
+
+
+
 ### How to install in baremetal ?
 
 Follow https://velero.io/docs/v1.4/basic-install/
@@ -191,5 +220,5 @@ No
 
 For scheduled backups the next schedule will trigger
 
-For Inprogress, will stay in Progress forever
+For Inprogress, will stay in Progress forever. You need to delete the backup and delete the velero operator pod to recover. This looks like a bug
 
