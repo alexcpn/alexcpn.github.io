@@ -53,7 +53,7 @@ Waiting for backup to complete. You may safely press ctrl-c to stop waiting - yo
 Backup completed with status: Completed. You may check for more information using the commands `velero backup describe test-10g-8` and `velero backup logs test-10g-8`.
 Thu Sep  3 18:36:31 IST 2020
 
-
+```
 
 
 
