@@ -25,41 +25,23 @@ If we take the activation function as sigmoid then we can also write $a^l$ as
 $$ 
 a^{l} = \sigma(z^l) \quad where \quad 
 
-z^l =w^l a^{l-1}
+z^l =w^l a^{l-1} +b^l
 $$
 
 We can also easily calculate
 
 $$
-\mathbf {\frac{\partial a^{l} }{\partial w} = \frac{\partial \sigma (z^{l}) }{\partial w} = \sigma' (z^{l}) \quad \rightarrow  ( {a})}
+\mathbf {\frac{\partial a^{l} }{\partial w} = \frac{\partial \sigma (z^{l}) }{\partial w} = \sigma' (a^{l}) \quad \rightarrow  ( {a})}
 $$
 
-
-Which basically states that if  $a^l$ = sigmoid($z^l$) then
-
-$$
-\frac{\partial a^{l} }{\partial w} = derivativeSigmoid(z^l)
-$$
-
-Where $\sigma'$ = derivativeSigmoid
-
----
-
-Regarding the Basis *b* in
-
-$
-  z^{l} =(w^l a^{l-1}+b^l).
-$
-
-If we create a dummy input $a^0 =1$  then we can set the basis in the above equation to $w^0 =b$ Thisi s how it is done during implementation. We wont takt that now into use here, so ignore basis for the time being.
-
-
----
-Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first.
-
----
+Where $\sigma'$ = derivative of Sigmoid with respect to Weight
 
 ## A Two Layered Neural Network
+
+Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first. Each of these are explained in more detail in the previous sections.
+
+---
+
 
 Our two layer neural network can be written as
 
@@ -84,40 +66,40 @@ We will use the above equation as the basis for the rest of the chapter.
 
 ## Gradient Vector of Loss function In Output Layer
 
-Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1
+Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1.
 
 $$
 \frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
 $$
 
-from equation (a) 
+The first term is 
 
 $$
 \mathbb{
-\frac{\partial a^{2} }{\partial w^2} = \sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1}) 
+\frac{\partial a^{2} }{\partial w^2} = \sigma' (a^{2}) \quad \rightarrow  (\mathbf  {1}) 
 }
 $$
 
-Next 
+To find the second term
 
 $$
 \mathbf{
 \frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (2) }
 $$
 
-Putting these together we get the final equation for the second layer
+Putting 1 & 2 together we get the final equation for the second layer. This is the output layer.
 
 ---
 
 $$ \mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) }
+\frac {\partial C}{\partial w^2} = \sigma' (a^{2})*(a^2-y) \quad \rightarrow (3) }
 $$
 
 ----
 
 ## Gradient Vector of Loss function in Inner Layer
 
-Now let's do the same for the inner layer.
+Now let's do the same for the inner layer. This is bit more tricky.
 
 $$
 
@@ -127,16 +109,16 @@ $$
 This can also be written as
 
 $$
-\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}
+\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
 $$
 
 We can calculate the first part of this like below
 
 $$
-\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = \sigma'(z^1)  \quad \rightarrow (4.1)
+\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = a^0  \quad \rightarrow (4.1)
 $$
 
-Now this a slightly tricky part and we use Chain Rule to split this up like below, the first part of which we calculated in the earlier step.
+For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
 
 $$
 \frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
@@ -146,7 +128,7 @@ $$\begin{aligned}
 
 Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad 
 
-\frac {\partial C}{\partial(a^2)}  \\ \\
+\frac {\partial C}{\partial(a^2)}  =(a^2-y)  \rightarrow (4.2)\\ \\
 
 Now \space to \space calculate \space
 
@@ -157,9 +139,9 @@ a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
 \frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
 
-w^2 . \sigma'(a^1) \rightarrow (4.2)\\ \\
+w^2 . \sigma'(a^1) \rightarrow (4.3)\\ \\
 
-Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
+Putting \space (4.1) \space  \space (4.2)\space  and (4.3)\space together \\ \\
 
 \end{aligned}$$
 
@@ -167,14 +149,35 @@ Putting \space (4.1) \space and \space (4.2)\space \space together \\ \\
 
 $$
 \mathbf{
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5) 
+\frac {\partial C}{\partial w^1} =a^0*(a^2-y)*w^2 . \sigma'(a^1)\quad \rightarrow \mathbb (5) 
 }
 $$
 We substitute the first term equation (2).
 
+Repeating here the previous equation (3) as well 
+
+$$ \mathbf{
+\frac {\partial C}{\partial w^2} = \sigma' (a^{2})*(a^2-y) \quad \rightarrow (3) }
+$$
+and rewriting (5)
+$$
+\mathbf{
+\frac {\partial C}{\partial w^1} =\sigma'(a^1)*(a^2-y)*a^0 .w^2  \quad \rightarrow \mathbb (5) 
+}
+$$
+
+Note that weight is a Vector and we need to use the Vector product /dot product where weights are concerned. We will do an implementation to test out these equations to be sure.
+
+
 ---
 
-With equations (3) and (5) we can calculate the Gradient of the Loss function with respect to weights in any layer and using this update the weights in any layer iteratively.
+With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
+
+We now need to adjust the previous weight, by gradient descent.
+
+So using the above gradients we get the new weights iteratively like below. If you notice this is exactly what is happening in gradient descent as well; only chain rule is used to calculate the gradients here. Backpropagation is the algorithm that helps calculate the gradients for each layer.
+
+---
 
 $$
 
@@ -182,7 +185,7 @@ $$
 
 $$
 
-
+---
 
 ## Implementation
 
@@ -321,6 +324,5 @@ Todo - Finish program
 
 Reference  
 - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
-
 
 

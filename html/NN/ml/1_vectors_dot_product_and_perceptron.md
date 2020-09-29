@@ -76,19 +76,19 @@ The bias can be modelled as a a weight $w_0$ connected to a dummy input $x_0$ se
 If we ignore bias for a second the output $y$ can be written as the sum of all inputs times the weights thresholded by the sum value being greater than zero or not.
 
 $$
-y = 1  \textbf{ if } \sum_i w_i x_i ≥ 0 \text{  else } y=0
+y = 1  \text{ if } \sum_i w_i x_i \ge 0 \text{  else } y=0
 $$
 
 The big blue circle is the primitive brain of the primitive neural network - the perceptron brain. Which is basically a function $\sigma$ (sigma).
 
  This is what is called as an *Activation Function* in Neural Networks. We will see that later. This is a step function, we use here, output is non continuous (and hence non-differentiable) and is either 1 or 0.
 
-If the inputs are arranged as a column matrix and weights also arranged likewise then both the input and weights can be treated as vector and $\sum_i w_i x_i$ is same as the dot product $\textbf{w}\cdot\textbf{x}$. Hence the activation function can also be written as 
+If the inputs are arranged as a column matrix and weights also arranged likewise then both the input and weights can be treated as vector and $\sum_i w_i x_i$ is same as the dot product $\mathbf{w}\cdot\mathbf{x}$. Hence the activation function can also be written as 
 
 $$
 \sigma (x) =
 \begin{cases}
-1, & \text{if}\ \textbf{w}\cdot\textbf{x}+b ≥ 0 \\
+1, & \text{if}\ \mathbf{w}\cdot\mathbf{x}+b \ge 0 \\
 0, & \text{otherwise} \\
 \end{cases}
 $$
@@ -98,7 +98,7 @@ Note that dot product of two matrices (representing vectors), can be written as 
 $$
 \sigma(w^Tx + b)=
 \begin{cases}
-1, & \text{if}\ w^Tx + b ≥ 0 \\
+1, & \text{if}\ w^Tx + b \ge 0 \\
 0, & \text{otherwise} \\
 \end{cases}
 $$
@@ -106,13 +106,14 @@ $$
 All three equations are the same.
 
 
-The equation $\bf w⋅x>b$   defines all the points on one side of the hyperplane, and $\bf w⋅x<=b$  all the points on the other side of  the hyperplane and on the hyperplane itself. This happens to be the  very definition of “linear separability” Thus, the perceptron allows us to separate our feature space in two convex half-spaces.
+The equation $w \cdot x \gt b$  defines all the points on one side of the hyperplane, and $w \cdot x \ge b$  all the points on the other side of  the hyperplane and on the hyperplane itself. This happens to be the  very definition of “linear separability” Thus, the perceptron allows us to separate our feature space in two convex half-spaces.
 
 (From https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html)
 
 If we can calculate the weights then we can have a weight vector, which splits the input feature vectors to two regions by a hyperplane. 
 
 ![cornellperceptron](https://i.imgur.com/OIN3maHm.png)
+
 Image source [https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/images/perceptron/perceptron_img1.png](https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/images/perceptron/perceptron_img1.png)
 
 In simple terms, it means that an unknown feature vector of an input set belonging to say Dogs and Cats, when done a Dot product with a trained weight vector, will fall into either the Dog space of the hyperplane, or the Cat space of the hyperplane. This is how neural networks do classifications.
