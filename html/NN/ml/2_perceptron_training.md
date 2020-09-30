@@ -16,8 +16,9 @@ $$
 
 Now let us see why we want a weight vector first - once again and then we go to how it is obtained.
 
-Assume that there are two sets of feature vectors P and N, where P is set of positive samples (say cat features) and N is non-positive cases (say non-cat features) and P and N are the correctly classified **Training Set**.
- 
+Assume that there are two sets of feature vectors P and N, where P is set of positive samples (say cat features) and N is non-positive cases (say non-cat features) and P and N are the correctly classified
+**Training Set**.
+
 We can see how hyperplane that is created orthogonal (perpendicular) to the weight vector splits input feature vector space, into two distinct regions.
 
 ![cornellperceptron][6]
@@ -28,9 +29,9 @@ Or in a better way, which shows the vectors properly
 
 So that if we get this weight vector trained with sufficient know samples of P and N, when an unknown vector comes in, we can take a dot product of the unknown feature vector with the learned weight vector and find out in which region it falls, in the cat feature region -P or the non-cat feature region - N.
 
-## How are the weights learned?
+## How are the weights learnedm?
 
-You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later. 
+You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later.
 
 ----
 
@@ -43,7 +44,7 @@ The error of a perceptron with weight vector w is the number of incorrectly clas
 
 One possible strategy is to use a local greedy algorithm which works by computing the error of the perceptron for a given weight vector, looking then for a **direction in weight space** in which to move and update the weight vector by selecting new weights in the selected search direction.
 
-Taking input from the training example and doing a dot product with the weight vector; will give you either a value $>=0$ or $<0$. Note that this means which quadrant the feature vector lies; either in the positive quadrant (P) or on the negative side (N). 
+Taking input from the training example and doing a dot product with the weight vector; will give you either a value $>=0$ or $<0$. Note that this means which quadrant the feature vector lies; either in the positive quadrant (P) or on the negative side (N).
 
 If this is as expected, then do nothing. If the dot product comes wrong, that is if input feature vector - say $x$, was $x \in P$, but dot product $w. x < 0$, we need to drag the weight vector towards x.
 $w_n = w +x$
@@ -65,7 +66,6 @@ This is also called the delta rule. Note that there is some articles that refe t
 A more rigorous  explanation of the proof is here from the book
 [Neural Networks by R.Rojas][3] and more lucid explanation here
  [perceptron-learning-algorithm][4]
- 
 
   [1]: https://i.stack.imgur.com/kO3ym.png
   [2]: https://i.imgur.com/7MsJuS1.png

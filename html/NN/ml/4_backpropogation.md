@@ -1,7 +1,6 @@
 
 # Chapter 4: Back-propagation Explained
 
-
 ## Activation functions, Cost functions and Back-propagation
 
 We have seen how gradient descent was used to optimise the cost function associated with linear regression and how that leads to find the optimal line separating the features  in  linear regression.
@@ -99,7 +98,6 @@ The central idea is how a change in weight affects the Cost in this chain depict
 
 There are two three things to note. We are talking now about the *Cost* and how the Cost and Weights in different layers are related.
 
-
 We need to find how a small change in weight ($\Delta w$), shown int the top left, changes the Cost. This change of Cost, is the result of the change in $z^l$ due to change in $w^l$, and change in $a^l$ due to change in $z^l$ and change in $C_0$ by change in $a^l$. This is the Chain Rule and this graph representation explains this very intuitively.
 
 ![backpropogationgif]
@@ -110,14 +108,11 @@ Here is a more detailed depiction of how the small change in weight adds through
 ![backpropogationgif2]
 Source : Alex Punnen: Neural Networks from the Ground Up
 
-This is the Chain Rule 
+This is the **Chain Rule**
 
 $$
-
 \delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
-
 $$
-
 
 Now we have the Chain Rule, we can calculate how a small change in weight is going to change the Cost through a chain of layers
 
@@ -127,7 +122,7 @@ This calculated number $\delta C_0/\delta w^l$ signifies how much a small nudge 
 
 This calculation is the key part. It is easy to grasp visually, once you have the connection diagram or *computational graph* of the network in mind.
 
-Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example. 
+Basically this is the **gradient** of the Loss function or Cost function with respect to the weight of the network for a single input output example.
 
 This is what BackPropagation calculates.Now the definition of Back Propagation may seem more understandable.
 
@@ -151,15 +146,12 @@ First calculate how the weight in this layer contributes to the final Cost or Lo
 
 $$
 \delta C_0/\delta w^{l-1} = \delta z^{l-1}/\delta w^{l-1} . \delta a^{l-1}/\delta z^{l-1} . \delta C_0/\delta a^{l-1}
-
 $$
 
 and using this
 
 $$
-
   W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
-
 $$
 
 And that's it folks, backpropagation demystified. Simple and elegant, but looks pretty complex from the outside.
@@ -170,7 +162,6 @@ Next would be to add more layers and more connections and change the notation to
 Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 
 In the next chapter we will go a little deeper into Chain Rule and show how we adjust the weights at each layer
-
 
 References
 
