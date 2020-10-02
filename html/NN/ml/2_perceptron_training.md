@@ -12,7 +12,7 @@ $$
 
 ![dotproduct][1]
 
-**If two vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative**. Why? As  Cos($\theta$) is positive in the first quadrant* and negative in the second quadrant.  *See this excellent answer here to refresh your trigonometry [https://www.quora.com/Why-is-sin-90-taken-to-be-1](https://www.quora.com/Why-is-sin-90-taken-to-be-1)
+**If two vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative**. Why? As  Cos($\theta$) is positive in the first quadrant* and negative in the second quadrant. *See this excellent answer here to refresh your trigonometry [https://www.quora.com/Why-is-sin-90-taken-to-be-1](https://www.quora.com/Why-is-sin-90-taken-to-be-1)
 
 Now let us see why we want a weight vector first - once again and then we go to how it is obtained.
 
@@ -29,13 +29,13 @@ Or in a better way, which shows the vectors properly
 
 So that if we get this weight vector trained with sufficient know samples of P and N, when an unknown vector comes in, we can take a dot product of the unknown feature vector with the learned weight vector and find out in which region it falls, in the cat feature region -P or the non-cat feature region - N.
 
-## How are the weights learnedm?
+## How are the weights learned ?
 
 You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later.
 
 ----
 
-Basically what is done is to start with a randomly initialised weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
+Basically what is done is to start with a randomly initialized weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
 Question is how to nudge to the correct "direction"
 
 We want to rotate the weight vector to the direction of the input vector so that the hyperplane is closer to the correct classification.
@@ -52,20 +52,24 @@ Which is vector addition, that is $w$ is moved towards $x$. Say that  $x \in N$,
 
 This is the classical method of perceptron learning
 
+
 $$
 \delta w_j =
  \begin{cases}
- 0 \text{      if instance is classified correctly}  \\
-+x_j  \text{   if +1 instance is classified as −1} \\
--x_j \text{    if -1 instance is classified as +1}\\
+ 0 \text { if instance is classified correctly}  \\ 
++x_j  \text { if +1 instance is classified as −1} \\ 
+-x_j \text { if -1 instance is classified as +1}\\ 
 \end{cases}
-$$ [ref 5][5]
+$$
 
-This is also called the delta rule. Note that there is some articles that refe to this as gradient descent simplified. But gradient descent dependes on the activation function being differentiable. The step function which is the activation function of the perceptron in non continious and hence non differentiable.
+ [ref 5][5]
+
+This is also called the delta rule. Note that there is some articles that refer to this as gradient descent simplified. But gradient descent depends on the activation function being differentiable. The step function which is the activation function of the perceptron in non continuous and hence non differentiable.
 
 A more rigorous  explanation of the proof is here from the book
 [Neural Networks by R.Rojas][3] and more lucid explanation here
  [perceptron-learning-algorithm][4]
+
 
   [1]: https://i.stack.imgur.com/kO3ym.png
   [2]: https://i.imgur.com/7MsJuS1.png
@@ -74,4 +78,4 @@ A more rigorous  explanation of the proof is here from the book
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
   [6]: https://i.imgur.com/OIN3maH.png
 
-----
+
