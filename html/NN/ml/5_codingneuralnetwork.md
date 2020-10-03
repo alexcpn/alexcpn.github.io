@@ -2,10 +2,10 @@
 
 Let's take the simple neural network and walk through the same, first going through the maths and then the implementation.
 
-Let's write the  equation of the following neural network
+Let's write the  equation of the following two layer neural network
 
 ```
-x is the Input
+x is the Input 
 y is the Output.
 l is the number of layers of the Neural Network.
 a is the activation function ,(we use sigmoid here)
@@ -15,160 +15,24 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 $$
 
-Where the activation $a^l$ is
-$$
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
-$$
-
-If we take the activation function as sigmoid then we can also write $a^l$ as
-
-$$
-a^{l} = \sigma(z^l) \quad where \quad
-
-z^l =w^l a^{l-1} +b^l
-$$
-
-We can also easily calculate
-
-$$
-\mathbf {\frac{\partial a^{l} }{\partial w} = \frac{\partial \sigma (z^{l}) }{\partial w} = \sigma' (a^{l}) \quad \rightarrow  ( {a})}
-$$
-
-Where $\sigma'$ = derivative of Sigmoid with respect to Weight
-
-## A Two Layered Neural Network
-
-Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first. Each of these are explained in more detail in the previous sections.
-
----
-
-Our two layer neural network can be written as
-
- $$
- \mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
- $$
-
- ---
-
- Note that $a^2$ does not denote the exponent but just that it is of layer 2.
-
-Lets write down the Chain rule first.
-
-$$
-\mathbf {
-\frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
-= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
-}
-$$
-
-We will use the above equation as the basis for the rest of the chapter.
-
-## Gradient Vector of Loss function In Output Layer
-
-Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1.
-
-$$
-\frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
-$$
-
-The first term is
-
-$$
-\mathbb{
-\frac{\partial a^{2} }{\partial w^2} = \sigma' (a^{2}) \quad \rightarrow  (\mathbf  {1})
-}
-$$
-
-To find the second term
-
-$$
-\mathbf{
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (2) }
-$$
-
-Putting 1 & 2 together we get the final equation for the second layer. This is the output layer.
-
----
+Repeating here the previous equation's that we derived in the previous chapter 
 
 $$ \mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (a^{2})*(a^2-y) \quad \rightarrow (3) }
+\frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
 $$
-
----
-
-## Gradient Vector of Loss function in Inner Layer
-
-Now let's do the same for the inner layer. This is bit more tricky.
-
-$$
-
-\frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1}
-$$
-
-This can also be written as
-
-$$
-\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
-$$
-
-We can calculate the first part of this like below
-
-$$
-\frac {\partial a^1}{\partial w^1}  = \frac {\partial (a^0.w^1 )}{\partial w^1} = a^0  \quad \rightarrow (4.1)
-$$
-
-For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
-
-$$
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
-$$
-
-$$\begin{aligned}
-
-Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad
-
-\frac {\partial C}{\partial(a^2)}  =(a^2-y)  \rightarrow (4.2)\\ \\
-
-Now \space to \space calculate \space
-
- \frac{\partial(a^2)}{\partial(a^1)} \space where \space
-
-a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =
-
-w^2 . \sigma'(a^1) \rightarrow (4.3)\\ \\
-
-Putting \space (4.1) \space  \space (4.2)\space  and (4.3)\space together \\ \\
-
-\end{aligned}$$
-
----
 
 $$
 \mathbf{
-\frac {\partial C}{\partial w^1} =a^0*(a^2-y)*w^2 . \sigma'(a^1)\quad \rightarrow \mathbb (5)
+\frac {\partial C}{\partial w^1} =a^0* \sigma'(z^1)*(a^2-y).\sigma'(z^2).w^2 \quad \rightarrow \mathbb (B)
 }
 $$
-We substitute the first term equation (2).
 
-Repeating here the previous equation (3) as well
-
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (a^{2})*(a^2-y) \quad \rightarrow (3) }
-$$
-and rewriting (5)
-$$
-\mathbf{
-\frac {\partial C}{\partial w^1} =\sigma'(a^1)*(a^2-y)*a^0 .w^2  \quad \rightarrow \mathbb (5) 
-}
-$$
+---
 
 Note that weight is a Vector and we need to use the Vector product /dot product where weights are concerned. We will do an implementation to test out these equations to be sure.
 
----
 
-With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
+With equations (A) and (B) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
 
 We now need to adjust the previous weight, by gradient descent.
 
