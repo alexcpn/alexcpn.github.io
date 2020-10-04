@@ -145,39 +145,122 @@ $$
 c0 = ((y-a2)**2)/2
 ```
 
-Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.
+Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally via Gradient Descent.
 
----
+Giving below the full code with comments.
 
-We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calculate the error gradient $\frac{\partial C}{\partial w}$ and repeat
-
-$$\begin{aligned}
-
-w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
-
-w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
-
-\end{aligned}$$
-
-Let's update the weights as per the formula (3) and (5)
-
-$$\begin{aligned}
-
-\mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) } \\ \\
-
-\mathbf{
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5)
-}
-\end{aligned}$$
+You can try this live with Google Colab -https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
 
 ```python
-dc_dw2 =  (a2-y)*der_sigmoid(np.dot(a1,w2))
-dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
+#---------------------------------------------------------------
+# Boiler plate code for calculating Sigmoid, derivative etc
+#---------------------------------------------------------------
 
+import numpy as np
+# seed random numbers to make calculation deterministic 
+np.random.seed(1)
+
+# pretty print numpy array
+np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
+
+# let us code our sigmoid funciton
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+# let us add a method that takes the derivative of x as well
+def derv_sigmoid(x):
+   return x*(1-x)
+
+#---------------------------------------------------------------
+
+# Two layered NW. Using from (1) and the equations we derived as explanation's
+# (1) http://iamtrask.github.io/2015/07/12/basic-python-network/
+#---------------------------------------------------------------
+
+# set learning rate as 1 for this toy example
+learningRate = 1
+
+# input x, also used as the training set here
+x = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+
+# desired output for each of the training set above
+y = np.array([[0,1,1,0]]).T
+
+# Explanation - as long as input has two ones, but not three, output is One
+"""
+Input [0,0,1]  Output = 0
+Input [0,1,1]  Output = 1
+Input [1,0,1]  Output = 1
+Input [1,1,1]  Output = 0
+"""
+
+# Randomly initialized weights
+weight1 =  np.random.random((3,4)) 
+weight2 =  np.random.random((4,1)) 
+
+# Activation to layer 0 is taken as input x
+a0 = x
+
+iterations = 1000
+for iter in range(0,iterations):
+
+  # Forward pass - Straight Forward
+  z1= np.dot(x,weight1)
+  a1 = sigmoid(z1) 
+  z2= np.dot(a1,weight2)
+  a2 = sigmoid(z2) 
+  if iter == 0:
+    print("Initial Output \n",a2)
+
+  # Backward Pass - Backpropagation 
+
+  
+  #---------------------------------------------------------------
+  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
+  # Eq (A) ---> dC_dw2 =a1.(a2-y)*derv_sigmoid(a2)
+  #---------------------------------------------------------------
+
+  k2 = (a2-y)*derv_sigmoid(a2) 
+  dC_dw2 = a1.dot(k2)
+  if iter == 0:
+    print("Shape dC_dw2",np.shape(dC_dw2)) #debug
+  
+  #---------------------------------------------------------------
+  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
+  # Eq (B)---> dC_dw1 =a0.derv_sigmoid(a1)*(a2-y)*derv_sigmoid(a2)*weight2
+  #---------------------------------------------------------------
+  
+  t1 = k2.dot(weight2.T)*derv_sigmoid(a1)
+  dC_dw1 = a0.T.dot(t1)
+
+  # debug - Following above from iamtrask. 
+  # What I do in commented section is not working
+  #t2 = weight2 * k2
+  #t1 = derv_sigmoid(a1) *t2
+  #dC_dw1 = a0.T.dot(t1)
+
+  #---------------------------------------------------------------
+  # Gradient descent
+  #---------------------------------------------------------------
+ 
+  weight2 = weight2 - learningRate*dC_dw2
+  weight1 = weight1 - learningRate*dC_dw1
+
+print("New output",a2)
+
+#---------------------------------------------------------------
+# Training is done, weight2 and weight2 are primed for output y
+#---------------------------------------------------------------
+
+# Lets test out, two ones in input and one zero, ouput should be One
+x = np.array([[1,0,1]])
+z1= np.dot(x,weight1)
+a1 = sigmoid(z1) 
+z2= np.dot(a1,weight2)
+a2 = sigmoid(z2) 
+print("Output after Training is \n",a2)
 ```
-
-Todo - Finish program
 
 Reference  
 - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
+- https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
