@@ -1,11 +1,10 @@
 
 # Bring up a Sample K8s cluster 
-## On Bare-metal or OpenStack with Flannel (Networking), Containerd and HAProxy Ingress Controller
-
+## On Bare-metal or OpenStack with Flannel (Networking), Containerd
 
 Setup
 
-We have one master and three workers. All running Ubuntu-18.04. One node has a floating IP -10.131.228.167. This will be the master, rest 3 are workers.
+We have one master and three workers. All running Ubuntu-18.04. One node has a floating IP 10.131.XX.YY and node 192.168.0.5. This will be the master, rest 3 are workers.
 
 Make all firewall ports Open. You don't want to get stuck here.
 
@@ -27,13 +26,11 @@ It may be apparent in the next steps when you try to do `kubeadm init` or in the
 
  Workaround is to delete this file and restart the containerd service and after that the kubelet service.
 
-
 ```
 rm /etc/containerd/config.toml
 systemctl restart containerd
 systemctl restart kubelet
-````
-
+```
 
 ## Step 2  Install kubelet,kubeadm  and kubectl
 -------------
@@ -123,104 +120,14 @@ kubectl config set-cluster kubernetes-green --insecure-skip-tls-verify=true
 
 That's it.
 
+```
+alex@N-20HEPF0ZU9PR:/mnt/c/Users/acp/Documents/certs3/ee$ kubectl get nodes -o wide
+NAME      STATUS   ROLES    AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+green-1   Ready    master   46h   v1.19.4   192.168.0.5    <none>        Ubuntu 18.04.4 LTS   4.15.0-96-generic   containerd://1.3.7
+green-2   Ready    <none>   46h   v1.19.4   192.168.0.19   <none>        Ubuntu 18.04.4 LTS   4.15.0-96-generic   containerd://1.3.7
+green-3   Ready    <none>   45h   v1.19.4   192.168.0.32   <none>        Ubuntu 18.04.4 LTS   4.15.0-96-generic   containerd://1.3.7
+green-4   Ready    <none>   45h   v1.19.4   192.168.0.20   <none>        Ubuntu 18.04.4 LTS   4.15.0-96-generic   containerd://1.3.7
+````
+
 ---
 
-## Installing an Ingress Controller
-
-### Install MetalLB first
-
-Follow this - https://metallb.universe.tf/installation/ (Installation by manifest)
-
-We will need this since we are installing in Baremetal (or OpenStack VMs). More details https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
-
-We will use this Confg map to provide our Floating IP to metal LB
-
-```
-cat << EOF | kubectl apply -f - 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - 10.131.228.167-10.131.228.167
-EOF
-```
-
-### Install HAProxy Ingress Controller
-
-Install HAProxy Ingress Controller via Helm as written here - https://haproxy-ingress.github.io/docs/getting-started/
-
-```
-helm install haproxy-ingress haproxy-ingress/haproxy-ingress \
-  --create-namespace --namespace=ingress-controller \
-  --set controller.hostNetwork=true
-```
-
-For more setting (GRPC,HTTP2) see ref - https://github.com/alexcpn/alexcpn.github.io/blob/master/html/other/haproxy-grpc.md
-
-You should see somthing like this, with the EXTERNAL-IP filled
-
-```
-kubectl -n ingress-controller get svc
-NAME              TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                      AGE
-haproxy-ingress   LoadBalancer   10.103.47.242   10.131.228.167   80:30038/TCP,443:31304/TCP   157m
-```
-
-## Testing with NGINX
-
-```
-# Create a Deployment of NGINX
-kubectl create deployment nginx2 --image nginx:alpine -n test
-
-# Expose nginx service
-kubectl -n test expose deployment nginx2 --port=80
-```
-You should see something like below
-```
-kubectl -n test get svc
-NAME     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-nginx2   ClusterIP   10.98.234.20   <none>        80/TCP    5h23m
-```
-
-Let's test via Port-forwarding
-
-```
-kubectl port-forward service/nginx2 --address 0.0.0.0 80:80--namespace test
-```
-From your laptop or browser
-
-```
-curl -kv http://nginx.10.131.228.167.nip.io/
-```
-This should work; If not check your IP and firewall; and test first from the master node, if it is not working locally
-
-- Create an Ingress
-
-```
-HOST=nginx.10.131.228.167.nip.io
-
-kubectl create -f - <<EOF
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: nginx
-  namespace: test
-spec:
-  rules:
-  - host: $HOST
-    http:
-      paths:
-      - backend:
-          serviceName: nginx2
-          servicePort: 80
-        path: /
-EOF
-```
-
-Test via http://nginx.10.131.228.167.nip.io/ from a browser. You should see the  **Welcome to nginx!** screen.
