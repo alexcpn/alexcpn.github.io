@@ -2,10 +2,10 @@
 
 Let's take the simple neural network and walk through the same, first going through the maths and then the implementation.
 
-Let's write the  equation of the following two layer neural network
+Let's write the  equation of the following neural network
 
 ```
-x is the Input 
+x is the Input
 y is the Output.
 l is the number of layers of the Neural Network.
 a is the activation function ,(we use sigmoid here)
@@ -15,40 +15,188 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 $$
 
-Repeating here the previous equation's that we derived in the previous chapter 
+Where the activation $a^l$ is 
+$$
+  a^{l} = \sigma(w^l a^{l-1}+b^l).
+$$
+http://neuralnetworksanddeeplearning.com/chap2.html#eqtn25
 
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
+and
+$$
+a^{l} = \sigma(z^l) \quad where \quad
+z^l =w^l a^{l-1} +b^l
+$$
+<a name="(a)"></a>
+$$
+\text{Also lets write the derivate}\;  \; 
+\mathbf {\frac{\partial a^{l} }{\partial w^{l}} = \frac{\partial \sigma (z^{l}) }{\partial w^{l}} = \sigma' (z^{l}) \quad \rightarrow  ( {a})}
 $$
 
+Where $\sigma'$ = derivative of Sigmoid with respect to Weight at layer l
+
+
+
+\
+&nbsp;
+
+# A Two Layered Neural Network
+
+Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first. Each of these are explained in more detail in the previous sections.
+
+&nbsp;
+
+Our two layer neural network can be written as
+
+ $$
+ \mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
+ $$
+
+($a^2$ does not denote the exponent but just that it is of layer 2)
+
+Lets write down the derivative of Loss function wrto weight using chain rule
+
 $$
-\mathbf{
-\frac {\partial C}{\partial w^1} =a^0* \sigma'(z^1)*(a^2-y).\sigma'(z^2).w^2 \quad \rightarrow \mathbb (B)
+\mathbf {
+\frac {\partial C}{\partial w^l} 
+= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
 }
 $$
 
+We will use the above equation as the basis for the rest of the chapter.
+
+&nbsp;
+
+## Gradient Vector of Loss function In Output Layer
 ---
+&nbsp;
+
+Our Loss function is $C$. Lets substitute $l$  with layer numbers and get the gradient of the Cost with respect to weights in layer 2 and layer 1.
+
+$$
+\frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
+$$
+
+The first term follows from [Equation (a)](#(a))
+
+$$
+\mathbb{
+\frac{\partial a^{2} }{\partial w^2} = \sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1})
+}
+$$
+
+To find the second term, we do normal derivation
+
+<a name="Eq2"></a>
+
+$$
+\mathbf{
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2} \rightarrow (2) }
+$$
+
+Putting 1 & 2 together we get the final equation for the second layer. This is the output layer.
+
+&nbsp;
+
+$$ \mathbf{
+\frac {\partial C}{\partial w^2} = \sigma'(z^{2})*(a^2-y) =\sigma'(z^{2})*\delta{^2} \quad \rightarrow (3) }
+$$
+&nbsp;
+http://neuralnetworksanddeeplearning.com/chap2.html#eqtnBP1
+
+&nbsp;
+
+## Gradient Vector of Loss function in Inner Layer
+---
+
+&nbsp;
+
+Now let's do the same for the inner layer. This is bit more tricky and we use the Chain rule to derive this
+
+&nbsp;
+
+$$
+\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
+$$
+
+&nbsp;
+
+We can calculate the first part of this like below
+
+$$
+\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) \quad \rightarrow (4.1)
+$$
+
+The first term follows from [Equation (a)](#(a))
+
+For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
+
+$$
+\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
+$$
+
+Note that [previously](#Eq2) we  had calculated
+
+$$\begin{aligned}
+
+\frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
+
+\text {Now to calculate} \quad
+
+ \frac{\partial(a^2)}{\partial(a^1)} \quad where \quad
+
+a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
+
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)\\ \\
+
+Putting \space (4.1) \space  \space (4.2)\space  and (4.3)\space together \\ \\
+
+\end{aligned}$$
+
+(4.3) https://math.stackexchange.com/a/4065766/284422
+
+---
+
+$$
+\mathbf{
+\frac {\partial C}{\partial w^1} = \sigma'(z^1)*\delta^{2}*w^2 . \sigma'(z^2)\quad \rightarrow \mathbb (5)
+}
+$$
+We substitute the first term equation (2).
+Repeating here the previous equation (3) as well
+
+$$ \mathbf{
+\frac {\partial C}{\partial w^2} =\sigma'(z^{2})*\delta^{2} \quad \rightarrow (3) }
+$$
 
 Note that weight is a Vector and we need to use the Vector product /dot product where weights are concerned. We will do an implementation to test out these equations to be sure.
 
+\
+&nbsp;
 
-With equations (A) and (B) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
+----
+
+&nbsp;
+
+With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
+
+&nbsp;
 
 We now need to adjust the previous weight, by gradient descent.
 
+&nbsp;
+
 So using the above gradients we get the new weights iteratively like below. If you notice this is exactly what is happening in gradient descent as well; only chain rule is used to calculate the gradients here. Backpropagation is the algorithm that helps calculate the gradients for each layer.
 
----
+&nbsp;
 
 $$
-
   W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
-
 $$
 
----
+\
+&nbsp;
 
-## Implementation
+# Implementation
 
 With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here http://iamtrask.github.io/2015/07/12/basic-python-network/ adding little more explanation for each of the steps, from what we have learned.
 
@@ -145,122 +293,39 @@ $$
 c0 = ((y-a2)**2)/2
 ```
 
-Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally via Gradient Descent.
+Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.
 
-Giving below the full code with comments.
+---
 
-You can try this live with Google Colab -https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
+We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calculate the error gradient $\frac{\partial C}{\partial w}$ and repeat
+
+$$\begin{aligned}
+
+w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
+
+w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
+
+\end{aligned}$$
+
+Let's update the weights as per the formula (3) and (5)
+
+$$\begin{aligned}
+
+\mathbf{
+\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) } \\ \\
+
+\mathbf{
+\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5)
+}
+\end{aligned}$$
 
 ```python
-#---------------------------------------------------------------
-# Boiler plate code for calculating Sigmoid, derivative etc
-#---------------------------------------------------------------
+dc_dw2 =  (a2-y)*der_sigmoid(np.dot(a1,w2))
+dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
 
-import numpy as np
-# seed random numbers to make calculation deterministic 
-np.random.seed(1)
-
-# pretty print numpy array
-np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-
-# let us code our sigmoid funciton
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-
-# let us add a method that takes the derivative of x as well
-def derv_sigmoid(x):
-   return x*(1-x)
-
-#---------------------------------------------------------------
-
-# Two layered NW. Using from (1) and the equations we derived as explanation's
-# (1) http://iamtrask.github.io/2015/07/12/basic-python-network/
-#---------------------------------------------------------------
-
-# set learning rate as 1 for this toy example
-learningRate = 1
-
-# input x, also used as the training set here
-x = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
-
-# desired output for each of the training set above
-y = np.array([[0,1,1,0]]).T
-
-# Explanation - as long as input has two ones, but not three, output is One
-"""
-Input [0,0,1]  Output = 0
-Input [0,1,1]  Output = 1
-Input [1,0,1]  Output = 1
-Input [1,1,1]  Output = 0
-"""
-
-# Randomly initialized weights
-weight1 =  np.random.random((3,4)) 
-weight2 =  np.random.random((4,1)) 
-
-# Activation to layer 0 is taken as input x
-a0 = x
-
-iterations = 1000
-for iter in range(0,iterations):
-
-  # Forward pass - Straight Forward
-  z1= np.dot(x,weight1)
-  a1 = sigmoid(z1) 
-  z2= np.dot(a1,weight2)
-  a2 = sigmoid(z2) 
-  if iter == 0:
-    print("Initial Output \n",a2)
-
-  # Backward Pass - Backpropagation 
-
-  
-  #---------------------------------------------------------------
-  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
-  # Eq (A) ---> dC_dw2 =a1.(a2-y)*derv_sigmoid(a2)
-  #---------------------------------------------------------------
-
-  k2 = (a2-y)*derv_sigmoid(a2) 
-  dC_dw2 = a1.dot(k2)
-  if iter == 0:
-    print("Shape dC_dw2",np.shape(dC_dw2)) #debug
-  
-  #---------------------------------------------------------------
-  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
-  # Eq (B)---> dC_dw1 =a0.derv_sigmoid(a1)*(a2-y)*derv_sigmoid(a2)*weight2
-  #---------------------------------------------------------------
-  
-  t1 = k2.dot(weight2.T)*derv_sigmoid(a1)
-  dC_dw1 = a0.T.dot(t1)
-
-  # debug - Following above from iamtrask. 
-  # What I do in commented section is not working
-  #t2 = weight2 * k2
-  #t1 = derv_sigmoid(a1) *t2
-  #dC_dw1 = a0.T.dot(t1)
-
-  #---------------------------------------------------------------
-  # Gradient descent
-  #---------------------------------------------------------------
- 
-  weight2 = weight2 - learningRate*dC_dw2
-  weight1 = weight1 - learningRate*dC_dw1
-
-print("New output",a2)
-
-#---------------------------------------------------------------
-# Training is done, weight2 and weight2 are primed for output y
-#---------------------------------------------------------------
-
-# Lets test out, two ones in input and one zero, ouput should be One
-x = np.array([[1,0,1]])
-z1= np.dot(x,weight1)
-a1 = sigmoid(z1) 
-z2= np.dot(a1,weight2)
-a2 = sigmoid(z2) 
-print("Output after Training is \n",a2)
 ```
+
+Todo - Finish program
 
 Reference  
 - https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
-- https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
