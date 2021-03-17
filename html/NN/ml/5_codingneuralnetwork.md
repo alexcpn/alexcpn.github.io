@@ -4,7 +4,7 @@ Let's take the simple neural network and walk through the same, first going thro
 
 Let's write the  equation of the following neural network
 
-```
+```python
 x is the Input
 y is the Output.
 l is the number of layers of the Neural Network.
@@ -15,7 +15,7 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 $$
 
-Where the activation $a^l$ is 
+Where the activation $a^l$ is
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
@@ -34,12 +34,10 @@ $$
 
 Where $\sigma'$ = derivative of Sigmoid with respect to Weight at layer l
 
-
-
 \
 &nbsp;
 
-# A Two Layered Neural Network
+## A Two Layered Neural Network
 
 Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first. Each of these are explained in more detail in the previous sections.
 
@@ -67,6 +65,7 @@ We will use the above equation as the basis for the rest of the chapter.
 &nbsp;
 
 ## Gradient Vector of Loss function In Output Layer
+
 ---
 &nbsp;
 
@@ -100,12 +99,15 @@ Putting 1 & 2 together we get the final equation for the second layer. This is t
 $$ \mathbf{
 \frac {\partial C}{\partial w^2} = \sigma'(z^{2})*(a^2-y) =\sigma'(z^{2})*\delta{^2} \quad \rightarrow (3) }
 $$
+
+\
 &nbsp;
-http://neuralnetworksanddeeplearning.com/chap2.html#eqtnBP1
+<http://neuralnetworksanddeeplearning.com/chap2.html#eqtnBP1>
 
 &nbsp;
 
 ## Gradient Vector of Loss function in Inner Layer
+
 ---
 
 &nbsp;
@@ -146,13 +148,13 @@ $$\begin{aligned}
 
 a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)\\ \\
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*\\ \\
 
 Putting \space (4.1) \space  \space (4.2)\space  and (4.3)\space together \\ \\
 
 \end{aligned}$$
 
-(4.3) https://math.stackexchange.com/a/4065766/284422
+*<https://math.stackexchange.com/a/4065766/284422>
 
 ---
 
@@ -161,6 +163,7 @@ $$
 \frac {\partial C}{\partial w^1} = \sigma'(z^1)*\delta^{2}*w^2 . \sigma'(z^2)\quad \rightarrow \mathbb (5)
 }
 $$
+
 We substitute the first term equation (2).
 Repeating here the previous equation (3) as well
 
@@ -169,11 +172,9 @@ $$ \mathbf{
 $$
 
 Note that weight is a Vector and we need to use the Vector product /dot product where weights are concerned. We will do an implementation to test out these equations to be sure.
-
-\
 &nbsp;
 
-----
+## Gradient Descent
 
 &nbsp;
 
@@ -196,9 +197,9 @@ $$
 \
 &nbsp;
 
-# Implementation
+## Implementation
 
-With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here http://iamtrask.github.io/2015/07/12/basic-python-network/ adding little more explanation for each of the steps, from what we have learned.
+With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here <http://iamtrask.github.io/2015/07/12/basic-python-network/> adding little more explanation for each of the steps, from what we have learned.
 
 We will use matrices to represent input and weight matrices.
 
@@ -328,4 +329,6 @@ dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
 Todo - Finish program
 
 Reference  
-- https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf
+
+- <https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf>
+- <http://neuralnetworksanddeeplearning.com/chap2.html>
