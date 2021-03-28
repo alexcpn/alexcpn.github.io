@@ -233,8 +233,11 @@ $$\begin{aligned}
 
 a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*\\
-\end{aligned}$$
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*
+
+\end{aligned}
+$$
+
 *<https://math.stackexchange.com/a/4065766/284422>
 
 Putting (4.1) (4.2) and (4.3) together
