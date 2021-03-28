@@ -24,10 +24,11 @@ y = np.array(
   [
       [0],
       [1],
-      [1],
-      [0]
+      [0],
+      [1]
   ])
 ```
+Note you can change the output and try to train the Neural network
 
 This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.
 
@@ -111,22 +112,136 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 
 \end{aligned}$$
 
-Let's update the weights as per the formula (3) and (5)
+Let's update the weights as per the formula (3) and (5) from last chapter
 
-$$\begin{aligned}
 
-\mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) } \\ \\
+$$  \mathbf{
+\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
+}$$
 
-\mathbf{
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5)
+$$
+\delta^2 = (a^2-y)
+$$
+
+$$ \mathbf{
+\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
 }
-\end{aligned}$$
+$$
 
 ```python
-dc_dw2 =  (a2-y)*der_sigmoid(np.dot(a1,w2))
-dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
+import numpy as np
+# seed random numbers to make calculation deterministic 
+np.random.seed(1)
 
+# pretty print numpy array
+np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
+
+# let us code our sigmoid funciton
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+# let us add a method that takes the derivative of x as well
+def derv_sigmoid(x):
+   return sigmoid(x)*(1-sigmoid(x))
+
+#---------------------------------------------------------------
+
+# Two layered NW. Using from (1) and the equations we derived as explanaionns
+# (1) http://iamtrask.github.io/2015/07/12/basic-python-network/
+#---------------------------------------------------------------
+
+# set learning rate as 1 for this toy example
+learningRate = 1
+
+# input x, also used as the training set here
+x = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+
+# desired output for each of the training set above
+y = np.array([[0,1,1,0]]).T
+
+# Explanaiton - as long as input has two ones, but not three, ouput is One
+"""
+Input [0,0,1]  Output = 0
+Input [0,1,1]  Output = 1
+Input [1,0,1]  Output = 1
+Input [1,1,1]  Output = 0
+"""
+
+# Randomly initalised weights
+weight1 =  np.random.random((3,4)) 
+weight2 =  np.random.random((4,1)) 
+
+# Activation to layer 0 is taken as input x
+a0 = x
+
+iterations = 1000
+for iter in range(0,iterations):
+
+  # Forward pass - Straight Forward
+  z1= np.dot(x,weight1)
+  a1 = sigmoid(z1) 
+  z2= np.dot(a1,weight2)
+  a2 = sigmoid(z2) 
+  if iter == 0:
+    print("Intial Ouput \n",a2)
+
+  # Backward Pass - Backpropagation 
+  delta2  = (a2-y)
+  #---------------------------------------------------------------
+  # Calcluating change of Cost/Loss wrto weight of 2nd/last layer
+  # Eq (A) ---> dC_dw2 = delta2*derv_sigmoid(z2)*a1.T
+  #---------------------------------------------------------------
+
+  dC_dw2_1  = delta2*derv_sigmoid(z2) 
+  dC_dw2  = a1.T.dot(dC_dw2_1)
+  
+  #---------------------------------------------------------------
+  # Calcluating change of Cost/Loss wrto weight of 2nd/last layer
+  # Eq (B)---> dC_dw1 = derv_sigmoid(z1)*delta2*derv_sigmoid(z2)*weight2*a0.T
+  # dC_dw1 = derv_sigmoid(z1)*dC_dw2*weight2_1*a0.T
+  #---------------------------------------------------------------
+
+  dC_dw1 =  np.multiply(dC_dw2_1,weight2.T) * derv_sigmoid(z1)
+  # todo - the weight2.T is the only thing not in equation here
+  dC_dw1 = a0.T.dot(dC_dw1)
+
+  #---------------------------------------------------------------
+  #Gradinent descent
+  #---------------------------------------------------------------
+ 
+  weight2 = weight2 - learningRate*(dC_dw2)
+  weight1 = weight1 - learningRate*(dC_dw1)
+
+
+print("New ouput",a2)
+
+#---------------------------------------------------------------
+# Training is done, weight2 and weight2 are primed for output y
+#---------------------------------------------------------------
+
+# Lets test out, two ones in input and one zero, ouput should be One
+x = np.array([[1,0,1]])
+z1= np.dot(x,weight1)
+a1 = sigmoid(z1) 
+z2= np.dot(a1,weight2)
+a2 = sigmoid(z2) 
+print("Ouput after Training is \n",a2)
 ```
 
-Todo - Finish program
+Output
+
+```console
+Intial Ouput 
+ [[ 0.758]
+ [ 0.771]
+ [ 0.791]
+ [ 0.801]]
+New ouput [[ 0.028]
+ [ 0.925]
+ [ 0.925]
+ [ 0.090]]
+Ouput after Training is 
+ [[ 0.925]]
+ ```
+
+We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
