@@ -252,7 +252,7 @@ $$
 }
 $$
 
-The third term is 
+The third term is
 
 $$
 \mathbf{
@@ -311,7 +311,6 @@ Now \space to \space calculate \quad
 
 We \space can \space re-write  \space this \space as \\ \\
 
-
  \frac{\partial(a^2)}{\partial(a^1)} =  \frac{\partial(a^2)}{\partial(z^2)}. \frac{\partial(z2)}{\partial(a^1)}   \\ \\
 
  which \space is \space \\ \\ 
@@ -321,7 +320,6 @@ We \space can \space re-write  \space this \space as \\ \\
  which \space is \space \\ \\ 
 
  \sigma'(z^2).w^2 \\ \\
-
 
 \frac{\partial(a^2)}{\partial(a^1)} = \sigma'(z^2).w^2  \quad \rightarrow (2.3.2)\\ \\
 
@@ -336,8 +334,8 @@ $$
 \frac {\partial C}{\partial w^1} =a^0* \sigma'(z^1)*(a^2-y).\sigma'(z^2).w^2 \quad \rightarrow \mathbb (B)
 }
 $$
----
 
+---
 
 Repeating here the previous equation (A) as well
 
@@ -345,7 +343,8 @@ $$ \mathbf{
 \frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
 $$
 
-So with these two equations let's implement a tow layered neural network in the next chapter
+There is one caveat here;these equations are just illustrative with respect to scalar calculus and not  accouinting for the matrix calculus we will need when modelling a practical neural network. We will check that in the next chapter But these two equaltions are illustrative of what is really going on.
+
 
 ---
 

@@ -1,4 +1,4 @@
-# Chapter 5: Back Propagation for a Two layered Neural Network
+# Chapter 5: Back Propagation for a Two layered Neural Network (Matrix Calculus)
 
 Let's take the simple neural network and walk through the same, first going through the maths and then the implementation.
 
@@ -26,16 +26,7 @@ $$
 a^{l} = \sigma(z^l) \quad where \quad
 z^l =w^l a^{l-1} +b^l
 $$
-<a name="(a)"></a>
-$$
-\text{Also lets write the derivate}\;  \; 
-\mathbf {\frac{\partial a^{l} }{\partial w^{l}} = \frac{\partial \sigma (z^{l}) }{\partial w^{l}} = \sigma' (z^{l}) \quad \rightarrow  ( {a})}
-$$
 
-Where $\sigma'$ = derivative of Sigmoid with respect to Weight at layer l
-
-\
-&nbsp;
 
 ## A Two Layered Neural Network
 
@@ -64,46 +55,134 @@ We will use the above equation as the basis for the rest of the chapter.
 
 &nbsp;
 
-## Gradient Vector of Loss function In Output Layer
 
----
+## Gradient Vector/Matrix/2D tensor of Loss function wrto Weight in last layer
+
+$$
+C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
+$$
+
+Assuming a neural net with 2 layers, we have the final Loss as 
+
+$$
+C = \frac{1}{2} \sum_j (y_j-a^2_j)^2
+$$
+
+Where
+
+$$
+a^2 = \sigma(w^2.a^1)
+$$
+
+We can then write
+
+$$
+C = \frac{1}{2} \sum_j v^2 \quad \rightarrow (Eq \;A)
+$$
+
+Where
+
+$$
+v= y-a^2
+$$
+
+## Partial Derivative of Loss function wrto Weight
+
+For the last layer, lets use Chain Rule to split like below
+
+$$
+\frac {\partial C}{\partial w^2} = \frac{\partial v^2}{\partial v} * \frac{\partial v}{\partial w^2} \quad \rightarrow (Eq \;B)
+$$
+
+$$
+ \frac{\partial v^2}{\partial v} =2v \quad \rightarrow (Eq \;B.1)
+$$
+
+$$
+\frac{\partial v}{\partial w^2}=  \frac{\partial (y-a^2)}{\partial w^2} = 
+0-\frac{\partial a^2}{\partial w^2} \quad \rightarrow (Eq \;B.2)
+$$
+
+$$
+\frac {\partial C}{\partial w^2} = \frac{1}{2} *2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
+$$
 &nbsp;
 
-Our Loss function is $C$. Lets substitute $l$  with layer numbers and get the gradient of the Cost with respect to weights in layer 2 and layer 1.
+### Now we need to find $\frac{\partial a^2}{\partial w^2}$
+
+Let
 
 $$
-\frac {\partial C}{\partial w^2}= \frac {\partial a^2}{\partial w^2}.  \frac {\partial C}{\partial a^2}
+a^2= \sigma(sum(w^2 \otimes a^1 )) = \sigma(z^2) 
+$$
+$$
+z^2 = sum(w^2 \otimes a^1 )
 $$
 
-The first term follows from [Equation (a)](#(a))
-
 $$
-\mathbb{
-\frac{\partial a^{2} }{\partial w^2} = \sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1})
-}
+z^2 = sum(k^2) \; \text {where} \; k^2=w^2 \otimes a^1 
 $$
 
-To find the second term, we do normal derivation
 
-<a name="Eq2"></a>
+We now need to derive an intermediate term which we will use later
 
 $$
-\mathbf{
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2} \rightarrow (2) }
+\frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
+$$
+$$
+=\frac {\partial sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
+$$
+$$
+\frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
+$$
+How the above is, you need to check this  in https://explained.ai/matrix-calculus/#sec6.2
+
+Basically though these are written like scalar here; actually all these are partial differention of vector by vector, or vector by scalar; and a set of vectors can be represented as the matrix here.
+
+Note that the vector dot product $w.a$ when applied on matrices becomes the elementwise multiplication $w^2 \otimes a^1$ (also called Hadamard product)
+
+Going back to  $Eq \;(B.2)$
+
+$$
+\frac {\partial a^2}{\partial w^2} = \frac{\partial a^2}{\partial z^2} * \frac{\partial z^2}{\partial w^2}
 $$
 
-Putting 1 & 2 together we get the final equation for the second layer. This is the output layer.
+Using $Eq \;(B.3)$ for the term in left
 
-&nbsp;
-
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} = \sigma'(z^{2})*(a^2-y) =\sigma'(z^{2})*\delta{^2} \quad \rightarrow (3) }
+$$
+=  \frac{\partial a^2}{\partial z^2} * (a^{1})^T
 $$
 
-\
-&nbsp;
-<http://neuralnetworksanddeeplearning.com/chap2.html#eqtnBP1>
+$$
+=  \frac{\partial \sigma(z^2)}{\partial z^2} * (a^{1})^T
+$$
 
+$$
+\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
+$$
+
+Now lets got back to partial derivative of Loss function wrto to weight
+
+$$
+\frac {\partial C}{\partial w^2} = \frac {1}{2}*2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
+$$
+Using $Eq \;(B.4)$ to substitute in the last term
+
+$$
+= v(0- \sigma^{'}(z^2) * (a^{1})^T) 
+$$
+
+$$
+= v*-1*\sigma^{'}(z^2) * (a^{1})^T
+$$
+
+$$
+= (y-a^2)*-1*\sigma^{'}(z^2) * (a^{1})^T
+$$
+
+$$
+\frac {\partial C}{\partial w^2}= (a^2-y)*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
+$$
 &nbsp;
 
 ## Gradient Vector of Loss function in Inner Layer
@@ -122,13 +201,16 @@ $$
 
 &nbsp;
 
-We can calculate the first part of this like below
+We can calculate the first part of this from $Eq\; (B.4)$ that we derived above
 
 $$
-\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) \quad \rightarrow (4.1)
+\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
 $$
 
-The first term follows from [Equation (a)](#(a))
+$$
+\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
+$$
+
 
 For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
 
@@ -136,7 +218,10 @@ $$
 \frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
 $$
 
-Note that [previously](#Eq2) we  had calculated
+$$
+{
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
+$$
 
 $$\begin{aligned}
 
@@ -148,37 +233,44 @@ $$\begin{aligned}
 
 a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
 
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*\\ \\
-
-Putting \space (4.1) \space  \space (4.2)\space  and (4.3)\space together \\ \\
-
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*\\
 \end{aligned}$$
-
 *<https://math.stackexchange.com/a/4065766/284422>
 
----
+Putting (4.1) (4.2) and (4.3) together
+
+## Final Equations
+
+$$  \mathbf{
+\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
+}$$
 
 $$
-\mathbf{
-\frac {\partial C}{\partial w^1} = \sigma'(z^1)*\delta^{2}*w^2 . \sigma'(z^2)\quad \rightarrow \mathbb (5)
+\delta^2 = (a^2-y)
+$$
+
+Adding also the partial derivate of loss funciton with respect to weight in the final layer
+
+$$ \mathbf{
+\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
 }
 $$
 
-We substitute the first term equation (2).
-Repeating here the previous equation (3) as well
+And that's that. You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the backprogation algorithm is the most elegant dynamic programming till date.
 
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} =\sigma'(z^{2})*\delta^{2} \quad \rightarrow (3) }
-$$
-
-Note that weight is a Vector and we need to use the Vector product /dot product where weights are concerned. We will do an implementation to test out these equations to be sure.
-&nbsp;
-
-## Gradient Descent
+$$  \mathbf{
+\frac {\partial C}{\partial w^1} = \delta^{2}*\sigma'(z^2)*(a^{0})^T*w^2.\sigma'(z^1) \quad \rightarrow \mathbb Eq \; (5)
+}$$
 
 &nbsp;
 
-With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example $\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$
+## Using Gradient Descent to find the optimal weights to reduce the Loss function
+
+&nbsp;
+
+With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example 
+
+$$\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$$
 
 &nbsp;
 
@@ -190,143 +282,14 @@ So using the above gradients we get the new weights iteratively like below. If y
 
 &nbsp;
 
-$$
+$$\mathbf {
   W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
-$$
+}$$
 
 \
 &nbsp;
 
-## Implementation
-
-With this clear, this is not so difficult to code up. Let's do this. I am following the blog and code here <http://iamtrask.github.io/2015/07/12/basic-python-network/> adding little more explanation for each of the steps, from what we have learned.
-
-We will use matrices to represent input and weight matrices.
-
-```python
-x = np.array(
-    [
-        [0,0,1],
-        [0,1,1],
-        [1,0,1],
-        [1,1,1]
-    ])
-
-```
-
-This is a 4*3 matrix. Note that each row is an input. lets take all this 4 as 'training set'
-
-```python
-y = np.array(
-  [
-      [0],
-      [1],
-      [1],
-      [0]
-  ])
-```
-
-This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.
-
-**A neural network is implemented as a set of matrices representing the weights of the network.**
-
-Let's create a two layered network. Before that please not the formula for the neural network
-
-So basically the output at layer l is the dot product of the weight matrix of layer l and input of the previous layer.
-
-Now let's see how the matrix dot product works based on the shape of matrices.
-
-```python
-[m*n].[n*x] = [m*x]
-[m*x].[x*y] = [m*y]
-```
-
-We take the $[m*n]$ as the input matrix this is a $[4*3]$ matrix.
-
-Similarly the output $y$ is a $[4*1]$ matrix; so we have $[m*y] =[4*1]$
-
-So we have
-
-```python
-m=4
-n=3
-x=?
-y=1
-```
-
-Lets then create our two weight matrices of the above shapes, that represent the two layers of the neural network.
-
-```python
-w0 = x
-w1 = np.random.random((3,4))
-w2 = np.random.random((4,1))
-```
-
-We can have an array of the weights to loop through, but for the time being let's hard-code these. Note that 'np' stands for the popular numpy array library in Python.
-
-We also need to code in our non linearity.We will use the Sigmoid function here.
-
-```python
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-
-# derivative of the sigmoid
-def derv_sigmoid(x):
-   return x*(1-x)
-```
-
-With this we can have the output of first, second and third layer, using our equation of neural network forward propagation.
-
-```python
-a0 = x
-a1 = sigmoid(np.dot(a0,w1))
-
-a2 = sigmoid(np.dot(a1,w2))
-```
-
-a2 is the calculated output from randomly initialized weights. So lets calculate the error by subtracting this from the expected value and taking the MSE.
-
-$$
- C = \frac{1}{2} \|y-a^l\|^2
-$$
-
-```python
-c0 = ((y-a2)**2)/2
-```
-
-Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.
-
----
-
-We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calculate the error gradient $\frac{\partial C}{\partial w}$ and repeat
-
-$$\begin{aligned}
-
-w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
-
-w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
-
-\end{aligned}$$
-
-Let's update the weights as per the formula (3) and (5)
-
-$$\begin{aligned}
-
-\mathbf{
-\frac {\partial C}{\partial w^2} = \sigma' (z^{2})*(a^2-y) \quad \rightarrow (3) } \\ \\
-
-\mathbf{
-\frac {\partial C}{\partial w^1} =\frac {\partial C}{\partial(a^2)} *w^2 . \sigma'(z^1)  =(a^2-y)*w^2 . \sigma'(z^1)\quad \rightarrow \mathbb (5)
-}
-\end{aligned}$$
-
-```python
-dc_dw2 =  (a2-y)*der_sigmoid(np.dot(a1,w2))
-dc_dw1 =  (a2-y)*w2*der_sigmoid(np.dot(a0,w1))
-
-```
-
-Todo - Finish program
+That's it
 
 Reference  
 
