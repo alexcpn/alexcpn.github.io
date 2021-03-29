@@ -128,6 +128,10 @@ $$ \mathbf{
 }
 $$
 
+## A Two layered Neural Network in Python
+
+Below is a two layered Network; I have used the code from http://iamtrask.github.io/2015/07/12/basic-python-network/ as the basis and try to make thing more clear and fit it into the equations we dervied.
+
 ```python
 import numpy as np
 # seed random numbers to make calculation deterministic 
@@ -245,3 +249,7 @@ Ouput after Training is
  ```
 
 We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
+
+Reference
+
+https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
