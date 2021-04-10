@@ -1,8 +1,5 @@
 
-# Neural Networks -The Maths and Code
-##  The Maths and Implementaion
-
-
+# The Maths behind Neural Networks
 
 Alex Punnen \
 &copy; All Rights Reserved \

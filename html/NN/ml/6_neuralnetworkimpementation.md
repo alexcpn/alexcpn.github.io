@@ -1,8 +1,23 @@
-# Implementation of a two layered Neural Network
+# The Maths behind Neural Networks
+
+Alex Punnen \
+&copy; All Rights Reserved \
+2019-2021 
+
+---
+
+## Contents
+
+- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
+- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)
+- Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
+- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
+- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
+
+## Chapter 6: Implementation of a two layered Neural Network
 
 With the derivative of the Cost function dervied from the last chapter, we can code the network
-
-I am using the code here <http://iamtrask.github.io/2015/07/12/basic-python-network/> as a base.
 
 We will use matrices to represent input and weight matrices.
 
@@ -130,7 +145,7 @@ $$
 
 ## A Two layered Neural Network in Python
 
-Below is a two layered Network; I have used the code from http://iamtrask.github.io/2015/07/12/basic-python-network/ as the basis and try to make thing more clear and fit it into the equations we dervied.
+Below is a two layered Network; I have used the code from http://iamtrask.github.io/2015/07/12/basic-python-network/ as the basis. With minor changes to fit into how we derived the equations.
 
 ```python
 import numpy as np
@@ -253,3 +268,12 @@ We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
 Reference
 
 https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing
+
+## Contents
+
+- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
+- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md) 
+- Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
+- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- **Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)**
+- **Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)**

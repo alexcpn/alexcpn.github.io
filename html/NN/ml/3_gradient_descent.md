@@ -1,4 +1,21 @@
-# Chapter 3: Gradient Descent, Gradient Vector and Loss Function
+# The Maths behind Neural Networks
+
+Alex Punnen \
+&copy; All Rights Reserved \
+2019-2021 
+
+---
+
+## Contents
+
+- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
+- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)
+- Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
+- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
+- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
+
+## Chapter 3: Gradient Descent, Gradient Vector and Loss Function
 
 It is not clear when gradient descent became popular for training neural networks.  It is clear that the limitation of Perceptron showed the limitations of shallow layered neural networks, and for deeper layers, an effective way of training was the hard part.
 
@@ -116,6 +133,15 @@ And the loss function in say three dimensions will geometrically be something li
 But the intuition regarding solving it is the same. Instead of the simple slope as in the case of two-dimensional loss function like MSE, we take the **gradient vector** and follow the negative to the gradient, with some constant selected as the learning rate. The constant is so chosen, that we decrement in short steps, and reduce the risk of overshooting the minima.
 
 In the next part we will see where the gradient descent comes into play in neural network learning.
+
+## Contents
+
+- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md) <---
+- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md) 
+- **Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)**
+- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
+- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md
 
 [Reading Handwritten Digits A Zip Code Recognition System]:http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf
