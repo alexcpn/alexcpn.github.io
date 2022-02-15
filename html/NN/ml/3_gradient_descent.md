@@ -14,7 +14,7 @@ Alex Punnen \
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-
+- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 ## Chapter 3: Gradient Descent, Gradient Vector and Loss Function
 
 It is not clear when gradient descent became popular for training neural networks.  It is clear that the limitation of Perceptron showed the limitations of shallow layered neural networks, and for deeper layers, an effective way of training was the hard part.
@@ -59,11 +59,11 @@ The gradient descent method is much simpler than Newton's method. How it relates
 It is a function wich represents the difference between the expected value and the actual value as the base.
 
 $$
-\text{ say } x_1  \text{  is the actual \,value} \\
-
-\text{Expected value } = \hat x \\
-
-\text{Error in the function} = x_1 -\hat  x
+\begin{aligned}
+\text{ Say } x_1  \text{is the actual value} \\
+\text{Expected value }=\hat x  \quad  \\
+\text{Error in the function} = x_1 -\hat x \\
+\end{aligned}
 $$
 
 To make sure that the error is not skewed if the variance is above or below the function, that is positive or negative, we take the square of the difference, and since we are not usually looking at one value, but a set of values, we take the mean of the count of variables. This is the **Mean Square Error** cost function.
@@ -141,7 +141,7 @@ In the next part we will see where the gradient descent comes into play in neura
 - **Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)**
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md
+- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 
 [Reading Handwritten Digits A Zip Code Recognition System]:http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf

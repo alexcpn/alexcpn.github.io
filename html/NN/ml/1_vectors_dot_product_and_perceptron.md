@@ -14,7 +14,7 @@ Alex Punnen \
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-
+- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 
 ### Chapter 1
 ## Vectors, Dot Products and  the Perceptron
@@ -37,9 +37,11 @@ However we need to sepcify also a context where this vector lives -[Vector Space
 
 The easiest way to understand the Vector is in a geometric context, say 2D or 3D cartesian coordinates, and then extrapolate it for other Vector spaces which we encounter but cannot really imgagine. This is what we will try to do here.
 
-## Matrices and Vectors
+## Matrices - A way to represent Vectors (and Tensors)
 
- Vectors are represented as matrices.A matrix is defined to be a rectangular array of numbers. Example here is a [Euclidean Vector][5] in three-dimensional Euclidean space (or $R^{3}$). So a vector is represented as a column matrix.
+ Vectors are represented as matrices. A matrix is defined to be a rectangular array of numbers. Example here is a [Euclidean Vector][Euclidean_vector]  in three-dimensional Euclidean space (or $R^{3}$) with some magnitude and direction (from (0,0,0) origin in this case).
+ 
+ A vector is represented either as column matrix or as a row matrix.
 
 $$
 a = \begin{bmatrix}
@@ -47,11 +49,20 @@ a_{1}\\a_{2}\\a_{3}\
 \end{bmatrix} = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix}
 $$
 
+$a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represented as $\vec a$ in the **Vector notation** and as $a_{i}$ in the **Index Notation**. 
+
+Please see [this article][indexnotation] regarding index notation details and about *free indices*. In most of the derivations later on, we will use the index notation.
+
+**Tensor**
+
+Since  we will be dealing soon with multidimensonal matrices, it is as well to state here what Tensors are. Easier is to define how they are represented, and that will suit our case as well. A Vector is a one dimensional matrix. Higher dimension matrices are used for Tensors. Example is the multidimensional weight matrices we use in neural network. They are weight Tensors. A Vector is a Tensor or Rank 1 and technically a Scalar is also a Tensor of Rank 0.
 ## Dot product
 
 Algebraically, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.
 
-if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, then $\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3}$
+if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, then 
+
+$\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3} = a_ib_i \quad\text {in index notation}$
 
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 
@@ -61,7 +72,7 @@ $$
 
  ![dotproduct][6]
 
-These definitions are equivalent when using Cartesian coordinates.
+Note- These definitions are equivalent when using Cartesian coordinates.
 Here is a simple proof that follows from trigonometry [8] and [9]
 
 ## Dot Product and Vector Alignment
@@ -169,7 +180,7 @@ In simple terms, it means that an unknown feature vector of an input set belongi
   [2]: http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf
   [3]: https://i.stack.imgur.com/Q1rBUm.png#center
   [4]: https://i.stack.imgur.com/t0plRm.png#center
-  [5]: https://en.wikipedia.org/wiki/Euclidean_vector
+  [Euclidean_vector]: https://en.wikipedia.org/wiki/Euclidean_vector
   [6]: https://i.stack.imgur.com/kO3ym.png#center
   [7]: https://i.stack.imgur.com/Nw2Ls.png#center
   [8]: http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx
@@ -181,3 +192,4 @@ In simple terms, it means that an unknown feature vector of an input set belongi
   [hyperplane2]: https://i.imgur.com/9M8GZHc.png#center
   [hyperplane1]: https://i.imgur.com/OIN3maHm.png#center
   [linearseperable]: https://i.imgur.com/jmWvoWh.png
+  [indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf

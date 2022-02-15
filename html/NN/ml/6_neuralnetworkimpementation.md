@@ -14,7 +14,7 @@ Alex Punnen \
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - **Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)**
-
+- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 ## Chapter 6: Implementation of a two layered Neural Network
 
 With the derivative of the Cost function dervied from the last chapter, we can code the network
