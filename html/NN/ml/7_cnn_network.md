@@ -79,7 +79,7 @@ For this case we will be using the sigmoid ($\sigma$ ) function as the activatio
 
 Writing this out, without index notation, and with the super script representing just the layers of the network. Note $x$ is the input
 
-$$\mathbf  \color{red}{
+$$ \color{red}{
 \begin{aligned}
  x \rightarrow \text{hidden layers} \,\rightarrow (w^{l-1} a^{l-2}+b^{l-1})=z^{l-1} \\ \\
  z^{l-1} \rightarrow  \sigma(z^{l-1})= a^{l-1}  
@@ -127,7 +127,7 @@ For this we need to find the derivative of Loss function wrto weights, and use t
 
 I am using the diagram below taken from the earlier chapter of a simple neural network, to show how the nude in weight in the last layer affects the cost. The Activation in this diagram is Sigmoid and the Cost function is Mean Square Error. However in our case the Activation function is Softmax and the Cost function is Cross Entropy Loss.
 
-![b_ackpropogationgif]
+![backpropogationgif]
 
 There are two ways to do this; and both by using the Chain Rule of Calculus
 
@@ -138,14 +138,14 @@ Using the Derivative of Softmax wrto its inputs.
 $$
 \mathbf {
 \frac {\partial L}{\partial w^l} 
-=  \color{violet}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
+=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
 }
 $$
 
 Where
 $$
 \mathbf {
-L = -\sum_k y_k \log \color{violet}{p_k} \,\,and \,p_j = \frac {e^ \color{violet}{z_j}} {\sum_k e^{z_k}}
+L = -\sum_k y_k \log \color{red}{p_k} \,\,and \,p_j = \frac {e^ \color{red}{z_j}} {\sum_k e^{z_k}}
 }
 $$
 If you are confused with the indexes, just take a short example and substitute. Basically i,j,k etc are dummy indices used to illustrate in index notation the vectors.
@@ -154,7 +154,7 @@ I am going to drop the superscirpt $l$ denoting the layer number henceforth and 
 
 Following from [Derivative of Softmax Activation -Alijah Ahmed]
 
-$$ \color{violet}
+$$ \color{red}
   {
   \begin{aligned}
 
@@ -170,21 +170,22 @@ $$
 
 The last term is the derivative  of Softmax wrto it's inputs, this is easy to derive and there are many sites that descirbe it. Example [Neural Network with SoftMax in Python- Abishek Jana] or the first part here  [The Softmax function and its derivative-Eli Bendersky]
 
-$$ \color{violet}
+$$
+ \color{red}
   {
   \begin{aligned}
-
-   \frac {\partial { p_i}}{\partial z_i} = p_i(\delta_{ij} -p_j) 
+   \frac {\partial { p_i}}{\partial z_i} = p_i(\delta_{ij} -p_j)
    \\ \\
-   \delta_{ij} = 1 \text{ when i =j} \\
+   \delta_{ij} = 1 \text{ when i =j}
+   \\
    \delta_{ij} = 0 \text{ when i} \ne \text{j}
-  
-\end{aligned}
-}
+  \end{aligned}
+  }
 $$
+
 Using this above
 
-$$ \color{violet}
+$$ \color{red}
   {
   \begin{aligned}
 
