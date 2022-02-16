@@ -209,9 +209,9 @@ $$ \color{red}
      \\ \\
      = -y_i + p_i( y_i + \sum_{k \ne i}  y_k) 
      \\ \\
-     = -y_i + p_i( \sum_{k=i}  y_k) 
+     = -y_i + p_i( \sum_{k}  y_k) 
      \\ \\
-     \text {note that } \sum_{k=i}  y_k = 1  \, \text{as it is a One hot encoded Vector}
+     \text {note that } \sum_{k}  y_k = 1  \, \text{as it is a One hot encoded Vector}
      \\ \\
      = p_i - y_i
 
