@@ -79,6 +79,8 @@ For this case we will be using the sigmoid ($\sigma$ ) function as the activatio
 
 Writing this out, without index notation, and with the super script representing just the layers of the network. Note $x$ is the input
 
+### The Network
+
 $$ \color{red}{
 \begin{aligned}
  x \rightarrow \text{hidden layers} \,\rightarrow (w^{l-1} a^{l-2}+b^{l-1})=z^{l-1} \\ \\
@@ -133,7 +135,7 @@ There are two ways to do this; and both by using the Chain Rule of Calculus
 
 Using the Derivative of Softmax wrto its inputs. 
 
-**For the last layer**
+## For the last layer
 
 $$
 \mathbf {
@@ -214,10 +216,76 @@ $$ \color{red}
      \text {note that } \sum_{k}  y_k = 1  \, \text{as it is a One hot encoded Vector}
      \\ \\
      = p_i - y_i
-
+     \\ \\
+     \frac {\partial L}{\partial z^l}  = p_i - y_i
 \end{aligned}
 }
 $$
+
+Note, that we now need to calculate the second term, to complete the equation
+
+$$
+\begin{aligned}
+\frac {\partial L}{\partial w^l} 
+=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
+\\ \\
+z^{l} = (w^l a^{l-1}+b^l) 
+\\
+ \color{green}{\frac {\partial z^l}{\partial w^l} = a^{l-1}}
+ \\ \\ \text{Putting all together} \\ \\
+ \frac {\partial L}{\partial w^l} = (p_i - y_i) *a^{l-1} \quad  \quad(\mathbf  {1})
+\end{aligned}
+$$
+
+
+Using Gradient descent we can keep adjusting the last layers like
+
+$$
+     w{^l}{_i} = w{^l}{_i} -\alpha *  \frac {\partial L}{\partial w^l} 
+$$
+
+Now let's do the derivation for the inner layers
+
+## For the inner layers
+
+$$
+\mathbf {
+  \begin{aligned}
+\frac {\partial L}{\partial w^{l-1}} 
+=  \color{red}{\frac {\partial L}{\partial z^l}}.
+    \color{blue}{\frac {\partial z^l}{\partial a^{l-1}}}.
+    \color{violet}{\frac {\partial a^{l-1}}{\partial z^{l-1}}}.
+    \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}}
+\\ \\
+\color{red}{\frac {\partial L}{\partial z^l}= p_i-y_i = (a^l-y)}
+\\ \\
+    \color{blue}{\frac {\partial z^l}{\partial a^{l-1}}= 
+     \frac {\partial (w^l a^{l-1}+b^l)}{\partial a^{l-1}}= w^l}  
+\\ \\
+\color{violet}{\frac {\partial a^{l-1}}{\partial z^{l-1}} 
+  = \frac {\partial \sigma(z^{l-1})}{\partial z^{l-1}} 
+  = {\sigma'(z^{l-1})}
+}
+\\ \\
+ \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}= a^{l-2}}
+\\ \\
+\text{Putting all these in the equation we get}
+\\ \\
+\frac {\partial L}{\partial w^{l-1}} 
+=  \color{red}{(a^l-y)}.\color{blue}{w^l}.\color{violet}{\sigma'(z^{l-1})}.\color{green}{a^{l-2}}
+\\ \\
+\frac {\partial L}{\partial w^{l-1}} 
+= \mathbf  (a^l-y).w^l.\sigma'(z^{l-1}).a^{l-2} \quad  \quad {(2)}
+\end{aligned}
+}
+$$
+
+Using Gradient descent we can keep adjusting the inner layers like
+
+$$
+     w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
+$$
+
 
 ## References
  
