@@ -19,10 +19,12 @@ Alex Punnen \
 ## Chapter 7: Yet Another Backpropagation Explanation
 ### With Softmax and  Cross Entropy Loss 
 
-Let's  think of a $l$ layered neural network whose input is $x/a^0$ and output is $a^l$
+**The Conventions used**
+
+Let's  think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$
 
 $$
- x/a^0 \rightarrow \text{hidden layers} \,\rightarrow a^{l-1} \rightarrow  a^{l} 
+ a^0 \rightarrow \text{hidden layers} \,\rightarrow a^{l-1} \rightarrow  a^{l} 
 $$
 
 $a^{l}$  is the input at layer *l*. Input  of a neuron in layer *l*  is the output of activation from the previous layer $(l-1)$.
@@ -50,15 +52,13 @@ For this we need to find the derivative of Loss function wrto weights, that is t
 
 This is a bit involved mathematically and various authors give various ways. There are many terms and concepts that can trip somone who has not touched maths for sometime or done these parts or paid specific attention to these parts.
 
-However there are only a few concepts that you need to understand.
-
 ## The Maths you need and the Maths you Don't
 
-Since there is a vast amount of articles and explanations, I will be referring mostly to the root articles and some of those is a must read which I will indicate and the rest in this section like [The Matrix Calculus You Need For Deep Learning (Derivative wrto Bias) Terence,Jermy] are highly recommended.
+Since there is a vast amount of articles and explanations, I will be referring mostly to few highly quoted articles here. A few of those is a must read which I will indicate and the other like [The Matrix Calculus You Need For Deep Learning (Derivative wrto Bias) Terence,Jermy] are recommended read.
 
 - Understand what Scalar's, Vectors, Tensors are, and that Vectors and Tensors are written as matrices and Vector is one dimenstion matrix whereas Tensor's are many dimensional usually. (Technically a Vector is also a Tensor). After this you can forget about Tensors and think only of Vectors and Matrices and Scalar. Mostly just matrices.
 
-- That linear algebra for matrices that will be used is just poperties of matrix multiplication and addition that you already know. A linear equation of the form $y= m*x +c$ in matrix form used in neural network is $z_l = w_l* a_{l-1} + b_l$. 
+- That linear algebra for matrices that will be used is just poperties of matrix multiplication and addition that you already know. A linear equation of the form $$y= m*x +c$$ in matrix form used in neural network is $z_l = w_l* a_{l-1} + b_l$. 
 
 - The Index notation for dealing with Vectors and Matrices. This is a **must** read [A Primer on Index Notation John Crimaldi]
 
@@ -66,7 +66,7 @@ Since there is a vast amount of articles and explanations, I will be referring m
   
   - Example- Dot Product is defined only between Vectors, though many articles and tutorials will be using dot product.Since each row of a multidimenstional matrix acts like a Vector, the Numpy dot function(numpy.dot) works for matrix multiplication for non vectors as well.Technically numpy matmul is the right one to use for matrix multiplication. $np.dot(A,B)$ is same as $np.matmul(A,B)$.numpy.Numpy einsum is also used for dimensions more than two. If A and B are two dimenstional matrices $np.dot(A,B) = np.einsum('ij,jk->ik', A, B)$. And einsum is much easier than numpy.tensordot to work with. You will need this for higher dimensional weights especially trying to implement convolutional neural network. *"Using the Einstein summation convention, many common multi-dimensional, linear algebraic array operations can be represented in a simple fashion -Numpy Doc"*
 
-  Strange fact - There is no accepetd definition of matrix multiplication of dimensions other than two!
+  Fact - There is no accepetd definition of matrix multiplication of dimensions other than two!
   
   - Hadamard product you rarely need, though internally computer implementation maybe using these for optimisation. it is a special case of element wise multiplication of matrices of same dimension and used in multiplying the gradient vector.It is reffered in Michel Neilsen famous book in writing out the Error of a layer wrto pervious layers. http://neuralnetworksanddeeplearning.com/chap2.html.
 
@@ -112,7 +112,7 @@ $$
     \end{aligned}
     $$
 
-     Here $\frac{ \partial y}{\partial g}$ and $\frac{ \partial g}{\partial x}$ are two Jacobian matrices containing the set of partial derivatives. But since only the diagonals remain in deep learning application we can skip calculating the Jacobian and write as 
+     Here $\frac{ \partial y}{\partial g}$ and $\frac{ \partial g}{\partial x}$ are two Jacobian matrices containing the set of partial derivatives. But since only the diagonals remain in deep learning application we can skip calculating the Jacobian and write as
 
      $$
     \begin{aligned}
@@ -120,11 +120,9 @@ $$
     \end{aligned}
     $$
 
-## The Neural Network Model 
-
+## The Neural Network Model
 
 Note - I am writing this out, without index notation, and with the super script representing just the layers of the network.
-
 
 $$
 \mathbf {
@@ -188,16 +186,14 @@ $$
 ---
 ## On to the rest of the explanation
 
-There are too many articles related to Back propogation, many of which are very good. But I was not clever enough to understand many. So what I did was also to code along a CNN with Softmax and CrossEntropy, and tried to fit the equations to code. And the one that worked for me finally (at least till the weight dimension part) is this [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind] with help form StackOverflow related sites.
+There are too many articles related to Back propogation, many of which are very good. However I could not follow many and had niggling doubts in others. So what I did was also to code along a CNN with Softmax and CrossEntropy, and tried to fit the equations to code. And the one that worked for me finally (at least till the weight dimension part) is this [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind] with help form StackOverflow related sites. So that's what I am following here.
 
-We need to do this for at least the last layer and one or two inner layers as depending on the Network structure, what looks correct on paper via simple application of Chain rule, won't work out in code/practise. As probably we tend to wrongly use the wrong type of Chain rule - that is miss out summing of some partial derivatives.
-##  Partial Derivative for the last layer 
-### CrossEntropy Loss wrto Weight in previous layer
+### CrossEntropy Loss wrto Weight in last layer
 
 $$
 \mathbf {
 \frac {\partial L}{\partial w^l} 
-=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
+=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}} \rightarrow \quad EqA1
 }
 $$
 
@@ -207,6 +203,7 @@ $$
 L = -\sum_k y_k \log \color{red}{p_k} \,\,and \,p_j = \frac {e^ \color{red}{z_j}} {\sum_k e^{z_k}}
 }
 $$
+
 If you are confused with the indexes, just take a short example and substitute. Basically i,j,k etc are dummy indices used to illustrate in index notation the vectors.
 
 I am going to drop the superscirpt $l$ denoting the layer number henceforth and focus on the index notation for the softmax vector $P$ and target vector $Y$
@@ -220,14 +217,17 @@ $$ \color{red}
     \frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_j y_k \log {p_k})}}{\partial z_i}
    \\ \\ \text {taking the summation outside} \\ \\
    = -\sum_j y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
-  \\ \\ \text {using the derivative of the logarithm} \\ \\
+  \\ \\ \text {using the derivative of the logarithm and Chain Rule for Composite of Two Function} \\ \\
+  \frac{d}{dx} (f(g(x))) = f'(g(x))g'(x) 
+  \\ \\
   = -\sum_k y_k * \frac {1}{p_k} *\frac {\partial { p_k}}{\partial z_i}
   
 \end{aligned}
 }
 $$
 
-The last term is the derivative  of Softmax wrto it's inputs, this is easy to derive and there are many sites that descirbe it. Example [Neural Network with SoftMax in Python- Abishek Jana] or the first part here  [The Softmax function and its derivative-Eli Bendersky]
+The last term is the derivative  of Softmax wrto it's inputs also called logits. This is easy to derive and there are many sites that descirbe it. Example  
+[Dertivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here [The Softmax function and its derivative-Eli Bendersky]
 
 $$
  \color{red}
@@ -274,12 +274,12 @@ $$ \color{red}
      \\ \\
      = p_i - y_i
      \\ \\
-     \frac {\partial L}{\partial z^l}  = p_i - y_i
+     \frac {\partial L}{\partial z^l}  = p_i - y_i \rightarrow \quad \text{EqA.1.1}
 \end{aligned}
 }
 $$
 
-Note, that we now need to calculate the second term, to complete the equation
+We need to put this back in $EqA1$. We now need to calculate the second term, to complete the equation
 
 $$
 \begin{aligned}
@@ -290,12 +290,12 @@ z^{l} = (w^l a^{l-1}+b^l)
 \\
  \color{green}{\frac {\partial z^l}{\partial w^l} = a^{l-1}}
  \\ \\ \text{Putting all together} \\ \\
- \frac {\partial L}{\partial w^l} = (p_i - y_i) *a^{l-1} \quad  \quad(\mathbf  {1})
+ \frac {\partial L}{\partial w^l} = (p_i - y_i) *a^{l-1} \quad  \rightarrow \quad \mathbf  {EqA.1}
 \end{aligned}
 $$
 
 
-Using Gradient descent we can keep adjusting the last layers like
+Using Gradient descent we can keep adjusting the last layer like
 
 $$
      w{^l}{_i} = w{^l}{_i} -\alpha *  \frac {\partial L}{\partial w^l} 
@@ -322,17 +322,99 @@ $$
 \end{aligned}
 $$
 
+## Derivative of Loss wrto Weight in Layer -1
+
+Adding the diagrame once more 
+
+$$
+\mathbf {
+\bbox[10px, border:2px solid red] { \color{red}{
+\begin{aligned}
+ a^0 \rightarrow
+    \bbox[5px, border:2px solid black]  {
+      \underbrace{\text{hidden layers}}_{a^{l-2}} }
+      \,\rightarrow
+    \bbox[5px, border:2px solid black]  {  
+      \underbrace{w^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
+    }
+      \,\rightarrow
+    \bbox[5px, border:2px solid black]  {  
+      \underbrace{\sigma(z^{l-1})}_{a^{l-1}}
+    }
+    \,\rightarrow
+    \bbox[5px, border:2px solid black]  {  
+     \underbrace{w^l a^{l-1}+b^l}_{z^{l} }
+    }
+    \,\rightarrow
+    \bbox[5px, border:2px solid black]  {  
+    \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
+    }
+    \,\rightarrow
+  \bbox[5px, border:2px solid black]  {  
+    \underbrace{L ( \vec P, \vec Y)}_{\text{CrossEntropyLoss}}
+  }
+\end{aligned}
+}}}
+$$
+
+Derivative of Loss wrto the inner layer we can express  as
+
+$$
+\begin{aligned}
+  \frac {\partial L}{\partial w^{l-1}} = 
+  \color{red}{\frac {\partial L}{\partial a^{l-1}}}.
+   \color{green}{\frac {\partial a^{l-1}}{\partial w^{l-1}}}
+
+\end{aligned}
+$$
+
+Coming to the first part; In this layer we will experss the first term wrto Softmax layer
+
+$$
+\begin{aligned}
+  \color{red}{\frac {\partial L}{\partial a^{l-1}} = 
+                \frac {\partial L     }{\partial z^{l}   }
+                \frac {\partial z^{l} }{\partial a^{l-1} }
+              }
+   \\ \\
+   \text{The first part we have already derived earlier see EqA.1.1} \quad
+  \frac {\partial L}{\partial z^l}  = p_i - y_i 
+   \\ \\ \text{and }
+    z^l = w^l a^{l-1}+b^l          
+    \text{which makes }
+    \color{red}{\frac {\partial z^{l} }{\partial a^{l-1}} = w^l}
+    \\ \\
+  \text{Putting both together } 
+  \color{red}{\frac {\partial L}{\partial a^{l-1}} = 
+                (p_i -y_i)w^l
+              }
+  \\ \\ \text{ The Second part is easier} \\ \\
+\color{green}{\frac {\partial a^{l-1}}{\partial w^{l-1}} = a^{l-2}} 
+\\ \\
+\text{ as } a^{l-1} = w^{l-1}a^{l-2}+b^{l-1}
+\\ \\
+\color{red}{ \text{the above is wrong -todo} }
+\text{ as } a^{l-1} = \sigma (w^{l-1}a^{l-2}+b^{l-1})
+\\
+\\ \\
+ \frac {\partial L}{\partial w^{l-1}} = \color{red}{(p_i -y_i)w^l} \color{green}{ a^{l-2}} \rightarrow \quad \text{EqA.2}
+
+\end{aligned}
+$$
+
+Note that we are skipping the Transpose part in the above derivations; These are important when we also take into cosideration practical implementation
 
 Using Gradient descent we can keep adjusting the inner layers like
 
 $$
      w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
 $$
+## Derivative of Loss wrto Weight in Layer - 2
+
+Can we use the same trick for the $(l-2)$ layer ?
 
 
 ## References
- 
- (Perspective from a Programmer who has some memory of Calculus and willing to learn more)
  
  Easier to follow (wihtout explcit Matrix Calculus) and something that can be implemented
  - [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]  
@@ -342,39 +424,32 @@ Easy to follow but lacking in some aspects
 
 Slightly hard to follow using the Jacobian - but partly implementable
  - [The Softmax function and its derivative-Eli Bendersky]
- - [Derivative of Softmax Activation -Alijah Ahmed]
 
- Please also check [The Matrix Calculus You Need For Deep Learning Terence,Jermy] for the above and more exlanation [Finding the Cost Function of Neural Networks Chi-Feng Wang]
 
-Easy to follow but lacking in rigour and not correct for all types of networks
- - [Neural Network with SoftMax in Python- Abishek Jana]
- 
 More difficult to Follow with proper index notations (I could not)
  - [Backpropagation In Convolutional Neural Networks Jefkine]
 
+  [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
+  
+  [The Matrix Calculus You Need For Deep Learning Terence,Jermy]:https://arxiv.org/pdf/1802.01528.pdf
+
+  [The Matrix Calculus You Need For Deep Learning (Derivative wrto Bias) Terence,Jermy]: https://explained.ai/matrix-calculus/#sec6.2
   
   [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]: https://bfeba431-a-62cb3a1a-s-sites.googlegroups.com/site/deeplearningcvpr2014/ranzato_cvpr2014_DLtutorial.pdf?attachauth=ANoY7cqPhkgQyNhJ9E7rmSk-RTdMYSYqpfJU2gPlb9cWH_4a1MbiYPq_0ihyuolPiYDkImyr9PmA-QwSuS8F3OMChiF97XTDD_luJqam70GvAC4X6G6KlU2r7Pv1rqkHaMbmXpdtXJHAveR_jWf1my_IojxFact87u2-1YXtfJIwYkhBwhMsYagICk-P6X9ktA0Pyjd601tboSlX_UGftX1vB57-tS6bdAkukhmSRLU-ZiF4RdJ_sI3YAGaaPYj1KLWFpkFa_-XG&attredirects=1
   
   [lecun-ranzato]: https://cs.nyu.edu/~yann/talks/lecun-ranzato-icml2013.pdf
   
-  [Euclidean_vector]: https://en.wikipedia.org/wiki/Euclidean_vector
-  
-  [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
-  
-  [backpropogationgif]: https://i.imgur.com/jQOLUG3.gif
   [Notes on Backpropagation-Peter Sadowski]: https://www.ics.uci.edu/~pjsadows/notes.pdf
   
   [The Softmax function and its derivative-Eli Bendersky]: https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/
-  
-  [Neural Network with SoftMax in Python- Abishek Jana]: https://www.adeveloperdiary.com/data-science/deep-learning/neural-network-with-softmax-in-python/
+
+  [Python Impmementation of Jacobian of Softmax wrto Logits Aerin Kim]: https://stackoverflow.com/a/46028029/429476
   
   [Derivative of Softmax Activation -Alijah Ahmed]: https://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function
   
+  [Dertivative of SoftMax Antoni Parellada]: https://stats.stackexchange.com/a/267988/191675
+
   [Backpropagation In Convolutional Neural Networks Jefkine]: https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/]
 
   [Finding the Cost Function of Neural Networks Chi-Feng Wang]: https://towardsdatascience.com/step-by-step-the-math-behind-neural-networks-490dc1f3cfd9
-  
-  [The Matrix Calculus You Need For Deep Learning Terence,Jermy]:https://arxiv.org/pdf/1802.01528.pdf
-
-  [The Matrix Calculus You Need For Deep Learning (Derivative wrto Bias) Terence,Jermy]: https://explained.ai/matrix-calculus/#sec6.2
-
+ 
