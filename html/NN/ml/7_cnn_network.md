@@ -68,7 +68,7 @@ Since there is a vast amount of articles and explanations, I will be referring m
 
   Fact - There is no accepetd definition of matrix multiplication of dimensions other than two!
   
-  - Hadamard product you rarely need, though internally computer implementation maybe using these for optimisation. it is a special case of element wise multiplication of matrices of same dimension and used in multiplying the gradient vector.It is reffered in Michel Neilsen famous book in writing out the Error of a layer wrto pervious layers. http://neuralnetworksanddeeplearning.com/chap2.html.
+  - Hadamard product you may need. It is a special case of element wise multiplication of matrices of same dimension. It is used in the magic of converting index notation to Matrix notation. You can survive without it,but you cannot conver to Matrix notation without understanding how.It is reffered in Michel Neilsen famous book [Neural Networks and Deep Learning Michel Neilsen] in writing out the Error of a layer wrto pervious layers.
 
 - Calculus, the concept of Derivatives,Parial Derivatives, Gradient, Matrix Calculus, Jacobian Matrix
 
@@ -357,84 +357,90 @@ $$
 }}}
 $$
 
-Derivative of Loss wrto the inner layer we can express  as
+
+The trick here (yes it is a trick), is to derivative the Loss wrto the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative wrto either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intutive to compute.
+
+**Warning**
+With this, and with Chain Rule we can write out an expression that looks correct; and is correct in index notation. However when we implement with an actual case, we need to write this out in Matrix notation, and there some Matrix products have to be written out as Hadamard product
+
 
 $$
-\begin{aligned}
-  \frac {\partial L}{\partial w^{l-1}} = 
-  \color{red}{\frac {\partial L}{\partial a^{l-1}}}.
-   \color{green}{\frac {\partial a^{l-1}}{\partial w^{l-1}}}
+  \begin{aligned}
 
+\frac {\partial L}{\partial w^{l-1}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
+     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} \rightarrow \text{EqA.2}
+\\ \\ \text{the trick is to represent the first  part  in terms of what we computed earlier; in terms of } \color{blue}{\frac {\partial L}{\partial z^{l}}}
+\\  \\
+\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =
+\color{blue}{\frac {\partial L}{\partial z^{l}}}.
+    \frac {\partial z^{l}}{\partial a^{l-1}}.
+    \frac {\partial a^{l-1}}{\partial z^{l-1}} \rightarrow \text{ EqMagic!}
+  \\ \\
+  \color{blue}{\frac {\partial L}{\partial z^{l}}} = \color{blue}{(p_i- y_i)}
+  \text{ from the previous layer (from EqA1.1) } 
+  \\ \\
+   z^l = w^l a^{l-1}+b^l
+    \text{ which makes }
+    {\frac {\partial z^{l} }{\partial a^{l-1}} = w^l} \text{ and }
+ a^{l-1} = \sigma (z^{l-1})     \text{ which makes }
+\frac {\partial a^{l-1}}{\partial z^{l-1}} = \sigma \color{red}{'} (z^{l-1} )
+
+
+\\ \\ \text{ Putting together we get the first part of Eq A.2 }
+\\\\
+\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =\color{blue}{(p_i- y_i)}.w^l.\sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA.2.1 }
+\\ \\ \text{Value of EqA.2.1 to be used in the next layer derivation in EqMagic)}
+\\ \\
+ z^{l-1} = w^{l-1} a^{l-2}+b^{l-1}
+    \text{ which makes }
+    \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}=a^{l-2}}
+\\ \\
+\frac {\partial L}{\partial w^{l-1}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
+     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} = \color{blue}{(p_i- y_i)}.w^l.\sigma \color{red}{'} (z^{l-1} ).\color{green}{a^{l-2}}
 \end{aligned}
 $$
 
-Coming to the first part; In this layer we will experss the first term wrto Softmax layer
+As proud I am to reach till here, I have done the misfortune of trying to implement a CNN with this and I know waht is all **wrong** with the above.
 
-$$
-\begin{aligned}
-  \color{red}{\frac {\partial L}{\partial a^{l-1}} = 
-                \frac {\partial L     }{\partial z^{l}   }
-                \frac {\partial z^{l} }{\partial a^{l-1} }
-              }
-   \\ \\
-   \text{The first part we have already derived earlier see EqA.1.1} \quad
-  \frac {\partial L}{\partial z^l}  = p_i - y_i 
-   \\ \\ \text{and }
-    z^l = w^l a^{l-1}+b^l          
-    \text{which makes }
-    \color{red}{\frac {\partial z^{l} }{\partial a^{l-1}} = w^l}
-    \\ \\
-  \text{Putting both together } 
-  \color{red}{\frac {\partial L}{\partial a^{l-1}} = 
-                (p_i -y_i)w^l
-              }
-  \\ \\ \text{ The Second part is easier} \\ \\
-\color{green}{\frac {\partial a^{l-1}}{\partial w^{l-1}} = a^{l-2}} 
-\\ \\
-\text{ as } a^{l-1} = w^{l-1}a^{l-2}+b^{l-1}
-\\ \\
-\color{red}{ \text{the above is wrong -todo} }
-\text{ as } a^{l-1} = \sigma (w^{l-1}a^{l-2}+b^{l-1})
-\\
-\\ \\
- \frac {\partial L}{\partial w^{l-1}} = \color{red}{(p_i -y_i)w^l} \color{green}{ a^{l-2}} \rightarrow \quad \text{EqA.2}
+This is correct as far as index notation is concerned. Butpractically we work with weight matrices and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ( $\hadamard$). Only then will the weight dimenstion align correctly
 
-\end{aligned}
-$$
-
-Note that we are skipping the Transpose part in the above derivations; These are important when we also take into cosideration practical implementation
 
 Using Gradient descent we can keep adjusting the inner layers like
 
 $$
      w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
 $$
-## Derivative of Loss wrto Weight in Layer - 2
-
-Can we use the same trick for the $(l-2)$ layer ?
 
 
 ## References
  
- Easier to follow (wihtout explcit Matrix Calculus) and something that can be implemented
+ Easier to follow (wihtout explcit Matrix Calculus) though not really correct
  - [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]  
 
 Easy to follow but lacking in some aspects
 - [Notes on Backpropagation-Peter Sadowski]
 
-Slightly hard to follow using the Jacobian - but partly implementable
+Slightly hard to follow using the Jacobian 
  - [The Softmax function and its derivative-Eli Bendersky]
 
 
-More difficult to Follow with proper index notations (I could not)
+More difficult to follow with proper index notations (I could not) and probably correct
  - [Backpropagation In Convolutional Neural Networks Jefkine]
 
+
+
+  
   [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
   
   [The Matrix Calculus You Need For Deep Learning Terence,Jermy]:https://arxiv.org/pdf/1802.01528.pdf
 
   [The Matrix Calculus You Need For Deep Learning (Derivative wrto Bias) Terence,Jermy]: https://explained.ai/matrix-calculus/#sec6.2
   
+  [Neural Networks and Deep Learning Michel Neilsen]: http://neuralnetworksanddeeplearning.com/chap2.html
+
+
   [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]: https://bfeba431-a-62cb3a1a-s-sites.googlegroups.com/site/deeplearningcvpr2014/ranzato_cvpr2014_DLtutorial.pdf?attachauth=ANoY7cqPhkgQyNhJ9E7rmSk-RTdMYSYqpfJU2gPlb9cWH_4a1MbiYPq_0ihyuolPiYDkImyr9PmA-QwSuS8F3OMChiF97XTDD_luJqam70GvAC4X6G6KlU2r7Pv1rqkHaMbmXpdtXJHAveR_jWf1my_IojxFact87u2-1YXtfJIwYkhBwhMsYagICk-P6X9ktA0Pyjd601tboSlX_UGftX1vB57-tS6bdAkukhmSRLU-ZiF4RdJ_sI3YAGaaPYj1KLWFpkFa_-XG&attredirects=1
   
   [lecun-ranzato]: https://cs.nyu.edu/~yann/talks/lecun-ranzato-icml2013.pdf
