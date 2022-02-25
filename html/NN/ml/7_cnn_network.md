@@ -16,9 +16,7 @@ Alex Punnen \
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 - Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 
-## Chapter 7: Back Propagation for Softmax with CrossEntropy Loss]
-### With Softmax and  Cross Entropy Loss 
-
+## Chapter 7: Back Propagation for Softmax with CrossEntropy Loss
 
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
 
