@@ -383,6 +383,147 @@ $$
 \frac{\partial z^2}{\partial w^2} = (a^{1})^T 
 $$
 
+
+# Jacobian question
+
+https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix
+
+From [ref 1] it is clear that when you have an elementwise operation on a vector; the Jacobian matrix of the function wrto its input vector is a diagonal matrix
+
+For an input vector $\textbf{x} = \{x_1, x_2, \dots, x_n\}$ on which an element wise function is applied; say the activation function sigmoid $\sigma$; and it give the output vector $\textbf{a} = \{a_1, a_2, \dots, a_n\}$ 
+$a_i= f(x_i); \text{ what is } \frac { \partial a}{ \partial x} $
+
+In scalar case this becomes   $\frac { \partial f(x)}{ \partial x} = f'(x)$
+
+In Vector case, that is when we take there derivative of a vector with respect to another vector we get the following (square) Jacobian matrix
+
+Example from [ref 2]
+
+$$
+\begin{aligned}
+\\ \\
+\text{The Jacobain, J } = \frac {\partial a}{\partial x} = 
+\begin{bmatrix}
+                \frac{\partial a_{1}}{\partial x_{1}}  & \frac{\partial a_{2}}{\partial x_{1}}     & \dots     & \frac{\partial a_{n}}{\partial x_{1}}    \\
+                \frac{\partial a_{1}}{\partial x_{2}}  & \frac{\partial a_{2}}{\partial x_{2}}     & \dots     & \frac{\partial a_{n}}{\partial x_{2}}    \\
+                \vdots  & \vdots    & \ddots    & \vdots    \\
+                \frac{\partial a_{1}}{\partial x_{n}}  & \frac{\partial a_{2}}{\partial x_{n}}    & \dots     & \frac{\partial a_{n}}{\partial x_{n}}    \\ 
+\end{bmatrix}
+\end{aligned}
+$$
+
+Above the diagonal of J are the only terms that can be nonzero:
+
+$$
+\begin{aligned}
+J = \begin{bmatrix}
+                \frac{\partial a_{1}}{\partial x_{1}}  & 0     & \dots     & 0    \\
+                0  & \frac{\partial a_{2}}{\partial x_{2}}     & \dots     & 0    \\
+                \vdots  & \vdots    & \ddots    & \vdots    \\
+                0  & 0    & \dots     & \frac{\partial a_{n}}{\partial x_{n}}    \\ 
+        \end{bmatrix}
+\end{aligned}
+$$
+
+$$
+\text{ As } 
+(\frac{\partial a}{\partial x})_{ij} = \frac{\partial a_i}{\partial x_j} = \frac { \partial f(x_i)}{ \partial x_j} = 
+\begin{cases}
+f'(x_i)  & \text{if $i=j$} \\
+0 & \text{otherwise}
+\end{cases}
+$$
+And the authors go on to explain that $\frac{\partial a}{\partial x}$ can be written as $\text{diag}(f'(x))$ and the hardmarad or elementwise multiplication ($\odot$ or $\circ$)  can be applied instead of matrix multiplication to this Jacobian matrix like $\odot f'(x)$ when applying the Chain Rule and converting from index notation to matrix notation.
+
+Sorry for the rather long explanation. This was mostly to make clear the context. On to the real question.
+
+While implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
+
+Taking a simple $2*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $8*2$ matrix and no longer a square matrix.
+
+Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian.
+
+$$
+\frac{\partial a_{i,j}}{\partial x_{i,j}} = J_{k,l} 
+$$
+
+ Even if so, there is no certainty that this will be a square matrix and we can generalize to the diagonal ? Am I correct in these above statements?
+
+ However, all articles treat this matrix case as a generalization of the Vector case and write $\frac{\partial a}{\partial x}$ as the $\text{diag}(f'(x))$, and then use the element-wise/Hadamard product for the Chain Rule. This way also in implementation. But there is no meaning of diagonal in a non-square matrix; What am I missing ?
+
+ [ref 1]:https://web.stanford.edu/class/cs224n/readings/gradient-notes.pdf
+ [ref 2]:https://aew61.github.io/blog/artificial_neural_networks/1_background/1.b_activation_functions_and_derivatives.html
+http://cs231n.stanford.edu/vecDerivs.pdf
+
+----
+## Solution
+
+$$
+\begin{aligned}
+\text{Let's take a 2x2 matrix , X } =
+\begin{bmatrix}
+                x_{{1}{1}}  & x_{{1}{2}}   \\
+                x_{{2}{1}}  & x_{{2}{2}}   \\
+\end{bmatrix}
+\end{aligned}
+$$
+On which an element wise operation is done  $a_{{i}{j}} = \sigma ({x_{{i}{j}}})$
+Writing that out as matrix $A$
+$$
+\begin{aligned}
+A =
+\begin{bmatrix}
+                a_{{1}{1}}  & a_{{1}{2}}   \\
+                a_{{2}{1}}  & a_{{2}{2}}   \\
+\end{bmatrix}
+\end{aligned}
+$$
+
+The partial derivative of the elements of A with its inputs is $\frac {\partial A }{\partial x_{{i}{j}}}$
+
+$$
+\begin{aligned}
+\frac {\partial \vec A }{\partial X} =
+\begin{bmatrix}
+                a_{{1}{1}}  & a_{{1}{2}}  &  a_{{2}{1}}  & a_{{2}{2}}   \\
+\end{bmatrix}
+\end{aligned}
+$$
+We vectorized the matrix; Now we need to take the partial derivative of the vector with each element of the matrix $X$
+
+
+
+$$
+\begin{aligned}
+\frac {\partial \vec A }{\partial X} =
+\begin{bmatrix}
+\frac{\partial  a_{{1}{1}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{1}{1}}}  \\ \\
+ \frac{\partial  a_{{1}{1}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{1}{2}}}  \\ \\
+\frac{\partial  a_{{1}{1}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{2}{1}}}  \\ \\
+\frac{\partial  a_{{1}{1}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{2}{2}}}  \\ \\
+\end{bmatrix}
+\end{aligned}
+$$
+The non diagonal terms are of the form  $\frac{\partial  a_{{i}{j}} }{\partial x_{{k}{k}}}$ and reduce to 0 and we get the resultant Jacobian Matrix as 
+
+
+$$
+\begin{aligned}
+\frac {\partial \vec A }{\partial X} =
+\begin{bmatrix}
+\frac{\partial  a_{{i}{j}} }{\partial x_{{i}{i}}} & \cdot \cdot \cdot & 0 \\
+ 0 & \frac{\partial  a_{{i}{j}} }{\partial x_{{i}{i}}} & \cdot \cdot \cdot  \\
+ \cdot \cdot \cdot  \\
+ \cdot \cdot \cdot  & \cdot \cdot \cdot & \frac{\partial  a_{{N}{N}} }{\partial x_{{N}{N}}} 
+\end{bmatrix}
+\end{aligned}
+$$
+--
+Hence  $\frac{\partial a_{{i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
+---
+
+Note that Multiplication of a vector by a diagonal matrix is elementwise multiplication or the hadamard product; And matrices in DL can be seen as stacked vectors
+
 ## Gradient descent
 
 Using Gradient descent we can keep adjusting the inner layers like
