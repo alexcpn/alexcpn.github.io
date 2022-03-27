@@ -96,6 +96,15 @@ A more rigorous  explanation of the proof is here from the book
 [Neural Networks by R.Rojas] and more lucid explanation here
  [perceptron-learning-algorithm]
 
+## The Problem with the Perceptron Network
+
+The Perceptron network needs the input feature set to be linearly seperable. However
+ all problems do not have their feature set which is linearly seperable. So this is a constraint of this system.
+
+The fact that Perceptron could not be trained for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first *AI winter*, as much of the hype generated intially by Frank Rosenblatt's discovery became a disillusionment.
+
+ ![linearseperable]
+
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
@@ -113,6 +122,7 @@ A more rigorous  explanation of the proof is here from the book
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
   [6]: https://i.imgur.com/OIN3maH.png
   [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
+  [linearseperable]: https://i.imgur.com/jmWvoWh.png
 
 
 

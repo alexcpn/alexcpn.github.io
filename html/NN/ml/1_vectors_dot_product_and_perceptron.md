@@ -116,18 +116,9 @@ Imagine we have a problem of  classifying if a leaf is healthy or not based on c
  For any new leaf, if we only extract the same features into a feature vector; we can **dot it with the *trained* weight vector and find out if it falls in healthy or deceased class.
 
  Not all problems have their feature set which is linearly seperable. So this is a constraint of this system.
-
-## Perceptron. The first Artificial Neuron
-
-The initial neural network - the **Frank Rosenblatt's perceptron** was doing this and could only do this - that is finding a solution if and only if the input set was linearly separable.
-
- Note that the fact that Perceptron could not be trained for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first *AI winter*, as much of the hype generated intially by Frank Rosenblatt's discovery became a disillusionment.
-
- ![linearseperable]
-
 ## Modelling of the Perceptron
 
-Here is how the Rosenblatt's perceptron is modelled
+The initial neural network - the **Frank Rosenblatt's perceptron** was basically splitting a linearly seperable feature set into distinct sets. Here is how the Rosenblatt's perceptron is modelled
 
   ![perceptron2][7]
 
@@ -161,7 +152,7 @@ $$
 \sigma (x) =
 \begin{cases}
 1, & \text{if}\ \mathbf{w}\cdot\mathbf{x}+b \ge 0 \\
-0, & \text{otherwise} \\
+0, & \text{otherwise} 
 \end{cases}
 $$
 
@@ -171,7 +162,7 @@ $$
 \sigma(w^Tx + b)=
 \begin{cases}
 1, & \text{if}\ w^Tx + b \ge 0 \\
-0, & \text{otherwise} \\
+0, & \text{otherwise} 
 \end{cases}
 $$
 
@@ -225,6 +216,5 @@ Next let's see how Perceptron is trained next.
   [13]: https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
   [hyperplane2]: https://i.imgur.com/9M8GZHc.png#center
   [hyperplane1]: https://i.imgur.com/OIN3maHm.png#center
-  [linearseperable]: https://i.imgur.com/jmWvoWh.png
   [indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
   [matrix decomposition]: https://en.wikipedia.org/wiki/Matrix_decomposition
