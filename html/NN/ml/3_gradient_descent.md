@@ -9,13 +9,16 @@ Alex Punnen \
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)
-- **Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)**
-- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
+- **Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)**
+- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 - Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
-## Chapter 3: Gradient Descent, Gradient Vector and Loss Function
+
+# Chapter 3
+
+## Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization
 
 It is not clear when gradient descent became popular for training neural networks.  It is clear that the limitation of Perceptron showed the limitations of shallow layered neural networks, and for deeper layers, an effective way of training was the hard part.
 
@@ -27,13 +30,13 @@ Beyond this very brief and shallow overview, one needs to refer to a deeper stud
 
 Frankly, it does not matter who. It matters how, as it can give an insight into the discovery. But there are quite a lot of overlaps in that short history and quite many brilliant minds contributing, that it is not that linear, to afford us further insight. Suffice it is to say that from 2012 neural network was no more a niche academic field.
 
-## Optimization and Gradient Descent
+## Optimization - Newton's Method and Gradient Descent
 
-Before we go to more complex topics like, let us see the simpler problem, the problem of Optimization.
+Before we go to more complex topics like, let us see the simpler problem, the problem of Optimization of an equation.
 
 ### Newton's Method
 
-Before the gradient descent method was discovered, optimization of a differentiable function was done by Newton's method, also called [Newton -Raphons method](https://en.wikibooks.org/wiki/Calculus/Newton%27s_Method).
+Before the gradient descent method was invented by Augustin-Louis Cauchy, optimization of a differentiable function was done by Newton's method, also called [Newton -Raphons method] possibly for astronomical or orbital solutions.
 
 The intuition regarding this is something like below.
 Assume that we need to find the   $\sqrt16$.  This is the same as solving the equation $x^2 − 16 = 0$.
@@ -46,17 +49,16 @@ You can see in the figure below where this tangent is touching the x-axis $x_1$ 
 
 ![Newton Raphson Method](https://i.imgur.com/huJ8gEc.png)
 
-You may think how finding the root can help in optimization. For optimization of a function $f(x)$, maximum and minima, happens at $f'(x)$= 0. So we can use the same method as above but instead of solving for  $f(x)$=0, we need to solve for $f'(x)$=0. We can use the same equation and substitute $f'(x)$  instead of $f(x)$.
+You may think how finding the root can help in optimization. This is because  optimization of a function $f(x)$, maximum and minima, happens at $f'(x)$= 0. So we can use the same method as above but instead of solving for  $f(x)$=0, we need to solve for $f'(x)$=0. We can use the same equation and substitute $f'(x)$  instead of $f(x)$.
 
 $x_1$ = $x_0$ - $f'(x_0)$/$f''(x_0)$
 
 You can see that in Newton's method we need to take the second derivative of the function to solve the equation. This makes it more complex than Gradient descent, which only needs the first derivative.
 
-### Gradient Descent
+The gradient descent method is much simpler than Newton's method. How it relates to ML is by the concept of Cost/Loss function.
+### Cost/Loss Function
 
-The gradient descent method is much simpler than Newton's method. How it relates to ML is by the concept of Cost function or also called the Loss Function
-### Cost Function
-It is a function wich represents the difference between the expected value and the actual value as the base.
+**It is a function which represents the difference between the expected value and the actual value as the base.** 
 
 $$
 \begin{aligned}
@@ -80,13 +82,13 @@ $$
 
 Where $X_i$ is a vector of calculated values and $\hat Xi$ is the vector of expected values.
 
-This is usually for regression problems in ML. For Classification problems, we have cost functions like  Cross-Entropy Loss or Hinge Loss/Multi-class SVM Loss. More details regarding different loss functions here [https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f](https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f)
+This is usually for regression problems in ML. For Classification problems, we have cost functions like  Cross-Entropy Loss or Hinge Loss/Multi-class SVM Loss. More details regarding different loss functions here ([Different Loss Function])
 
-Note that all the Cost functions used are continuous functions, that is they are differentiable. This is an important part as else we cannot apply gradient descent. For Classification loss or cost functions, the output is a probability distribution between 0 and 1.
+Note that all the Cost functions used are continuous functions, that is they are differentiable. This is an important feature, as else, we cannot apply gradient descent. 
 
- Now we need to find the values of weights that can minimize the function.
+For Classification loss or cost functions, the output is a probability distribution between 0 and 1.
 
-Let's take a closer look at optimizing the cost function. Let's talk about linear regression (line fitting) ML algorithm and optimizing it using  Mean Squared Error via Gradient Descent. This is the simplest to explain visually and hence we too use this for illustrating.
+Let's take a closer look at optimizing the cost function. Let's talk about linear regression (line fitting) ML algorithm and optimizing it using  Mean Squared Error via Gradient Descent for a start. This is the simplest to explain visually and hence we too use this for illustrating.
 
 In the diagram below the red line ($y= mx +b$) is the optimal line that one can draw through the sample set. The slope *m* and constant *b* is learned by the gradient descent algorithm. The x y-axis could be some data set like house price to area etc, which we have, and once we find a fitting line, we can plugin other values of x to give predicted y - regression.
 
@@ -137,9 +139,9 @@ In the next part we will see where the gradient descent comes into play in neura
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md) <---
-- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md) 
-- **Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)**
-- Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
+- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
+- **Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)**
+- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
 - Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 
@@ -147,3 +149,5 @@ In the next part we will see where the gradient descent comes into play in neura
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf
 [ImageNet Classification with Deep Convolutional Neural Networks]:https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 [History of BackPropogation]: https://en.wikipedia.org/wiki/Backpropagationmas.cs.umass.edu/classes/cs683/lectures-2010/Lec24_Learning3-F2010-4up.pdf
+[Newton -Raphons method]: https://en.wikibooks.org/wiki/Calculus/Newton%27s_Method
+[Different Loss Function]: https://medium.com/@phuctrt/loss-functions-why-what-where-or-when-189815343d3f

@@ -9,19 +9,21 @@ Alex Punnen \
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)
-- Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
-- **Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)**
-- Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
-## Chapter 4: Back-propagation Explained
+- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
+- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
+- **Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)**
+- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](4.1_backpropogation_impl.md)
+- Chapter 6: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
+- Chapter 7: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
+- Chapter 8: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 
-## Activation functions, Cost functions and Back-propagation
+# Chapter 4
+
+## The Importance of Back Propagation in Neural Networks
 
 We have seen how gradient descent was used to optimise the cost function associated with linear regression and how that leads to find the optimal line separating the features  in  linear regression.
 
-Now this same method is used for Neural Network Learning. We use the method of back-propagation to propagate recursively the optimise weights from gradient descent from output layers to the input layers.
+Now this same method is used for Neural Network Learning. We use the method of back-propagation to propagate recursively the optimized weights from gradient descent from output layers to the input layers.
 
 ## Structure of a Neural Network
 
@@ -31,11 +33,9 @@ Neural network is basically a set of inputs connected through 'weights' to a set
 
 For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized and the inputs passed into the activation function through the weights gives some output. This output or computed values can be compared to the expected results and the difference gives the error of the network. We can create a 'Cost Function' with a simple function of this error like what we saw in the last chapter say the Mean Squared Error. We can use the same Gradient Descent now to adjust the weights so that the error is minimized.
 
-So far so good.
-
  We do this in the last layer of the multi-layer neural network.
 
- Now how do we adjust the weights of the inner layer ? This is where Backpropagation comes in. In a recursive way weights are adjusted as per their contribution to the output. That is weights or connections which have influenced the output more are adjusted more than those which have influenced the output less.
+ Now how do we adjust the weights of the inner layer ? This is where Back-propagation comes in. In a recursive way weights are adjusted as per their contribution to the output. That is weights or connections which have influenced the output more are adjusted more than those which have influenced the output less.
 
 ## How Backpropagation works
 
@@ -47,9 +47,9 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  output
  $$
 
-   We take  $a^{l}$  as the input at layer *l*. Input  of a neuron in layer *l*  is the output of activation from the previous layer $(l-1)$.
+We take  $a^{l}$  as the input at layer *l*. Input  of a neuron in layer *l*  is the output of activation from the previous layer $(l-1)$.
 
- Output of Activation is  the product of the weight *w* and input at layer $(l-1)$  plus the *basis*, passed to the *activation function*. We will be using the sigmoid ($\sigma$ ) function as the activation function.
+Output of Activation is  the product of the weight *w* and input at layer $(l-1)$  plus the *basis*, passed to the *activation function*. We will be using the sigmoid ($\sigma$ ) function as the activation function.
 
 Writing this below gives.
 
@@ -83,8 +83,6 @@ C = \frac{1}{2} \sum_j (y_j-a^L_j)^2,
 $$
 
 ---
-
-### Gradient Descent
 
 Now this Cost needs to be reduced. We can use the **gradient descent** to find the path to the optimal weight that reduces the cost function for a set of training examples.
 
@@ -179,190 +177,7 @@ Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 
 ---
 
-# Deriving the Backpropagation equation for a two layer Neural network
 
-Let's use the above equation and use that to write the  equation of the following two layer neural network
-
-```python
-x is the Input
-y is the Output.
-l is the number of layers of the Neural Network.
-a is the activation function ,(we use sigmoid here)
-```
-
-$$
- x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
-$$
-
-Where the activation $a^l$ is
-$$
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
-$$
-
-If we take the activation function as sigmoid then we can also write $a^l$ as
-
-$$
-a^{l} = \sigma(z^l) \quad where \quad
-
-z^l =w^l a^{l-1} +b^l
-$$
-
-We can also easily calculate
-
-$$
-\mathbf {\frac{\partial a^{l} }{\partial z^l} = \frac{\partial \sigma (z^{l}) }{\partial z^l} = \sigma' (a^{l}) \quad \rightarrow  ( {a})}
-$$
-
-Where $\sigma'$ = derivative of Sigmoid with respect to Weight
-
-Note $x$ can also be written as $a^0$
-
----
-
-Our two layer neural network can be written as
-
- $$
- \mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
- $$
-
- ---
-
- Note that $a^2$ does not denote the exponent but just that it is of layer 2.
-
-Lets write down the Chain rule first.
-
-$$
-\mathbf {
-\frac {\partial C}{\partial w^l} = \frac {\partial z^l}{\partial w^l} . \frac {\partial a^l}{\partial z^l} . \frac {\partial C}{\partial a^l}
-= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
-}
-$$
-
-We will use the above equation as the basis for the rest of the chapter.
-
-## Gradient Vector of Loss function In Output Layer
-
-Lets substitute $l$ and get the gradient of the Cost with respect to weights in layer 2 and layer 1.
-
-### For the last layer - Layer 2
-
-$$
-\mathbf {
-\frac {\partial C}{\partial w^2} = \frac {\partial z^2}{\partial w^2} . \frac {\partial a^2}{\partial z^2} . \frac {\partial C}{\partial a^2}
-}
-$$
-
-The first term is
-
-$$
-\mathbb{
-\frac{\partial z^{2} }{\partial w^2} = \frac{\partial a^1.w^2}{\partial w^2} =a^1 \quad \rightarrow  (\mathbf  {1.1})
-}
-$$
-
-The second term is
-
-$$
-\mathbb{
-\frac{\partial a^{2} }{\partial z^2} = \frac{\partial \sigma(z^2) }{\partial z^2} =\sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1.2})
-}
-$$
-
-The third term is
-
-$$
-\mathbf{
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (1.3) }
-$$
-
-Putting $1.1,2.1 & 3.1$  together we get the final equation for the second layer. This is the output layer.
-
----
-
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
-$$
-
----
-
-## Gradient Vector of Loss function in Inner Layer
-
-Now let's do the same for the inner layer.
-
-$$
-
-\frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1}
-$$
-
-The first term is  similar to (1.1)
-$$
-\mathbb{
-\frac{\partial z^{1} }{\partial w^1} = \frac{\partial a^0.w^1}{\partial w^1} =a^0 \quad \rightarrow  (\mathbf  {2.1})
-}
-$$
-
-The second term is also similar to (1.2)
-
-$$
-\mathbb{
-\frac{\partial a^{1} }{\partial z^1} = \frac{\partial \sigma(z^1) }{\partial z^1} =\sigma' (z^{1}) \quad \rightarrow  (\mathbf  {2.2})
-}
-$$
-
-For the third part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step. This is where Chain Rule helps.
-
-$$
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
-$$
-
-$$\begin{aligned}
-
-Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad
-
-\frac {\partial C}{\partial(a^2)}  =(a^2-y)  \rightarrow (2.3.1)\\ \\
-
-Now \space to \space calculate \quad
-
- \frac{\partial(a^2)}{\partial(a^1)} \space  \\ \\
-
-We \space can \space re-write  \space this \space as \\ \\
-
- \frac{\partial(a^2)}{\partial(a^1)} =  \frac{\partial(a^2)}{\partial(z^2)}. \frac{\partial(z2)}{\partial(a^1)}   \\ \\
-
- which \space is \space \\ \\ 
-
-  \frac{\partial \sigma (z^2)}{\partial(z^2)} .\frac{\partial(w^2.a^1)}{\partial(a^1)} \\ \\
-
- which \space is \space \\ \\ 
-
- \sigma'(z^2).w^2 \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \sigma'(z^2).w^2  \quad \rightarrow (2.3.2)\\ \\
-
-\end{aligned}$$
-
-Putting  (2.1),(2.2),(2.3.1)and (2.3.2)  together, we get
-
----
-
-$$
-\mathbf{
-\frac {\partial C}{\partial w^1} =a^0* \sigma'(z^1)*(a^2-y).\sigma'(z^2).w^2 \quad \rightarrow \mathbb (B)
-}
-$$
-
----
-
-Repeating here the previous equation (A) as well
-
-$$ \mathbf{
-\frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
-$$
-
-There is one caveat here;these equations are just illustrative with respect to scalar calculus and not  accouinting for the matrix calculus we will need when modelling a practical neural network. We will check that in the next chapter But these two equaltions are illustrative of what is really going on.
-
-
----
 
 ### References
 
@@ -372,9 +187,9 @@ https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md) 
-- Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
-- **Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)**
+- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
+- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
+- **Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)**
 - Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 
