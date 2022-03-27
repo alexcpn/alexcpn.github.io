@@ -5,10 +5,7 @@ Alex Punnen \
 2019-2021 
 
 ---
-
-## Contents
-
-### Introduction
+# Introduction
 
 The intention of this set of articles is mostly for self-learning and to present what is learned in a simple and connected manner so that it could help others.
 
@@ -24,13 +21,17 @@ To further explain in more concrete terms,this distinction of Deep Learning from
 
 Whatever be the model used in Deep Learning, the learning is via gradient descent and back-propogation as of to-date; and how that works is basically what we are trying to learn.
 
+
+## Contents
+
 - **Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)**
 - Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
 - Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
 - Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
+- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
+- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)
+- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
+- Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
 
 # Chapter 1
 ## The simplest Neural Network - Perceptron using Vectors and Dot Products
@@ -191,14 +192,7 @@ In simple terms, it means that an unknown feature vector of an input set belongi
 
 Next let's see how Perceptron is trained next.
 
-## Contents
-
-- **Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)**
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
-- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
-- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
+Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
 
 
   [1]: https://en.wikipedia.org/wiki/Vector_space

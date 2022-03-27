@@ -12,12 +12,16 @@ Alex Punnen \
 - Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
 - Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
 - Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- **Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)**
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
-## Chapter 5: Back Propagation for a Two layered Neural Network (Matrix Calculus)
+- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
+**- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)**
+- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
+- Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
 
-Let's take the simple neural network and walk through the same, first going through the maths and then the implementation.
+# Chapter 6
+
+## Back Propagation with Matrix Calculus for a two layer Neural Network
+
+Let's take the previous simple neural network and derive the Back Propagation formula with some Matrix Calculus now
 
 Let's write the  equation of the following neural network
 
@@ -315,11 +319,4 @@ Reference
 - <https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf>
 - <http://neuralnetworksanddeeplearning.com/chap2.html>
 
-## Contents
-
-- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
-- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
-- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- **Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)**
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
+Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)

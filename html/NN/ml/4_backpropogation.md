@@ -12,10 +12,10 @@ Alex Punnen \
 - Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
 - Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
 - **Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)**
-- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](4.1_backpropogation_impl.md)
-- Chapter 6: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
-- Chapter 7: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-- Chapter 8: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
+- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
+- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)
+- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
+- Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
 
 # Chapter 4
 
@@ -182,17 +182,10 @@ Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 ### References
 
 http://neuralnetworksanddeeplearning.com/chap2.html
+
 https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 
-## Contents
-
-- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
-- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
-- **Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)**
-- Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-
+Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
 
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png
 [backpropogation]: https://i.imgur.com/1s89fsX.png

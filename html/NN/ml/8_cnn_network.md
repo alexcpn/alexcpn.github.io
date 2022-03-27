@@ -12,11 +12,19 @@ Alex Punnen \
 - Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
 - **Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)**
 - Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
-- Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
-- Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
+- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
+- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)
+- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
+- **Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)**
 
-## Chapter 7: Back Propagation for Softmax with CrossEntropy Loss
+
+# Chapter 8
+
+## Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss
+
+The previous chapters should have given an intuition of Back Propagation. Let's now dive much deeper into Back Propogation. We will need all the information covered in the previous chapters, plus a bit more involved mathematical concepts.
+
+It is good to remember here Geoffrey Hinton's talk available in Youtube - All this was invented not out of some mathematical model; but based on trial and error and checking what works. So do not treat this as distilled science. This is ever evolving.
 
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
 
@@ -28,12 +36,11 @@ For this we need to find the derivative of Loss function with respect to weights
 
 This is a bit involved mathematically and various authors give various ways. There are many terms and concepts that can trip someone who has not touched maths for some time or done these parts or paid specific attention to these parts.
 
-# The Maths you Need for Back Propogation
-## and the Maths you probably don't 
-
 Truth is that to understand this correctly, as in dealing with  higher dimensional weight matrices, you need a good understanding of index conventions when writing Matrices, and how these translate to Matrices. Also, a few other topics are given below. However, with some understanding, you can understand the concepts easily. Also many do not bother to understand at all, as we have beautiful Keras or Tensorflow abstractions. But to try to improve, this understanding would be necessary.
 
 There is a vast amount of articles and explanations, I will be referring mostly to a few highly quoted articles here. The rest are all quoting from these few.
+
+Below are some of the concepts that we had already covered in brief in previous chapters; and some which we have not touched previously; but without which it will not be possible to build a practical deep neural network solution.
 
 - Understand what **Scalar's, Vectors, Tensors** are and that Vectors and Tensors are written as matrices and Vector is one dimension matrix whereas Tensor's are many dimensional usually. (Technically a Vector is also a Tensor). After this, you can forget about Tensors and think only of Vectors Matrices and Scalar. Mostly just matrices.
 
@@ -65,7 +72,7 @@ $$
 \frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad
 $$
  
-- Caluculus - **Chain Rule - Single variable, Multi variable Chain rule, Vector Chain Rule**
+- Calculus - **Chain Rule - Single variable, Multi variable Chain rule, Vector Chain Rule**
  
   - Chain rule is used heavily to break down the partial derivate of Loss function with respect to weight into a chain of easily differentiable intermediate terms
 
