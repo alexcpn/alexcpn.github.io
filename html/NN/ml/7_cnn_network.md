@@ -8,8 +8,8 @@ Alex Punnen \
 
 ## Contents
 
-- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)
+- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
+- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)
 - **Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)**
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
@@ -462,64 +462,62 @@ $$
 \begin{aligned}
 \text{Let's take a 2x2 matrix , X } =
 \begin{bmatrix}
-                x_{{1}{1}}  & x_{{1}{2}}   \\
-                x_{{2}{1}}  & x_{{2}{2}}   \\
+                x_{ {1}{1} }  & x_{ {1}{2} } \\
+                x_{ {2}{1} }  & x_{ {2}{2} }
 \end{bmatrix}
 \end{aligned}
 $$
-On which an element wise operation is done  $a_{{i}{j}} = \sigma ({x_{{i}{j}}})$
+On which an element wise operation is done  $a_{ {i}{j} } = \sigma ({x_{ {i}{j} }})$
 Writing that out as matrix $A$
 $$
 \begin{aligned}
 A =
 \begin{bmatrix}
-                a_{{1}{1}}  & a_{{1}{2}}   \\
-                a_{{2}{1}}  & a_{{2}{2}}   \\
+                a_{ {1}{1} }  & a_{ {1}{2} }   \\
+                a_{ {2}{1} }  & a_{ {2}{2} }   \\
 \end{bmatrix}
 \end{aligned}
 $$
 
-The partial derivative of the elements of A with its inputs is $\frac {\partial A }{\partial x_{{i}{j}}}$
+The partial derivative of the elements of A with its inputs is $\frac {\partial A }{\partial x_{ {i}{j} }}$
 
 $$
 \begin{aligned}
 \frac {\partial \vec A }{\partial X} =
 \begin{bmatrix}
-                a_{{1}{1}}  & a_{{1}{2}}  &  a_{{2}{1}}  & a_{{2}{2}}   \\
+                a_{ {1}{1} }  & a_{ {1}{2} }  &  a_{ {2}{1} }  & a_{ {2}{2} }   \\
 \end{bmatrix}
 \end{aligned}
 $$
 We vectorized the matrix; Now we need to take the partial derivative of the vector with each element of the matrix $X$
 
-
-
 $$
 \begin{aligned}
 \frac {\partial \vec A }{\partial X} =
 \begin{bmatrix}
-\frac{\partial  a_{{1}{1}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{1}{1}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{1}{1}}}  \\ \\
- \frac{\partial  a_{{1}{1}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{1}{2}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{1}{2}}}  \\ \\
-\frac{\partial  a_{{1}{1}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{2}{1}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{2}{1}}}  \\ \\
-\frac{\partial  a_{{1}{1}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{1}{2}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{2}{1}} }{\partial x_{{2}{2}}} &   \frac{\partial  a_{{2}{2}} }{\partial x_{{2}{2}}}  \\ \\
+\frac{\partial  a_{ {1}{1} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {1}{2} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {2}{1} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {1}{1}}}  \\ \\
+ \frac{\partial  a_{ {1}{1}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {1}{2}}}  \\ \\
+\frac{\partial  a_{ {1}{1}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {2}{1}}}  \\ \\
+\frac{\partial  a_{ {1}{1}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {2}{2}}}  \\ \\
 \end{bmatrix}
 \end{aligned}
 $$
-The non diagonal terms are of the form  $\frac{\partial  a_{{i}{j}} }{\partial x_{{k}{k}}}$ and reduce to 0 and we get the resultant Jacobian Matrix as 
+The non diagonal terms are of the form  $\frac{\partial  a_{ {i}{j}} }{\partial x_{ {k}{k}}}$ and reduce to 0 and we get the resultant Jacobian Matrix as
 
 
 $$
 \begin{aligned}
 \frac {\partial \vec A }{\partial X} =
 \begin{bmatrix}
-\frac{\partial  a_{{i}{j}} }{\partial x_{{i}{i}}} & \cdot \cdot \cdot & 0 \\
- 0 & \frac{\partial  a_{{i}{j}} }{\partial x_{{i}{i}}} & \cdot \cdot \cdot  \\
+\frac{\partial  a_{ {i}{j}} }{\partial x_{ {i}{i}}} & \cdot \cdot \cdot & 0 \\
+ 0 & \frac{\partial  a_{ {i}{j}} }{\partial x_{ {i}{i}}} & \cdot \cdot \cdot  \\
  \cdot \cdot \cdot  \\
- \cdot \cdot \cdot  & \cdot \cdot \cdot & \frac{\partial  a_{{N}{N}} }{\partial x_{{N}{N}}} 
+ \cdot \cdot \cdot  & \cdot \cdot \cdot & \frac{\partial  a_{ {N}{N}} }{\partial x_{ {N}{N}}} 
 \end{bmatrix}
 \end{aligned}
 $$
 --
-Hence  $\frac{\partial a_{{i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
+Hence  $\frac{\partial a_{ {i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
 ---
 
 Note that Multiplication of a vector by a diagonal matrix is elementwise multiplication or the hadamard product; And matrices in DL can be seen as stacked vectors

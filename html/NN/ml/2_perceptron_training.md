@@ -9,19 +9,22 @@ Alex Punnen \
 
 ## Contents
 
-- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
-- **Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)**
+- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
+- **Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)**
 - Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 - Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
-## Chapter 2: Feature Vectors, Dot products and Perceptron Training
+
+# Chapter 2
+
+## Perceptron Training via Feature Vectors and Dot product 
 
 **Q.  How can we train the Perceptron with just simple Vector maths?**
 
-Let's follow from the previous chapter of the Perceptron neural network. Please read it if not done as the importance of vector representation (direction part) and what a vector dot product signifies is needed here again.
- 
+Let's follow from the previous chapter of the Perceptron neural network.
+
  Just to reiterate - Dot product, geometrically, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 \begin{aligned}
 $$
@@ -30,7 +33,7 @@ $$
 
 ![dotproduct][1]
 
-**If two vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative**. Why? As  Cos($\theta$) is positive in the first quadrant* and negative in the second quadrant. *See this excellent answer here to refresh your trigonometry [https://www.quora.com/Why-is-sin-90-taken-to-be-1](https://www.quora.com/Why-is-sin-90-taken-to-be-1)
+**If two vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative**. Why? As  Cos($\theta$) is positive in the first quadrant* and negative in the second quadrant ([quora_cost]).
 
 Now let us see why we want a weight vector first - once again and then we go to how it is obtained.
 
@@ -45,53 +48,58 @@ Or in a better way, which shows the vectors properly
 
 ![weighvector][2]
 
-So that if we get this weight vector trained with sufficient know samples of P and N, when an unknown vector comes in, we can take a dot product of the unknown feature vector with the learned weight vector and find out in which region it falls, in the cat feature region -P or the non-cat feature region - N.
+If we get this weight vector trained with sufficient number of samples of P and N, when an unknown vector comes in, we can take a dot product of the unknown feature vector with the learned weight vector and find out in which region it falls, in the cat feature region P or the non-cat feature region N.
 
 ## How are the weights learned ?
 
-You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler. We will go there still, but later.
+You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler.
 
 ----
 
 Basically what is done is to start with a randomly initialized weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
-Question is how to nudge to the correct "direction"
+
+Question is how to nudge to the correct "direction"?
 
 We want to rotate the weight vector to the direction of the input vector so that the hyperplane is closer to the correct classification.
 
-The error of a perceptron with weight vector w is the number of incorrectly classified points. The learning algorithm must minimize this error function E(w)
+The error of a perceptron with weight vector w is the number of incorrectly classified points. The learning algorithm must minimize this *error function* $E(w)$
 
-One possible strategy is to use a local greedy algorithm which works by computing the error of the perceptron for a given weight vector, looking then for a **direction in weight space** in which to move and update the weight vector by selecting new weights in the selected search direction.
+One possible strategy is to use a local greedy algorithm which works by computing the error of the perceptron for a given weight vector, looking then for a **direction in weight space** in which to move and update the weight vector.
 
-Taking input from the training example and doing a dot product with the weight vector; will give you either a value $>=0$ or $<0$. Note that this means which quadrant the feature vector lies; either in the positive quadrant (P) or on the negative side (N).
+Taking input from the training example, and doing a dot product with the weight vector; will give you either a value greater that 0 or less than 0.
 
-If this is as expected, then do nothing. If the dot product comes wrong, that is if input feature vector - say $x$, was $x \in P$, but dot product $w. x < 0$, we need to drag the weight vector towards x.
+ Note that this means which quadrant the feature vector lies; either in the positive quadrant (P) or on the negative side (N).
+
+If this is as expected, then do nothing. If the dot product comes wrong, that is if input feature vector - say $x$, was $x \in P$, but dot product $w. x < 0$, we need to drag/rotate the weight vector towards x.
+
 $w_n = w +x$
+
 Which is vector addition, that is $w$ is moved towards $x$. Say that  $x \in N$, but dot product $w. x > 0$ , then we need to do the reverse $w_n = w - x$
 
 This is the classical method of perceptron learning
 
-
 $$
-\delta w_j =
- \begin{cases}
- 0 \text { if instance is classified correctly}  \\ 
-+x_j  \text { if +1 instance is classified as −1} \\ 
--x_j \text { if -1 instance is classified as +1}\\ 
+w_j = w_j + \delta w_j \\
+\begin{align}
+\delta w_j = 
+\begin{cases}
+    0  \; \text{ if instance is classified correctly}  \\
+ +x_j  \; \text{ if Positive instance is classified as negative} \\
+ -x_j  \; \text{ if Negative instance is classified as positive} \\
 \end{cases}
+\end{align}
 $$
-
- [ref 5][5]
 
 This is also called the delta rule. Note that there is some articles that refer to this as gradient descent simplified. But gradient descent depends on the activation function being differentiable. The step function which is the activation function of the perceptron in non continuous and hence non differentiable.
 
 A more rigorous  explanation of the proof is here from the book
-[Neural Networks by R.Rojas][3] and more lucid explanation here
- [perceptron-learning-algorithm][4]
+[Neural Networks by R.Rojas] and more lucid explanation here
+ [perceptron-learning-algorithm]
 
 ## Contents
 
-- Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)
-- **Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)**
+- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
+- **Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)**
 - Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
@@ -100,9 +108,11 @@ A more rigorous  explanation of the proof is here from the book
 
   [1]: https://i.stack.imgur.com/kO3ym.png
   [2]: https://i.imgur.com/7MsJuS1.png
-  [3]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
-  [4]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
+  [Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
+   [perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
   [6]: https://i.imgur.com/OIN3maH.png
+  [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
+
 
 

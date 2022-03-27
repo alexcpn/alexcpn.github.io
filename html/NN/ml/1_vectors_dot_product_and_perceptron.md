@@ -8,30 +8,32 @@ Alex Punnen \
 
 ## Contents
 
-- **Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)**
-- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md)
+### Introduction
+
+The intention of this set of articles is mostly for self-learning and to present what is learned in a simple and connected manner so that it could help others.
+
+The aim of this set of articles if to unravel the mathematical concepts used in Deep Learning. I have been an application programmer for almost twenty years; and for me, and people like me, is not so difficult to use some platform like Tensorflow or Keras or Pytorch and off-the shelf models or libraries to assemble an IT Deep learning solution. That is a skill, and has its place. However it will benefit the builders also, to have more intuition on the things they build.
+
+Note that I have called out Deep Learning specifically. Deep Learning is a branch of machine learning. However machine learning, as is widely understood now means Data Science - that is data analysis using Statistics and Probability Distribution ( Frequentest and Bayesian) of a Data Set; simple example is linear regression (curve fitting) or logistic regression (hyper-plane fitting).
+
+Deep Learning is concerned with no such statistical or probabilistic modelling; it is not a mathematical model at all. It can be thought of as an universal approximation of any model; and the approximation bettered by more training on more data. 
+
+Another common explanation is that it models neural network in the brain. But that is an analogy that is way off the mark as of now. This complex approximation machine is modelled with the concept of vectors, matrices, using the concept of cost function similar to linear regression solutions to find a reduced cost by algorithms like gradient descent; and then propagating the cost back to all constituents of the machine via a method called back-propagation.
+
+To further explain in more concrete terms,this distinction of Deep Learning from Machine Learning, we can take the example of object detection in images. You can use a machine learning model like HAAR or HOG for object detection im images. But what works for one kind of images will not necessarily be effective in another kind. You need to manually tune the hyper-parameters of these models. This is the classical machine learning way of object detection. Whereas in Deep Learning way, we model a special type of Neural Network (or Deep Learning model) and train it using images to automatically tune the internal parameters of the network to be able to detect the objects from a wider gamut of image scenes.Deep Learning models are much more accurate than machine learning models; and now used as defacto in all production use-cases.
+
+Whatever be the model used in Deep Learning, the learning is via gradient descent and back-propogation as of to-date; and how that works is basically what we are trying to learn.
+
+- **Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)**
+- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md)
 - Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Back Propagation with Matrix Calulus](5_backpropogation_matrix_calulus.md)
 - Chapter 6: [A Simple NeuralNet with above Equations](6_neuralnetworkimpementation.md)
 - Chapter 7: [Back Propagation for Softmax with CrossEntropy Loss](7_cnn_network.md)
 
-### Chapter 1
-
-The intention of this set of articles is mostly for self-learning and to present what is learned in a simple and connected manner so that it could help others.
-
-The aim of this set of articles if to unravel the mathematical concepts used in Deep Learning. I have been an application programmer for almost twenty years; and for me, and people like me, is not so difficult to use some platform like Tensorflow or Keras or Pytorch and off-the shelf models or libraries to assemble an IT Deep learning solution. That is a skill as well and has its place. However it will benefit the builders also, to have more intuition on the things they build.
-
-Note that I have called out Deep Learning specifically. Deep Learning is a branch of machine learning. However machine learning, as is widely understood now means Data Science - that is data analysis using Statistics and Probability Distribution ( Frequentest and Bayesian) of a Data Set; simple example is linear regression (curve fitting) or logistic regression (hyper-plane fitting).
-
-Deep Learning is concerned with no such statistical or probability modelling; it is not a mathematical model at all. It can be thought of as an universal approximation of any model; and the approximation bettered by more training on more data. Another way of telling it is that it models neural network in the brain. But that is an analogy that is way off the mark as of now. This complex approximation machine is modelled with the concept of vectors, matrices, using the concept of cost function similar to linear regression solutions to find a reduced cost by algorithms like gradient descent; and then propagating the cost back to all constituents of the machine via a method called back-propagation.
-
-To further explain in more concrete terms,this distinction of Deep Learning from Machine Learning, we can take the example of object detection in images. You can use a machine learning model like HAAR or HOG for object detection im images. But what works for one kind of images will not necessarily be effective in another kind. You need to manually tune the hyper-parameters of these models. This is the classical machine learning way of object detection. Whereas in Deep Learning way, we model a special type of Neural Network (or Deep Learning model) and train it using images to automatically tune the internal parameters of the network to be able to detect the objects from a wider gamut of image scenes.Deep Learning models are much more accurate than machine learning models; and now used as defacto in all production use-cases.
-
-Whatever be the model used in Deep Learning, the learning is via gradient descent and back-propogation as of to-date; and how that works is basically what we are trying to learn.
-
-
-## Vectors, Dot Products and  the Perceptron
+# Chapter 1
+## The simplest Neural Network - Perceptron using Vectors and Dot Products
 
 To understand the maths or modelling of the neural network, it is best to start from the beginning when things were simple. The earliest neural network - the `Rosenblatt’s Perceptron` was the first to introduce the concept of using vectors and the property of vector dot product, to split hyperplanes of input feature vectors. These are the fundamentals that are still used today.
 
@@ -196,10 +198,12 @@ In simple terms, it means that an unknown feature vector of an input set belongi
 
 ![hyperplane2]
 
+Next let's see how Perceptron is trained next.
+
 ## Contents
 
-- **Chapter 1: [Vectors, Dot Products and  the Perceptron](1_vectors_dot_product_and_perceptron.md)**
-- Chapter 2: [Feature Vectors, Dot products and Perceptron Training](2_perceptron_training.md) 
+- **Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)**
+- Chapter 2: [Perceptron Training via Feature Vectors and Dot product ](2_perceptron_training.md) 
 - Chapter 3: [Gradient Descent, Gradient Vector and Loss Function](3_gradient_descent.md)
 - Chapter 4: [Activation functions, Cost functions and Back propagation](4_backpropogation.md)
 - Chapter 5: [Implementing a Neural Network using Chain Rule and Back Propagation](5_backpropogation_matrix_calulus.md)
