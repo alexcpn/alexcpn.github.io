@@ -22,42 +22,17 @@ Alex Punnen \
 
 ## Perceptron Training via Feature Vectors,HyperPlane split and Limitations 
 
-**Q.  How can we train the Perceptron with just simple Vector maths?**
-
 Let's follow from the previous chapter of the Perceptron neural network.
 
- Just to reiterate - Dot product, geometrically, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
-\begin{aligned}
-$$
- \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
-$$
-
-![dotproduct][1]
-
-**If two vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative**. Why? As  Cos($\theta$) is positive in the first quadrant* and negative in the second quadrant ([quora_cost]).
-
-Now let us see why we want a weight vector first - once again and then we go to how it is obtained.
-
-Assume that there are two sets of feature vectors P and N, where P is set of positive samples (say cat features) and N is non-positive cases (say non-cat features) and P and N are the correctly classified
-**Training Set**.
-
-We can see how hyperplane that is created orthogonal (perpendicular) to the weight vector splits input feature vector space, into two distinct regions.
+We have seen how the concept of splitting the hyper-plane of feature set separates one type of feature vectors from other.
 
 ![cornellperceptron][6]
 
-Or in a better way, which shows the vectors properly
-
-![weighvector][2]
-
-If we get this weight vector trained with sufficient number of samples of P and N, when an unknown vector comes in, we can take a dot product of the unknown feature vector with the learned weight vector and find out in which region it falls, in the cat feature region P or the non-cat feature region N.
-
 ## How are the weights learned ?
 
-You may have heard about Gradient descent. But hold your horses. For perceptron leaning it is much simpler.
+You may have heard about Gradient descent. For Perceptron leaning  is much simpler.
 
-----
-
-Basically what is done is to start with a randomly initialized weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
+What is done is to start with a randomly initialized weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
 
 Question is how to nudge to the correct "direction"?
 
@@ -97,19 +72,21 @@ A more rigorous  explanation of the proof is here from the book
 [Neural Networks by R.Rojas] and more lucid explanation here
  [perceptron-learning-algorithm]
 
-## The Problem with the Perceptron Network
+### The Perceptron Network and the AI winter
 
 The Perceptron network needs the input feature set to be linearly seperable. However
  all problems do not have their feature set which is linearly seperable. So this is a constraint of this system.
 
 The fact that Perceptron could not be trained for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first *AI winter*, as much of the hype generated intially by Frank Rosenblatt's discovery became a disillusionment.
 
+Next up we wil see a Modern Neural Network
+
  ![linearseperable]
 
 Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
 
   [1]: https://i.stack.imgur.com/kO3ym.png
-  [2]: https://i.imgur.com/7MsJuS1.png
+
   [Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
    [perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
