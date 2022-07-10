@@ -5,23 +5,6 @@ Alex Punnen \
 2019-2021 
 
 ---
-# Introduction
-
-The intention of this set of articles is mostly for self-learning and to present what is learned in a simple and connected manner so that it could help others.
-
-The aim of this set of articles if to unravel the mathematical concepts used in Deep Learning. I have been an application programmer for almost twenty years; and for me, and people like me, is not so difficult to use some platform like Tensorflow or Keras or Pytorch and off-the shelf models or libraries to assemble an IT Deep learning solution. That is a skill, and has its place. However it will benefit the builders also, to have more intuition on the things they build.
-
-Note that I have called out Deep Learning specifically. Deep Learning is a branch of machine learning. However machine learning, as is widely understood now means Data Science - that is data analysis using Statistics and Probability Distribution ( Frequentest and Bayesian) of a Data Set; simple example is linear regression (curve fitting) or logistic regression (hyper-plane fitting).
-
-Deep Learning is concerned with no such statistical or probabilistic modelling; it is not a mathematical model at all. It can be thought of as an universal approximation of any model; and the approximation bettered by more training on more data. 
-
-Another common explanation is that it models neural network in the brain. But that is an analogy that is way off the mark as of now. This complex approximation machine is modelled with the concept of vectors, matrices, using the concept of cost function similar to linear regression solutions to find a reduced cost by algorithms like gradient descent; and then propagating the cost back to all constituents of the machine via a method called back-propagation.
-
-To further explain in more concrete terms,this distinction of Deep Learning from Machine Learning, we can take the example of object detection in images. You can use a machine learning model like HAAR or HOG for object detection im images. But what works for one kind of images will not necessarily be effective in another kind. You need to manually tune the hyper-parameters of these models. This is the classical machine learning way of object detection. Whereas in Deep Learning way, we model a special type of Neural Network (or Deep Learning model) and train it using images to automatically tune the internal parameters of the network to be able to detect the objects from a wider gamut of image scenes.Deep Learning models are much more accurate than machine learning models; and now used as defacto in all production use-cases.
-
-Whatever be the model used in Deep Learning, the learning is via gradient descent and back-propogation as of to-date; and how that works is basically what we are trying to learn.
-
-
 ## Contents
 
 - **Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)**
@@ -36,10 +19,19 @@ Whatever be the model used in Deep Learning, the learning is via gradient descen
 # Chapter 1
 ## The simplest Neural Network - Perceptron using Vectors and Dot Products
 
-To understand the maths or modelling of the neural network, it is best to start from the beginning when things were simple. The earliest neural network - the `Rosenblatt’s Perceptron` was the first to introduce the concept of using vectors and the property of vector dot product, to split hyperplanes of input feature vectors. These are the fundamentals that are still used today.
+The aim of this set of articles is to unravel the mathematical concepts used in Deep Learning in as simple a way.
 
-Before we talk about why Neural Network inputs and weights are modelled as vectors (and represented as matrices) let us refresh our maths and see what these concepts mean geometrically. This will help us in understanding the intuition of these when they are used in other contexts/ in higher dimensions.
+Deep Learning is about neural networks and their structures and designs; and training those networks.
 
+Even the most complex Neural network is based on vectors, matrices and using the concept of cost function and algorithms like gradient descent to find a reduced cost; and then propagating the cost back to all constituents of the network proportionally via a method called back-propagation.
+
+Have you held an integrated circuit or chip in hand or seen. It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex we need to understand the simpler constituents.
+
+---
+
+The earliest neural network - the `Rosenblatt’s Perceptron` was the first to introduce the concept of using vectors and the property of `vector dot product`, to split hyperplanes of input feature vectors. These are the fundamentals that are still in used today.
+
+First a short refresher.
 ## Vectors
 
 A vector is an object that has both a magnitude and a direction. Example Force and Velocity. Both have magnitude as well as direction.
@@ -70,16 +62,21 @@ $a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represe
 
 Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other. This intuition is especially helpful when we use dot products on neural network weight matrices.
 
-Please see [this article][indexnotation] regarding index notation details and about *free indices*. In most of the derivations later on, we will use the index notation.
+Note: - the [index notation][indexnotation] of matrices is important later on when we start deriving out formulas
 
-In classical machine learning, example for linear regression -(line or curve fitting methodology), matrices play an important part in representing the set of modelled linear equations in matrix form and then using the matrix properties -matrix triangulation methods, to solve the linear equations. See [matrix decomposition] methods, example LU, QR decomposition. The other option is to find the optimal solution set by gradient descent, as it is computationally efficient.
+
+In classical machine learning, example for linear regression -(line or curve fitting methodology), matrices play an important part in representing the set of modelled linear equations in matrix form and then using the matrix properties -matrix triangulation methods, to solve the linear equations. See [matrix decomposition] methods, example LU, QR decomposition. 
+
+The other option is to find the optimal solution set by gradient descent, as it is computationally efficient.
 
 In Deep learning, the concept is not of linear regression or set of linear equations; but matrices still are heavily used to model the neural network. Here gradient descent is heavily used to find optimal solution.
 
 
-**Tensor**
+## Tensors
 
-Since  we will be dealing soon with multidimensional matrices, it is as well to state here what Tensors are. Easier is to define how they are represented, and that will suit our case as well. We have seen that a Vector is a one dimensional matrix. Higher dimension matrices are used for Tensors. Example is the multidimensional weight matrices we use in neural network. They are weight Tensors. A Vector is a Tensor or Rank 1 and technically a Scalar is also a Tensor of Rank 0.
+Since  we will be dealing soon with **multidimensional matrices**, it is as well to state here what Tensors are. Easier is to define how they are represented, and that will suit our case as well. We have seen that a Vector is a one dimensional matrix.
+
+Higher dimension matrices are used for Tensors. Example is the multidimensional weight matrices we use in neural network. They are **weight tensors**. A Vector is a Tensor of Rank 1 and technically a Scalar is also a Tensor of Rank 0.
 
 ## Dot product
 
@@ -100,24 +97,34 @@ $$
 Note- These definitions are equivalent when using Cartesian coordinates.
 Here is a simple proof that follows from trigonometry [8] and [9]
 
-## Dot Product and Vector Alignment
+## Dot Product for checking Vector Alignment
 
 **If two Vectors are in the same direction the dot product is positive and if they are in the opposite direction the dot product is negative.** This can be visualized geometrically putting in the value of the Cosine angle.
 
 So we could use the dot product as a way to find out if two vectors are aligned or not.
 
-## Dot Product and Splitting the hyper-plane
+## Dot Product and Splitting the hyper-plane -the crux of the Perceptron
+
+
+![hyperplane1]
+
+[Image source][13]
 
 Imagine we have a problem of  classifying if a leaf is healthy or not based on certain features of the leaf. For each leaf we have some feature vector set.
 
- For any  **input feature vector** in that vector space, if we have a **weight vector**, whose dot product with one feature vector of the set of input vectors of a certain class (say leaf is healthy) is positive and with the other set is negative, then that weight vector is splitting the feature vector hyper-plane into two.
+ For any  **input feature vector** in that vector space, if we have a **weight vector**, whose dot product with one feature vector of the set of input vectors of a certain class (say leaf is healthy) is positive, and with the other set is negative, then that weight vector is splitting the feature vector hyper-plane into two.
+
+Or in a better way, which shows the vectors properly
+ 
+ ![weightvector][weightvector]
  
  **In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.**
 
- For any new leaf, if we only extract the same features into a feature vector; we can **dot it with the *trained* weight vector and find out if it falls in healthy or deceased class.
+ For any new leaf, if we only extract the same features into a feature vector; we can *dot* it with the *trained* weight vector and find out if it falls in healthy or deceased class.
 
  Not all problems have their feature set which is linearly seperable. So this is a constraint of this system.
-## Modelling of the Perceptron
+ 
+ ##  The Perceptron
 
 The initial neural network - the **Frank Rosenblatt's perceptron** was basically splitting a linearly seperable feature set into distinct sets. Here is how the Rosenblatt's perceptron is modelled
 
@@ -132,18 +139,16 @@ The bias can be modelled as a a weight $w_0$ connected to a dummy input $x_0$ se
 If we ignore bias term, the output $y$ can be written as the sum of all inputs times the weights; thresholded by zero.
 
 $$
-y = 1  \text{ if } \;\sum_i w_i x_i \ge 0  \text{ else } y=0
+y = 1  \text{ if } \;\sum_i w_i x_i \ge 0  \text{ else } y=0 \quad \quad \rightarrow \mathbb \quad (Eq 1)
 $$
 
 The Perceptron will fire if the sum of its inputs is greater than zero; else it will not. It will be *activated* if the sum of its inputs is greater than zero; else it will not.
 
-## The Activation Function of the Nerual Network
+### The Activation Function of the Nerual Network
 
-The big blue circle is the primitive brain of the primitive neural network - the perceptron brain. Which is basically a function $\sigma$ (sigma).
-
- This is what is called as an **Activation Function** in Neural Networks. We will see that later. 
+The big blue circle is the primitive brain of the primitive neural network - the perceptron brain. This is what is called as an **Activation Function** in Neural Networks. We will see that later.
  
- In Perceptron, this is a step function we use here, output is non continuous (and hence non-differentiable) and is either 1 or 0.
+ In Perceptron, the activation function is a `step function`, output is non continuous (and hence non-differentiable) and is either 1 or 0.
 
 If the inputs are arranged as a column matrix and weights also arranged likewise then both the input and weights can be treated as vector and $\sum_i w_i x_i$ is same as the dot product $\mathbf{w}\cdot\mathbf{x}$. 
 
@@ -152,37 +157,34 @@ Hence the activation function can also be written as
 $$
 \sigma (x) =
 \begin{cases}
-1, & \text{if}\ \mathbf{w}\cdot\mathbf{x}+b \ge 0 \\
-0, & \text{otherwise} 
+1, & \text{if}\ \mathbf{w}\cdot\mathbf{x}+b \ge 0 \\ 
+0, & \text{otherwise}   \quad \quad \rightarrow \mathbb \quad (Eq 2)
 \end{cases}
 $$
 
-Note that dot product of two matrices (representing vectors), can be written as that transpose of one multiplied by another, $w \cdot x = w^Tx$ 
+Note that dot product of two matrices (representing vectors), can be written as the transpose of one multiplied by another, $w \cdot x = w^Tx$ 
 
 $$
 \sigma(w^Tx + b)=
 \begin{cases}
 1, & \text{if}\ w^Tx + b \ge 0 \\
-0, & \text{otherwise} 
+0, & \text{otherwise}  \quad \quad \rightarrow \mathbb \quad (Eq 3)
 \end{cases}
 $$
 
-All three equations are the same, just that in different reference it will be written in one of these forms.
+All three equations (Eq 1,2 &3) are the same, just that in different reference it will be written in one of these forms.
 
 ### The equation $w \cdot x \gt b$  defines all the points on one side of the hyperplane, and $w \cdot x \ge b$  all the points on the other side of  the hyperplane and on the hyperplane itself.
 
 ### This happens to be the  very definition of “linear separability”
 
-### **Thus, the perceptron allows us to separate our feature space in two convex half-spaces**
+### **Thus, the Perceptron allows us to separate our feature space in two convex half-spaces**
 Ref ([12])
 
 If we can calculate or train the weight matrix used here, then we can have a weight vector, which splits the input feature vectors to two regions by a hyperplane. 
 
 **This is the essence of the Perceptron, the initial artificial neuron.**
 
-![hyperplane1]
-
-[Image source][13]
 
 In simple terms, it means that an unknown feature vector of an input set belonging to say Dogs and Cats, when done a Dot product with a **trained weight vector**, will fall into either the Dog space of the hyperplane, or the Cat space of the hyperplane. This is how neural networks do classifications.
 
@@ -192,7 +194,7 @@ In simple terms, it means that an unknown feature vector of an input set belongi
 
 Next let's see how Perceptron is trained next.
 
-Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md) 
+Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
 
 
   [1]: https://en.wikipedia.org/wiki/Vector_space
@@ -212,3 +214,5 @@ Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitat
   [hyperplane1]: https://i.imgur.com/OIN3maHm.png#center
   [indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
   [matrix decomposition]: https://en.wikipedia.org/wiki/Matrix_decomposition
+  [weightvector]: https://i.imgur.com/7MsJuS1.png
+  
