@@ -18,7 +18,7 @@ Alex Punnen \
 - Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
 # Chapter 3
 
-## Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization
+## Gradient Descent and Optimization
 
 ### A brief history
 
