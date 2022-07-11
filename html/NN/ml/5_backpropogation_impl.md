@@ -19,7 +19,8 @@ Alex Punnen \
 
 # Chapter 5
 
-## Deriving the Backpropagation equation for a two layer Neural network
+## Backpropagation for a two layer Neural network - Scalar Calculus
+
 
 Let's consider the following two layer neural network
 
@@ -34,12 +35,16 @@ $$
  x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 $$
 
-Where the activation $a^l$ is
+Where the activation $a^l$ is sigmoid here
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
 
-If we take the activation function as sigmoid then we can also write $a^l$ as
+We will try to derive out via back propogation the effect of the weights in an inner layer to the final loss.
+
+There is one caveat here;these equations are just illustrative with respect to scalar calculus and not  accounting for the matrix calculus we will need when modelling a practical neural network. The maths is a bit complex with matrix calculus and we can start with the simplified discourse with Chain rule.
+
+We can write $a^l$ as
 
 $$
 a^{l} = \sigma(z^l) \quad where \quad
@@ -96,7 +101,7 @@ The first term is
 
 $$
 \mathbb{
-\frac{\partial z^{2} }{\partial w^2} = \frac{\partial a^1.w^2}{\partial w^2} =a^1 \quad \rightarrow  (\mathbf  {1.1})
+\frac{\partial z^{2} }{\partial w^2} = \frac{\partial (a^1.w^2)}{\partial w^2} =a^1 \quad \rightarrow  (\mathbf  {1.1})
 }
 $$
 
@@ -115,7 +120,7 @@ $$
 \frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) \rightarrow (1.3) }
 $$
 
-Putting $1.1,2.1 & 3.1$  together we get the final equation for the second layer. This is the output layer.
+Putting 1.1,2.1 & 3.1  together we get the final equation for the second layer. This is the output layer.
 
 ---
 
@@ -199,7 +204,6 @@ $$ \mathbf{
 \frac {\partial C}{\partial w^2} =  a^1* \sigma' (z^{2})*(a^2-y) \quad \rightarrow (A) }
 $$
 
-There is one caveat here;these equations are just illustrative with respect to scalar calculus and not  accouinting for the matrix calculus we will need when modelling a practical neural network. We will check that in the next chapter But these two equaltions are illustrative of what is really going on.
 
 
 ---
