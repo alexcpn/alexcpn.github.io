@@ -9,17 +9,18 @@ Alex Punnen \
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
-- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
-- **Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)**
-- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
-- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)
-- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
-- Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
+- Chapter 2: [Perceptron Training via Feature Vectors & HyperPlane split](2_perceptron_training.md)
+- Chapter 3: [Gradient Descent and Optimization](3_gradient_descent.md)**
+- **Chapter 4: [Back Propagation - Pass 1 (Chain Rule)](4_backpropogation_chainrule.md)**
+- Chapter 5: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
+- Chapter 6: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
+- Chapter 7: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)
+- Chapter 8: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
+
 
 # Chapter 4
 
-## Back Propagation
+## Back Propagation - Pass 1 (Chain Rule)
 
 We have seen how gradient descent was used to optimize the cost function.
 
@@ -148,6 +149,8 @@ Next would be to add more layers and more connections and change the notation to
 Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 
 This is the first pass; there are more details now to fill in; which we will take in subsequent chapters.
+
+Next: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
 
 ---
 

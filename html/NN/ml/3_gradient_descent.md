@@ -143,7 +143,7 @@ And the loss function in say three dimensions will geometrically be something li
 But the intuition regarding solving it is the same. Instead of the simple slope as in the case of two-dimensional loss function like MSE, we take the **gradient vector** and follow the negative to the gradient, with some constant selected as the learning rate. The constant is so chosen, that we decrement in short steps, and reduce the risk of overshooting the minima.
 
 
-Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
+Next: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
 
 [Reading Handwritten Digits A Zip Code Recognition System]:http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf
 [Deep Learning in Neural Networks: An Overview  Jurgen Schmidhuber]: https://arxiv.org/pdf/1404.7828.pdf

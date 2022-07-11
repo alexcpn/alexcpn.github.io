@@ -9,17 +9,18 @@ Alex Punnen \
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
-- Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)
-- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
-**- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)**
-- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
-- Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
+- Chapter 2: [Perceptron Training via Feature Vectors & HyperPlane split](2_perceptron_training.md)
+- Chapter 3: [Gradient Descent and Optimization](3_gradient_descent.md)
+- Chapter 4: [Back Propagation - Pass 1 (Chain Rule)](4_backpropogation_chainrule.md)
+- Chapter 5: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
+- **Chapter 6: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)**
+- Chapter 7: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)
+- Chapter 8: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
+
 
 # Chapter 6
 
-## Back Propagation with Matrix Calculus for a two layer Neural Network
+## Back Propagation Pass 3 (Matrix Calculus)
 
 Let's take the previous simple neural network and derive the Back Propagation formula with some Matrix Calculus now
 
@@ -40,7 +41,7 @@ Where the activation $a^l$ is
 $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
-http://neuralnetworksanddeeplearning.com/chap2.html#eqtn25
+
 
 and
 $$
@@ -312,11 +313,10 @@ $$\mathbf {
 
 &nbsp;
 
-That's it
 
 Reference  
 
 - <https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf>
 - <http://neuralnetworksanddeeplearning.com/chap2.html>
 
-Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
+Next: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)

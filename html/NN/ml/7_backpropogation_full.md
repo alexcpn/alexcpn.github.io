@@ -9,18 +9,18 @@ Alex Punnen \
 ## Contents
 
 - Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors,HyperPlane split and Limitations ](2_perceptron_training.md)
-- **Chapter 3: [Towards Modern Neural Network - The Cost function,Gradient Descent and Optimization](3_gradient_descent.md)**
-- Chapter 4: [The Importance of Back Propagation in Neural Networks](4_backpropogation.md)
-- Chapter 5: [Deriving the Backpropagation equation for a two layer Neural network](5_backpropogation_impl.md)
-- Chapter 6: [Back Propagation with Matrix Calculus for a two layer Neural Network](6_backpropogation_matrix_calculus.md)
-- Chapter 7: [A Simple NeuralNet with  Back Propagation](7_neuralnetworkimpementation.md)
-- **Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)**
+- Chapter 2: [Perceptron Training via Feature Vectors & HyperPlane split](2_perceptron_training.md)
+- Chapter 3: [Gradient Descent and Optimization](3_gradient_descent.md)
+- Chapter 4: [Back Propagation - Pass 1 (Chain Rule)](4_backpropogation_chainrule.md)
+- Chapter 5: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
+- Chapter 6: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
+- **Chapter 7: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)**
+- Chapter 8: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
 
 
-# Chapter 8
+# Chapter 7
 
-## Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss
+## Back Propagation in Full - With Softmax & CrossEntropy Loss
 
 The previous chapters should have given an intuition of Back Propagation. Let's now dive much deeper into Back Propogation. We will need all the information covered in the previous chapters, plus a bit more involved mathematical concepts.
 
@@ -29,16 +29,6 @@ It is good to remember here Geoffrey Hinton's talk available in Youtube - All th
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
 
 ---
-
-Our aim is to adjust the Weight matrices in all the layers so that the Softmax output reflects the Target Vector for the set of training inputs.
-
-For this we need to find the derivative of Loss function with respect to weights, that is to get the gradient of the loss function with respect to weight. We then use that gradient matrix to minimize the Loss function iteratively using the gradient descent algorithm.
-
-This is a bit involved mathematically and various authors give various ways. There are many terms and concepts that can trip someone who has not touched maths for some time or done these parts or paid specific attention to these parts.
-
-Truth is that to understand this correctly, as in dealing with  higher dimensional weight matrices, you need a good understanding of index conventions when writing Matrices, and how these translate to Matrices. Also, a few other topics are given below. However, with some understanding, you can understand the concepts easily. Also many do not bother to understand at all, as we have beautiful Keras or Tensorflow abstractions. But to try to improve, this understanding would be necessary.
-
-There is a vast amount of articles and explanations, I will be referring mostly to a few highly quoted articles here. The rest are all quoting from these few.
 
 Below are some of the concepts that we had already covered in brief in previous chapters; and some which we have not touched previously; but without which it will not be possible to build a practical deep neural network solution.
 
@@ -552,6 +542,8 @@ Slightly hard to follow using the Jacobian
 
 More difficult to follow with proper index notations (I could not) and probably correct
  - [Backpropagation In Convolutional Neural Networks Jefkine]
+
+Next: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
 
   
   [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
