@@ -527,6 +527,7 @@ $$
      w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
 $$
 
+Next: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
 
 ## References
  

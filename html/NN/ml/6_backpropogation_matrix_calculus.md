@@ -319,4 +319,4 @@ Reference
 - <https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf>
 - <http://neuralnetworksanddeeplearning.com/chap2.html>
 
-Next: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
+Next: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)

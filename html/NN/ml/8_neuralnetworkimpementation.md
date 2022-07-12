@@ -272,4 +272,6 @@ We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
 
 The code in [Colab](https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing)
 
-Chapter 8: [Back Propagation in Full -  Neural Network with Softmax & CrossEntropy Loss](8_cnn_network.md)
+Next: To build a full network like Convolutional Neural Network with the equations in Chapter 8.
+
+Part of the work is here https://github.com/alexcpn/cnn_in_python
