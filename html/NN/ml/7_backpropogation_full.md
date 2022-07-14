@@ -370,10 +370,12 @@ $$
 \end{aligned}
 $$
 
-**Disclaimer**
-As proud I am to understand till here, I had the misfortune of trying to implement a CNN with this and I know what is all **wrong** with the above.Basically if you use the above equation, you will find that the weights do not match for matrix multiplication.
+**Implementation Problem**
+I have been trying to implement a CNN with the equations above - https://github.com/alexcpn/cnn_in_python
 
-This is because, the above equation is correct only as far as the index notation is concerned. But practically we work with weight matrices, and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). All these are detailed out in [The Matrix Calculus You Need For Deep Learning Terence,Jermy], and I need to edit the answer and explanation once I have grasped if with an example. Only then will the weight dimension align correctly. Please see the correct equations here [Neural Networks and Deep Learning Michel Neilsen]
+ However for the inner layers I am finding that the wights are not matching
+This could be because, the above equation is correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). All these are detailed out in [The Matrix Calculus You Need For Deep Learning Terence,Jermy], and I need to edit the answer and explanation once I have grasped if with an example. Only then will the weight dimension align correctly.
+
 
 Example 
 $$
@@ -385,7 +387,7 @@ $$
 
 https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix
 
-From [ref 1] it is clear that when you have an elementwise operation on a vector; the Jacobian matrix of the function wrto its input vector is a diagonal matrix
+From [ref 1] it is clear that when you have an element wise operation on a vector; the Jacobian matrix of the function wrto its input vector is a diagonal matrix
 
 For an input vector $\textbf{x} = \{x_1, x_2, \dots, x_n\}$ on which an element wise function is applied; say the activation function sigmoid $\sigma$; and it give the output vector $\textbf{a} = \{a_1, a_2, \dots, a_n\}$ 
 $a_i= f(x_i); \text{ what is } \frac { \partial a}{ \partial x} $
@@ -436,7 +438,7 @@ Sorry for the rather long explanation. This was mostly to make clear the context
 
 While implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
 
-Taking a simple $2*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $8*2$ matrix and no longer a square matrix.
+Taking a simple $2\*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $8*2$ matrix and no longer a square matrix.
 
 Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian.
 
