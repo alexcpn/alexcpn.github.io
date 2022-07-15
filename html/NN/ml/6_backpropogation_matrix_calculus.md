@@ -22,7 +22,7 @@ Alex Punnen \
 
 ## Back Propagation Pass 3 (Matrix Calculus)
 
-Let's take the previous simple neural network and derive the Back Propagation formula with some Matrix Calculus now
+Let's take the previous two layered simple neural network,with a Mean Square Error Loss function, and derive the Back Propagation formula with Matrix Calculus now.
 
 Let's write the  equation of the following neural network
 
@@ -42,19 +42,12 @@ $$
   a^{l} = \sigma(w^l a^{l-1}+b^l).
 $$
 
-
 and
+
 $$
 a^{l} = \sigma(z^l) \quad where \quad
 z^l =w^l a^{l-1} +b^l
 $$
-
-
-## A Two Layered Neural Network
-
-Let's start with a concrete case of a Neural network with two layers and derive the equations of back propagation for that first. Each of these are explained in more detail in the previous sections.
-
-&nbsp;
 
 Our two layer neural network can be written as
 
@@ -78,7 +71,7 @@ We will use the above equation as the basis for the rest of the chapter.
 &nbsp;
 
 
-## Gradient Vector/Matrix/2D tensor of Loss function wrto Weight in last layer
+## Gradient Vector/2D-Tensor of Loss function in last layer
 
 $$
 C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
@@ -108,7 +101,7 @@ $$
 v= y-a^2
 $$
 
-## Partial Derivative of Loss function wrto Weight
+## Partial Derivative of Loss function with respect to Weight
 
 For the last layer, lets use Chain Rule to split like below
 
@@ -130,37 +123,40 @@ $$
 $$
 &nbsp;
 
-### Now we need to find $\frac{\partial a^2}{\partial w^2}$
+### Now we need to find $$\frac{\partial a^2}{\partial w^2}$$
 
 Let
 
 $$
-a^2= \sigma(sum(w^2 \otimes a^1 )) = \sigma(z^2) 
-$$
-$$
-z^2 = sum(w^2 \otimes a^1 )
-$$
+\begin{aligned}
 
-$$
-z^2 = sum(k^2) \; \text {where} \; k^2=w^2 \otimes a^1 
+a^2= \sigma(sum(w^2 \otimes a^1 )) = \sigma(z^2) 
+\\\\
+z^2 = sum(w^2 \otimes a^1)
+\\\\
+z^2 = sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1 
+
+\end{aligned}
 $$
 
 We now need to derive an intermediate term which we will use later
 
 $$
+\begin{aligned}
 \frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
-$$
-$$
+
+\\\\
 =\frac {\partial sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
-$$
-$$
+\\ \\
 \frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
+\end{aligned}
+
 $$
-How the above is, you need to check this  in https://explained.ai/matrix-calculus/#sec6.2
 
-Basically though these are written like scalar here; actually all these are partial differention of vector by vector, or vector by scalar; and a set of vectors can be represented as the matrix here.
+Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2
 
-Note that the vector dot product $w.a$ when applied on matrices becomes the elementwise multiplication $w^2 \otimes a^1$ (also called Hadamard product)
+
+The Vector dot product $w.a$ when applied on matrices becomes the elementwise multiplication $w^2 \otimes a^1$ (also called Hadamard product)
 
 Going back to  $Eq \;(B.2)$
 
@@ -187,22 +183,19 @@ Now lets got back to partial derivative of Loss function wrto to weight
 $$
 \frac {\partial C}{\partial w^2} = \frac {1}{2}*2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
 $$
+
 Using $Eq \;(B.4)$ to substitute in the last term
 
 $$
+\begin{aligned}
 = v(0- \sigma^{'}(z^2) * (a^{1})^T) 
-$$
-
-$$
+\\\\
 = v*-1*\sigma^{'}(z^2) * (a^{1})^T
-$$
-
-$$
+\\\\
 = (y-a^2)*-1*\sigma^{'}(z^2) * (a^{1})^T
-$$
-
-$$
+\\\\
 \frac {\partial C}{\partial w^2}= (a^2-y)*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
+\end{aligned}
 $$
 &nbsp;
 
@@ -225,27 +218,23 @@ $$
 We can calculate the first part of this from $Eq\; (B.4)$ that we derived above
 
 $$
+\begin{aligned}
 \frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
-$$
-
-$$
+\\\\
 \frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
+\end{aligned}
 $$
 
 
 For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
 
 $$
+\begin{aligned}
 \frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
-$$
-
-$$
+\\\\
 {
 \frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
-$$
-
-$$\begin{aligned}
-
+\\\\
 \frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
 
 \text {Now to calculate} \quad
@@ -280,7 +269,7 @@ $$ \mathbf{
 }
 $$
 
-And that's that. You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the backprogation algorithm is the most elegant dynamic programming till date.
+You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the back=propagation algorithm is the most elegant dynamic programming till date.
 
 $$  \mathbf{
 \frac {\partial C}{\partial w^1} = \delta^{2}*\sigma'(z^2)*(a^{0})^T*w^2.\sigma'(z^1) \quad \rightarrow \mathbb Eq \; (5)
