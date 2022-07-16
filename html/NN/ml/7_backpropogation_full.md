@@ -315,7 +315,7 @@ $$
 }}}
 $$
 
-The trick here (yes it is a trick), is to derivative the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intuitive to compute.
+The trick here is to derivative the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intuitive to compute.
 
 
 $$
@@ -326,7 +326,8 @@ $$
 \end{aligned}
 $$
 
-The trick is to represent the first  part  in terms of what we computed earlier; in terms of $\color{blue}{\frac {\partial L}{\partial z^{l}}}$
+We  represent the first  part  in terms of what we computed earlier ie $\color{blue}{\frac {\partial L}{\partial z^{l}}}$
+
 
 $$
 \begin{aligned}
@@ -348,7 +349,7 @@ $$
 
 \\ \\ \text{ Putting together we get the first part of Eq A2 }
 \\\\
-\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =\color{blue}{(p_i- y_i)}.w^l.\sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
+\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =\color{blue}{(p_i- y_i).w^l.\sigma }\color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
 \\ \\
  z^{l-1} = w^{l-1} a^{l-2}+b^{l-1}
     \text{ which makes }
@@ -356,7 +357,7 @@ $$
 \\ \\
 \frac {\partial L}{\partial w^{l-1}} 
 =  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} = \color{blue}{(p_i- y_i)}.w^l.\sigma \color{red}{'} (z^{l-1} ).\color{green}{a^{l-2}}
+     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} = \color{blue}{(p_i- y_i).w^l.\sigma '(z^{l-1} )}.\color{green}{a^{l-2}}
 \end{aligned}
 $$
 
@@ -366,7 +367,7 @@ $$
 \begin{aligned}
 \frac {\partial L}{\partial w^{l-2}} 
 =  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
-     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}} \color{red}{ \ne (p_i- y_i).w^{l-1}.\sigma '(z^{l-2} ).a^{l-3}}
+     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}} \color{blue}{ \ne (p_i- y_i).w^{l-1}.\sigma '(z^{l-2} )}.\color{green}{a^{l-3}}
 \end{aligned}
 $$
 
