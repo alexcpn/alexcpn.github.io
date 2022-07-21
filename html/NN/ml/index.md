@@ -3,7 +3,6 @@
 
 Alex Punnen \
 &copy; All Rights Reserved \
-2019-2021 
 
 ---
 
