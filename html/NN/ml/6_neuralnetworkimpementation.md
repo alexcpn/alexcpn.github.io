@@ -6,18 +6,9 @@ Alex Punnen \
 
 ---
 
-## Contents
+[Contents](index.md)
 
-- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors & HyperPlane split](2_perceptron_training.md)
-- Chapter 3: [Gradient Descent and Optimization](3_gradient_descent.md)
-- Chapter 4: [Back Propagation - Pass 1 (Chain Rule)](4_backpropogation_chainrule.md)
-- Chapter 5: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
-- Chapter 6: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
-- Chapter 7: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)
-- **Chapter 8: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)**
-
-# Chapter 8
+# Chapter 6
 
 ## A Simple NeuralNet with  Back Propagation
 
@@ -272,6 +263,4 @@ We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
 
 The code in [Colab](https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing)
 
-Next: To build a full network like Convolutional Neural Network with the equations in Chapter 8.
-
-Part of the work is here https://github.com/alexcpn/cnn_in_python
+Next: [Back Propagation Pass 3 (Matrix Calculus)](7_backpropogation_matrix_calculus.md)

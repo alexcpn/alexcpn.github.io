@@ -6,19 +6,9 @@ Alex Punnen \
 
 ---
 
-## Contents
+[Contents](index.md)
 
-- Chapter 1: [The simplest Neural Network - Perceptron using Vectors and Dot Products](1_vectors_dot_product_and_perceptron.md)
-- Chapter 2: [Perceptron Training via Feature Vectors & HyperPlane split](2_perceptron_training.md)
-- Chapter 3: [Gradient Descent and Optimization](3_gradient_descent.md)
-- Chapter 4: [Back Propagation - Pass 1 (Chain Rule)](4_backpropogation_chainrule.md)
-- Chapter 5: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
-- Chapter 6: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
-- **Chapter 7: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)**
-- Chapter 8: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
-
-
-# Chapter 7
+# Chapter 8
 
 ## Back Propagation in Full - With Softmax & CrossEntropy Loss
 
@@ -315,7 +305,7 @@ $$
 }}}
 $$
 
-The trick here is to derivative the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intuitive to compute.
+The trick here is to find the derivative of the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intuitive to compute.
 
 
 $$
@@ -361,7 +351,7 @@ $$
 \end{aligned}
 $$
 
-**Note** The value of EqA2.1 to be used in the next layer derivations; and repeated to the first layer; ie do not repeat $(p_i -y_i)$. That is all the other layers should use the calculated value of $\color{blue}{\frac {\partial L}{\partial z^{l-i}}}$ where  $i= current layer-1$
+**Note** All the other layers should use the previously calculated value of  $\color{blue}{\frac {\partial L}{\partial z^{l-i}}}$ where  $i= current layer-1$
 
 $$
 \begin{aligned}
@@ -390,12 +380,26 @@ $$
 \end{aligned}
 $$
 
-**Implementation**
+## Implementation in Python
 
-Here is an implementation of a Convolutional Neural Network to test out the forward and back-propagation algorithms - https://github.com/alexcpn/cnn_in_python
-This is illustrative and is used to show the back propagation flow for the final layers and a few inner layers.
+Here is an implementation of a relatively simple Convolutional Neural Network to test out the forward and back-propagation algorithms given above [https://github.com/alexcpn/cnn_in_python](https://github.com/alexcpn/cnn_in_python). The code is well commented and you will be able to follow the forward and backward propagation with the equations above. Note that the full learning cycle is not completed; but rather a few Convolutional layers, forward propagation and backward propogation for last few layers.
 
-Note that above equations are correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). This is illustrated and commented in the code
+## Gradient descent
+
+Using Gradient descent we can keep adjusting the inner layers like
+
+$$
+     w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
+$$
+
+
+## Some Implementation details
+
+Feel free to skip this section. These are some doubts that can come during implementation,and can be refereed to if needed.
+
+**From Index Notation to Matrix Notation**
+
+The above equations are correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in *Matrix Notation*. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). This is illustrated and commented in the code and deviates from the equations as is,
 
 Example 
 $$
@@ -403,19 +407,15 @@ $$
 $$
 
 
-
-## The Jacobian Matrix
-
-https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix
-
-From [ref 1] it is clear that when you have an element wise operation on a vector; the Jacobian matrix of the function wrto its input vector is a diagonal matrix
+**The Jacobian Matrix**
 
 For an input vector $\textbf{x} = \{x_1, x_2, \dots, x_n\}$ on which an element wise function is applied; say the activation function sigmoid $\sigma$; and it give the output vector $\textbf{a} = \{a_1, a_2, \dots, a_n\}$ 
+
 $a_i= f(x_i); \text{ what is } \frac { \partial a}{ \partial x} $
 
 In scalar case this becomes   $\frac { \partial f(x)}{ \partial x} = f'(x)$
 
-In Vector case, that is when we take there derivative of a vector with respect to another vector we get the following (square) Jacobian matrix
+In Vector case, that is when we take the derivative of a vector with respect to another vector to get the following (square) Jacobian matrix
 
 Example from [ref 2]
 
@@ -432,7 +432,7 @@ $$
 \end{aligned}
 $$
 
-Above the diagonal of J are the only terms that can be nonzero:
+The diagonal of J are the only terms that can be nonzero:
 
 $$
 \begin{aligned}
@@ -453,30 +453,29 @@ f'(x_i)  & \text{if $i=j$} \\
 0 & \text{otherwise}
 \end{cases}
 $$
-And the authors go on to explain that $\frac{\partial a}{\partial x}$ can be written as $\text{diag}(f'(x))$ and the hardmarad or elementwise multiplication ($\odot$ or $\circ$)  can be applied instead of matrix multiplication to this Jacobian matrix like $\odot f'(x)$ when applying the Chain Rule and converting from index notation to matrix notation.
+And the authors go on to explain that $\frac{\partial a}{\partial x}$ can be written as $\text{diag}(f'(x))$ and the Hadamard or element-wise multiplication ($\odot$ or $\circ$)  can be applied instead of matrix multiplication to this Jacobian matrix like $\odot f'(x)$ when applying the Chain Rule and converting from index notation to matrix notation.
 
-Sorry for the rather long explanation. This was mostly to make clear the context. On to the real question.
-
-While implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
+However,while implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
 
 Taking a simple $2\*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $8*2$ matrix and no longer a square matrix.
 
-Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian.
+Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian ?
 
 $$
 \frac{\partial a_{i,j}}{\partial x_{i,j}} = J_{k,l} 
 $$
 
- Even if so, there is no certainty that this will be a square matrix and we can generalize to the diagonal ? Am I correct in these above statements?
+ There is no certainty that this will be a square matrix and we can generalize to the diagonal ? 
 
- However, all articles treat this matrix case as a generalization of the Vector case and write $\frac{\partial a}{\partial x}$ as the $\text{diag}(f'(x))$, and then use the element-wise/Hadamard product for the Chain Rule. This way also in implementation. But there is no meaning of diagonal in a non-square matrix; What am I missing ?
+ However, all articles treat this matrix case as a generalization of the Vector case and write $\frac{\partial a}{\partial x}$ as the $\text{diag}(f'(x))$, and then use the element-wise/Hadamard product for the Chain Rule. This way also in implementation. But there is no meaning of diagonal in a non-square matrix. 
 
  [ref 1]:https://web.stanford.edu/class/cs224n/readings/gradient-notes.pdf
  [ref 2]:https://aew61.github.io/blog/artificial_neural_networks/1_background/1.b_activation_functions_and_derivatives.html
-http://cs231n.stanford.edu/vecDerivs.pdf
+
 
 ----
-## Solution
+
+What is basically done is to flatten the Matrix out
 
 $$
 \begin{aligned}
@@ -536,42 +535,31 @@ $$
 \end{bmatrix}
 \end{aligned}
 $$
+
 ---
 
 Hence  $\frac{\partial a_{ {i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
 
----
 
-Note that Multiplication of a vector by a diagonal matrix is elementwise multiplication or the hadamard product; And matrices in DL can be seen as stacked vectors
+Note that Multiplication of a vector by a diagonal matrix is element-wise multiplication or the Hadamard product; *And matrices in Deep Learning implementation can be seen as stacked vectors for simplification.*
 
-## Gradient descent
+More details about this here [Jacobian Matrix for Element wise Opeation on a Matrix (not Vector)](https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix)
 
-Using Gradient descent we can keep adjusting the inner layers like
 
-$$
-     w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
-$$
 
-Next: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
 
 ## References
  
  Easier to follow (without explicit Matrix Calculus) though not really correct
  - [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]  
-
 Easy to follow but lacking in some aspects
 - [Notes on Backpropagation-Peter Sadowski]
-
 Slightly hard to follow using the Jacobian 
  - [The Softmax function and its derivative-Eli Bendersky]
-
-
 More difficult to follow with proper index notations (I could not) and probably correct
  - [Backpropagation In Convolutional Neural Networks Jefkine]
 
-Next: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.md)
 
-  
   [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
   
   [The Matrix Calculus You Need For Deep Learning Terence,Jermy]:https://arxiv.org/pdf/1802.01528.pdf
@@ -598,4 +586,8 @@ Next: [A Simple NeuralNet with  Back Propagation](8_neuralnetworkimpementation.m
   [Backpropagation In Convolutional Neural Networks Jefkine]: https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/]
 
   [Finding the Cost Function of Neural Networks Chi-Feng Wang]: https://towardsdatascience.com/step-by-step-the-math-behind-neural-networks-490dc1f3cfd9
+
+  [Vector Derivatives]: http://cs231n.stanford.edu/vecDerivs.pdf
  
+ ---
+ End
