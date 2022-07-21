@@ -2,7 +2,7 @@
 # The Maths behind Neural Networks
 
 Alex Punnen \
-&copy; All Rights Reserved \
+&copy; All Rights Reserved 
 
 ---
 
