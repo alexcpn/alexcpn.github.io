@@ -361,22 +361,41 @@ $$
 \end{aligned}
 $$
 
-**Note** The value of EqA2.1 to be used in the next layer derivations; and repeated to the first layer; ie do not repeat $(p_i -y_i)$
+**Note** The value of EqA2.1 to be used in the next layer derivations; and repeated to the first layer; ie do not repeat $(p_i -y_i)$. That is all the other layers should use the calculated value of $\color{blue}{\frac {\partial L}{\partial z^{l-i}}}$ where  $i= current layer-1$
 
 $$
 \begin{aligned}
 \frac {\partial L}{\partial w^{l-2}} 
 =  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
-     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}} \color{blue}{ \ne (p_i- y_i).w^{l-1}.\sigma '(z^{l-2} )}.\color{green}{a^{l-3}}
+     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}}
+      \  \color{red}{ \ne (p_i- y_i)}.\color{blue}{w^{l-1}.\sigma '(z^{l-2} )}.\color{green}{a^{l-3}}
 \end{aligned}
 $$
 
-**Implementation Problem**
-I have been trying to implement a CNN with the equations above - https://github.com/alexcpn/cnn_in_python
+Repeating the steps done in EqA.1 and EqA.2 once more for better clarity
 
- However for the inner layers I am finding that the wights are not matching
-This could be because, the above equation is correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). All these are detailed out in [The Matrix Calculus You Need For Deep Learning Terence,Jermy], and I need to edit the answer and explanation once I have grasped if with an example. Only then will the weight dimension align correctly.
+$$
+\begin{aligned}
+\frac {\partial L}{\partial w^{l-2}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
+     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}} 
+     \\ \\ = \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
+    \frac {\partial z^{l-1}}{\partial a^{l-2}}.
+    \frac {\partial a^{l-2}}{\partial z^{l-2}}
+     .\color{green}{a^{l-3}}
+     \\ \\
+      = \color{blue}{ {\frac {\partial L}{\partial z^{l-1}}}.w^{l-1}.\sigma '(z^{l-2})}
+     .\color{green}{a^{l-3}}
+    \\   ( {\frac {\partial L}{\partial z^{l-1}}} \text{ calculated from previous layer})
+\end{aligned}
+$$
 
+**Implementation**
+
+Here is an implementation of a Convolutional Neural Network to test out the forward and back-propagation algorithms - https://github.com/alexcpn/cnn_in_python
+This is illustrative and is used to show the back propagation flow for the final layers and a few inner layers.
+
+Note that above equations are correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in Matrix Notation. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). This is illustrated and commented in the code
 
 Example 
 $$
@@ -384,7 +403,8 @@ $$
 $$
 
 
-# Jacobian question
+
+## The Jacobian Matrix
 
 https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix
 
@@ -516,8 +536,10 @@ $$
 \end{bmatrix}
 \end{aligned}
 $$
---
+---
+
 Hence  $\frac{\partial a_{ {i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
+
 ---
 
 Note that Multiplication of a vector by a diagonal matrix is elementwise multiplication or the hadamard product; And matrices in DL can be seen as stacked vectors
