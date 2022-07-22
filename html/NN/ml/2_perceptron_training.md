@@ -69,8 +69,6 @@ The Perceptron network needs the input feature set to be linearly seperable. How
 
 The fact that Perceptron could not be trained for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first *AI winter*, as much of the hype generated intially by Frank Rosenblatt's discovery became a disillusionment.
 
-Next up we wil see a Modern Neural Network
-
  ![linearseperable]
 
 Next: [Gradient Descent and Optimization](3_gradient_descent.md)
@@ -82,7 +80,7 @@ Next: [Gradient Descent and Optimization](3_gradient_descent.md)
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
   [6]: https://i.imgur.com/OIN3maH.png
   [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
-  [linearseperable]: https://i.imgur.com/jmWvoWh.png
+  [linearseperable]: https://i.imgur.com/anmAM48.png
 
 
 
