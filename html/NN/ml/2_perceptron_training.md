@@ -46,14 +46,14 @@ This is the classical method of perceptron learning
 
 $$
 w_j = w_j + \delta w_j \\
-\begin{align}
+\begin{aligned}
 \delta w_j = 
 \begin{cases}
     0  \; \text{ if instance is classified correctly}  \\
  +x_j  \; \text{ if Positive instance is classified as negative} \\
  -x_j  \; \text{ if Negative instance is classified as positive} \\
 \end{cases}
-\end{align}
+\end{aligned}
 $$
 
 This is also called the delta rule. Note that there is some articles that refer to this as gradient descent simplified. But gradient descent depends on the activation function being differentiable. The step function which is the activation function of the perceptron in non continuous and hence non differentiable.

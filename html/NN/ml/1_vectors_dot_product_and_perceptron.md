@@ -4,9 +4,11 @@ Alex Punnen \
 &copy; All Rights Reserved 
 
 ---
+
 [Contents](index.md)
 
 # Chapter 1
+
 ## The simplest Neural Network - Perceptron using Vectors and Dot Products
 
 The aim of this set of articles is to unravel the mathematical concepts used in Deep Learning in as simple a way.
@@ -22,15 +24,16 @@ Have you held an integrated circuit or chip in hand or seen. It looks overwhelmi
 The earliest neural network - the `Rosenblatt’s Perceptron` was the first to introduce the concept of using vectors and the property of `vector dot product`, to split hyperplanes of input feature vectors. These are the fundamentals that are still in used today.
 
 First a short refresher.
+
 ## Vectors
 
 A vector is an object that has both a magnitude and a direction. Example Force and Velocity. Both have magnitude as well as direction.
 
 However we need to specify also a context where this vector lives -[Vector Space][1]. For example when we are thinking about something like [Force vector][2], the context is usually 2D or 3D Euclidean world.
 
-![vector2D][3]
+![2D Vector][3]
 
-![vector3D][4]
+![3D Vector][4]
 
 (Source: 3Blue1Brown)
 
@@ -60,7 +63,6 @@ In classical machine learning, example for linear regression -(line or curve fit
 The other option is to find the optimal solution set by gradient descent, as it is computationally efficient.
 
 In Deep learning, the concept is not of linear regression or set of linear equations; but matrices still are heavily used to model the neural network. Here gradient descent is heavily used to find optimal solution.
-
 
 ## Tensors
 
@@ -114,7 +116,7 @@ Or in a better way, which shows the vectors properly
 
  Not all problems have their feature set which is linearly seperable. So this is a constraint of this system.
  
- ##  The Perceptron
+## The Perceptron
 
 The initial neural network - the **Frank Rosenblatt's perceptron** was basically splitting a linearly seperable feature set into distinct sets. Here is how the Rosenblatt's perceptron is modelled
 
@@ -164,7 +166,7 @@ $$
 
 All three equations (Eq 1,2 &3) are the same, just that in different reference it will be written in one of these forms.
 
-### The equation $w \cdot x \gt b$  defines all the points on one side of the hyperplane, and $w \cdot x \ge b$  all the points on the other side of  the hyperplane and on the hyperplane itself.
+### The equation $w. x > b$  defines all the points on one side of the hyperplane, and $w \cdot x \ge b$  all the points on the other side of  the hyperplane and on the hyperplane itself.
 
 ### This happens to be the  very definition of “linear separability”
 

@@ -114,20 +114,21 @@ Now we need to use the back-propagation algorithm to calculate how each weight h
 
 We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calculate the error gradient $\frac{\partial C}{\partial w}$ and repeat
 
-$$\begin{aligned}
-
+$$
+\begin{aligned}
 w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
-
 w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
-
-\end{aligned}$$
+\end{aligned}
+$$
 
 Let's update the weights as per the formula (3) and (5) from last chapter
 
 
-$$  \mathbf{
+$$
+\mathbf{
 \frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
-}$$
+}
+$$
 
 $$
 \delta^2 = (a^2-y)

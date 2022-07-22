@@ -91,7 +91,7 @@ The first term is
 
 $$
 \mathbb{
-\frac{\partial z^{2} }{\partial w^2} = \frac{\partial (a^1.w^2)}{\partial w^2} =a^1 \quad \rightarrow  (\mathbf  {1.1})
+\frac{\partial z^{2} }{\partial w^2} = \frac{\partial (a^1.w^2)}{\partial w^2} =a^1 \quad \rightarrow  (1.1)
 }
 $$
 
@@ -99,7 +99,7 @@ The second term is
 
 $$
 \mathbb{
-\frac{\partial a^{2} }{\partial z^2} = \frac{\partial \sigma(z^2) }{\partial z^2} =\sigma' (z^{2}) \quad \rightarrow  (\mathbf  {1.2})
+\frac{\partial a^{2} }{\partial z^2} = \frac{\partial \sigma(z^2) }{\partial z^2} =\sigma' (z^{2}) \quad \rightarrow  (1.2)
 }
 $$
 
@@ -125,14 +125,14 @@ $$
 Now let's do the same for the inner layer.
 
 $$
-
 \frac {\partial C}{\partial w^1}= \frac {\partial z^1}{\partial w^1}. \frac {\partial a^1}{\partial z^1}. \frac {\partial C}{\partial a^1}
 $$
 
 The first term is  similar to (1.1)
+
 $$
 \mathbb{
-\frac{\partial z^{1} }{\partial w^1} = \frac{\partial a^0.w^1}{\partial w^1} =a^0 \quad \rightarrow  (\mathbf  {2.1})
+\frac{\partial z^{1} }{\partial w^1} = \frac{\partial a^0.w^1}{\partial w^1} =a^0 \quad \rightarrow  (2.1)
 }
 $$
 
@@ -140,7 +140,7 @@ The second term is also similar to (1.2)
 
 $$
 \mathbb{
-\frac{\partial a^{1} }{\partial z^1} = \frac{\partial \sigma(z^1) }{\partial z^1} =\sigma' (z^{1}) \quad \rightarrow  (\mathbf  {2.2})
+\frac{\partial a^{1} }{\partial z^1} = \frac{\partial \sigma(z^1) }{\partial z^1} =\sigma' (z^{1}) \quad \rightarrow  (2.2)
 }
 $$
 
@@ -150,31 +150,22 @@ $$
 \frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
 $$
 
-$$\begin{aligned}
+Note that in the previous section we had calculated
 
-Note \space that \space in \space the\space  previous \space section \space \space  we \space had \space calculated \quad
-
-\frac {\partial C}{\partial(a^2)}  =(a^2-y)  \rightarrow (2.3.1)\\ \\
-
-Now \space to \space calculate \quad
-
+$$
+\begin{aligned}
+\frac {\partial C}{\partial(a^2)}  =(a^2-y)  \rightarrow (2.3.1)
+\\ \\
+\text{Now to calculate \quad}
  \frac{\partial(a^2)}{\partial(a^1)} \space  \\ \\
-
-We \space can \space re-write  \space this \space as \\ \\
-
  \frac{\partial(a^2)}{\partial(a^1)} =  \frac{\partial(a^2)}{\partial(z^2)}. \frac{\partial(z2)}{\partial(a^1)}   \\ \\
-
- which \space is \space \\ \\ 
-
-  \frac{\partial \sigma (z^2)}{\partial(z^2)} .\frac{\partial(w^2.a^1)}{\partial(a^1)} \\ \\
-
- which \space is \space \\ \\ 
-
- \sigma'(z^2).w^2 \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \sigma'(z^2).w^2  \quad \rightarrow (2.3.2)\\ \\
-
-\end{aligned}$$
+=  \frac{\partial \sigma (z^2)}{\partial(z^2)} .\frac{\partial(w^2.a^1)}{\partial(a^1)} 
+\\ \\
+ = \sigma'(z^2).w^2 \\ \\
+\frac{\partial(a^2)}{\partial(a^1)} = \sigma'(z^2).w^2  \quad \rightarrow (2.3.2)
+\\ \\
+\end{aligned}
+$$
 
 Putting  (2.1),(2.2),(2.3.1)and (2.3.2)  together, we get
 

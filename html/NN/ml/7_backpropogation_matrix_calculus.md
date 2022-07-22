@@ -119,13 +119,11 @@ Let
 
 $$
 \begin{aligned}
-
 a^2= \sigma(sum(w^2 \otimes a^1 )) = \sigma(z^2) 
 \\\\
 z^2 = sum(w^2 \otimes a^1)
 \\\\
 z^2 = sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1 
-
 \end{aligned}
 $$
 
@@ -133,14 +131,12 @@ We now need to derive an intermediate term which we will use later
 
 $$
 \begin{aligned}
-\frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
-
-\\\\
-=\frac {\partial sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
+\frac { \partial z^2}{ \partial w^2} =\frac { \partial z^2}{ \partial k^2}*\frac{ \partial k^2}{\partial w^2}
 \\ \\
-\frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
+=\frac{ \partial sum(k^2)}{ \partial k^2}* \frac{ \partial (w^2 \otimes a^1 )} {\partial w^2}
+\\ \\
+\frac{ \partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
 \end{aligned}
-
 $$
 
 Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2
@@ -209,9 +205,9 @@ We can calculate the first part of this from $Eq\; (B.4)$ that we derived above
 
 $$
 \begin{aligned}
-\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
+\frac { \partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
 \\\\
-\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
+\frac { \partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
 \end{aligned}
 $$
 
@@ -220,21 +216,16 @@ For the second part, we use Chain Rule to split like below, the first part of wh
 
 $$
 \begin{aligned}
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
+\frac{ \partial C}{\partial(a^1)} =  \frac{ \partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
 \\\\
 {
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
+\frac{ \partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
 \\\\
-\frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
-
+\frac { \partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
 \text {Now to calculate} \quad
-
- \frac{\partial(a^2)}{\partial(a^1)} \quad where \quad
-
+ \frac{ \partial(a^2)}{\partial(a^1)} \quad where \quad
 a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*
-
+\frac{ \partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*
 \end{aligned}
 $$
 
