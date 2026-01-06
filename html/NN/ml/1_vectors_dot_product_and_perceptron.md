@@ -31,9 +31,9 @@ A vector is an object that has both a magnitude and a direction. Example Force a
 
 However we need to specify also a context where this vector lives -[Vector Space][1]. For example when we are thinking about something like [Force vector][2], the context is usually 2D or 3D Euclidean world.
 
-![vector2D][3]
+![2Dvector](images/2dvector.jpeg)
 
-![vector3D][4]
+![3Dvector](images/3dvector.jpeg)
 
 (Source: 3Blue1Brown)
 
@@ -75,7 +75,7 @@ $$
  \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
 $$
 
- ![dotproduct][6]
+ ![dotproduct](images/dotproduct.png)
 
 Note- These definitions are equivalent when using Cartesian coordinates (Ref [8], [9])
 
@@ -172,16 +172,12 @@ The fact that Perceptron could not be used  for XOR or XNOR; which was demonstra
 
  This is the magic of Representation
 
-Next [Perceptron](2_perceptron.md)
+Next [Perceptron Training](2_perceptron_training.md)
 
 
   [1]: https://en.wikipedia.org/wiki/Vector_space
   [2]: http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf
-  [3]: https://i.stack.imgur.com/Q1rBUm.png#center
-  [4]: https://i.stack.imgur.com/t0plRm.png#center
   [Euclidean_vector]: https://en.wikipedia.org/wiki/Euclidean_vector
-  [6]: https://i.stack.imgur.com/kO3ym.png#center
-  [7]: https://i.stack.imgur.com/Nw2Ls.png#center
   [8]: http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx
   [9]: https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff
   [10]: https://alan.do/minskys-and-or-theorem-a-single-perceptron-s-limitations-490c63a02e9f

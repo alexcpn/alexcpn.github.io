@@ -10,6 +10,8 @@ Alex Punnen \
 
 # Chapter 2
 
+![perceptron](images/perceptron.png)
+
 ## Perceptron Training via Feature Vectors & HyperPlane split
 
 Let's follow from the previous chapter of the Perceptron neural network.

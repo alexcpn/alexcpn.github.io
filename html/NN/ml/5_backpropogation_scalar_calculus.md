@@ -9,7 +9,7 @@ Alex Punnen \
 
 # Chapter 5
 
-## Back propagation - Pass 2 (Scalar Calculus)
+## Back propagation - Implementing a two layer neural network
 
 
 Let's consider the following two layer neural network

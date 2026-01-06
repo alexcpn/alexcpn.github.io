@@ -9,76 +9,17 @@ Alex Punnen \
 
 # Chapter 4
 
-## Back Propagation - Pass 1 (Chain Rule)
-
-We have seen how gradient descent was used to optimize the cost function.
-
-We use the method of back-propagation to propagate recursively the optimized weights from gradient descent from output layers to the input layers.
-
-## Structure of a Neural Network
+## Back Propagation 
 
 Neural network is basically a set of inputs connected through 'weights' to a set of activation functions whose output will be the input for the next layers and so on.
 
 ![neuralnetwork]
 
-For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized, and the inputs passed into the activation function and gives an output. This output or computed values can be compared to the expected value and the difference gives the error of the network. We can create a 'Cost Function' like what we saw in the last chapter say the Mean Squared Error. We can use the same Gradient Descent now to adjust the weights so that the error is minimized.
+For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized, and the inputs passed into the activation function and gives an output.
 
- We do this in the last layer of the multi-layer neural network.
-
- Now how do we adjust the weights of the inner layer ? This is where **Back-propagation** comes in. In a recursive way weights are adjusted as per their contribution to the output. That is weights or connections which have influenced the output more are adjusted more, than those which have influenced the output less.
+ This output or computed values can be compared to the expected value and the difference gives the error of the network. We can create a 'Cost Function' like what we saw in the last chapter say the Mean Squared Error
 
 ## How Backpropagation works
-
- A real neural network has many layers and many interconnections. But let's first think of a simple two layered neural network with just a linear connection between two layers, l and (l-1) to simplify the notation and to understand the maths.
-
-$$
- x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  output
- $$
-
-We take  $a^{l}$  as the input at layer *l*. Input  of a neuron in layer *l*  is the output of activation from the previous layer $(l-1)$.
-
-Output of Activation is  the product of the weight *w* and input at layer $(l-1)$  plus the *basis*, passed to the *activation function*. We will be using the sigmoid ($\sigma$ ) function as the activation function.
-
-Writing this below gives.
-
-$$
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
-$$
-
-(Same notation as in http://neuralnetworksanddeeplearning.com/chap2.html)
-
-Let the expected output be $y$ for a training example $x$. Notice that we train with a lot of examples. But we are talking here now about only one example in the training set for simplicity.
-
-The calculated output for a network with $l$ layer is $a^l$.
-
-Let's calculate then the loss function. Difference of expected to the calculated.
-
-Let's use the quadratic cost function here.
-
-$$
- C = \frac{1}{2} \|y-a^L\|^2
-$$
-
----
-If there are  $j$ output layers, we need to take the sum of all the activations of the $j$ layers as below. The above is more simplified version.
-
-$$
-C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
-$$
-
----
-
-Now this Cost needs to be reduced. We can use the **gradient descent** to find the path to the optimal weight that reduces the cost function for a set of training examples.
-
-As we have seen earlier in gradient descent chapter, we get the path to the optimal weight by following the negative of the gradient of the Cost function with respect to the weight. But in multi-layered neural network  the question gets tricky on how to update the weights in the different layers. This is where Backpropagation algorithm comes in.
-
-## Back-Propagation
-
- Speaking generally, it is the mechanism to adjust the weights of all the layers according to how strong was *each*  of their influence on the final Cost.
-
-More specifically - It is an algorithm to adjust each weight of every layer in a neural network, by using gradient descent, by calculating the gradient of the Cost function in relation to each weight.
-
-## Back-Propagation in Detail
 
 Consider a neural network with multiple layers. The weight of layer $l$ is $w^l$.  And for the previous layer it is $w^{(l-1)}$.
 
@@ -86,12 +27,12 @@ The best way to understand backpropagation is visually and by the way it is done
 
  The below  GIF is a representation of a single path in the last layer($l$ of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
 
-The central idea is how a small change in weight affects the final  Cost in this chain depiction.
+The central idea is how a small change in weight in the previous layer affects the final output of the network.
 
 ![backpropogationgif]
 Source : Author
 
-## Chain Rule of Calculus and Back Propogation
+## Writing this out as Chain Rule
 
 Here is a more detailed depiction of how the small change in weight adds through the chain to affect the final cost, and **how much** the small change of weight in an inner layer affect the final cost.
 
@@ -104,9 +45,7 @@ $$
 ![backpropogationgif2]
 Source : Author
 
-Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost.
-
-Neurons that fire together, wire together. This is what we are doing with gradient descent and back propogation. Strengthening the stronger links and weakening the weaker links, vaguely similar to how biological neurons wire together.
+Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost. We have already seen this in the previous chapter.
 
 The weights in each layer are adjusted in proportion to how each layers weights affected the Cost function.
 
@@ -132,12 +71,177 @@ $$
   W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
 $$
 
-Next would be to add more layers and more connections and change the notation to represent the place of each weight in each layer so $w^l$ becomes $w^l_{j,k}$
+## Nerual Net as a Composition of Vector Functions
 
-![weightnotation]
-Source : Michael Nielsen: NeuralNetwork and Deep Learning book
+Lets first look at a neural network as a  composition of vector functions.
 
-This is the first pass; there are more details now to fill in; which we will take in subsequent chapters.
+Imagine a simple neural network with 3 layers. It is essentially a composition of three functions:
+
+A neural network is a composition of vector-valued functions, followed by a scalar-valued cost function:
+
+$$
+C = \text{Cost}(a_3) \\
+a_3 = L_3(L_2(L_1(x)))
+$$
+
+Where $L_1$, $L_2$ and $L_3$ are the three layers of the network and  
+
+Each layer is defined as:
+
+$$
+z_i = W_i a_{i-1} + b_i, \quad a_i = \sigma(z_i)
+$$
+
+And gradient descent is defined as:
+
+$$w_{i_{new}} = w_{i_{old}} - \eta \cdot \partial C / \partial w_i$$
+
+Problem is to find the partial derivative of the loss function with respect to the weights at each layer.
+
+To calculate how a change in the first layer's weights ($w_1$) affects the final Cost ($C$), we have to trace the "path of influence" all the way through the network.
+
+A nudge in $w_1$ changes the output of Layer 1. The change in Layer 1 changes the input to Layer 2. The change in Layer 2 changes the input to Layer 3. The change in Layer 3 changes the final Cost.
+
+Mathematically, we multiply the derivatives (Linear Maps) of these links together:
+
+We need to update weights of three layers
+
+$$w_{1_{new}} = w_{1_{old}} - \eta \cdot \partial C / \partial w_1$$
+
+$$w_{2_{new}} = w_{2_{old}} - \eta \cdot \partial C / \partial w_2$$
+
+$$w_{3_{new}} = w_{3_{old}} - \eta \cdot \partial C / \partial w_3$$
+
+
+And for that we need to find $ \partial C / \partial w_1 $, $ \partial C / \partial w_2 $, $ \partial C / \partial w_3 $.
+
+Lets write down the chain rule for each layer:
+
+$$\frac{\partial C}{\partial w_1} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1} \cdot \frac{\partial L_1}{\partial w_1}$$
+
+$$\frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial w_2}$$
+
+$$\frac{\partial C}{\partial w_3} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial w_3}$$
+
+Why is this written this way? By the chain rule, the derivative of a composition of functions is the product of the derivatives of the functions. It is thus easy to calculate the gradient of the loss with respect to the weights of each layer.
+
+Lets calculate the gradient of the loss with respect to the weights of the first layer.
+
+Notice something interesting?
+
+*   To calculate $\frac{\partial C}{\partial w_3}$, we need $\frac{\partial C}{\partial L_3}$.
+
+*   To calculate $\frac{\partial C}{\partial w_2}$, we need $\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}$.
+
+*   To calculate $\frac{\partial C}{\partial w_1}$, we need $\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1}$.
+
+We are re-calculating the same terms over and over again!
+
+If we start from the **Output** (Layer 3) and move **Backwards**:
+1.  We calculate $\frac{\partial C}{\partial L_3}$ once. We use it to find the update for $w_3$.
+
+2.  We pass this value back to find $\frac{\partial C}{\partial L_2}$ (which is $\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}$). We use it to find the update for $w_2$.
+
+3.  We pass *that* value back to find $\frac{\partial C}{\partial L_1}$. We use it to find the update for $w_1$.
+
+This avoids redundant calculations and is why it's called **Backpropagation**.
+
+It is essentially **Dynamic Programming** applied to the Chain Rule.
+
+
+
+
+
+### The Backpropagation Algorithm Step-by-Step
+
+
+**Step 1: The Output Layer ($L_3$)**
+
+We want to find the gradient $\frac{\partial C}{\partial w_3}$.
+Using the Chain Rule:
+$$ \frac{\partial C}{\partial w_3} = \frac{\partial C}{\partial a_3} \cdot \frac{\partial a_3}{\partial z_3} \cdot \frac{\partial z_3}{\partial w_3} $$
+
+Let's break it down term by term:
+
+1.  **Derivative of Cost w.r.t Activation** ($\frac{\partial C}{\partial a_3}$):
+    For MSE $C = \frac{1}{2}(a_3 - y)^2$:
+    $$ \frac{\partial C}{\partial a_3} = (a_3 - y) $$
+
+2.  **Derivative of Activation w.r.t Input** ($\frac{\partial a_3}{\partial z_3}$):
+    Since $a_3 = \sigma(z_3)$:
+    $$ \frac{\partial a_3}{\partial z_3} = \sigma'(z_3) $$
+
+3.  **Derivative of Input w.r.t Weights** ($\frac{\partial z_3}{\partial w_3}$):
+    Since $z_3 = w_3 a_2 + b_3$:
+    $$ \frac{\partial z_3}{\partial w_3} = a_2 $$
+
+**Combining them:**
+We define the "error" term $\delta_3$ at the output layer as:
+$$ \delta_3 = \frac{\partial C}{\partial z_3} = (a_3 - y) \odot \sigma'(z_3) $$
+
+> **Note on $\odot$ (Hadamard Product)**: We use element-wise multiplication here because both $(a_3 - y)$ and $\sigma'(z_3)$ are vectors of the same size.
+>
+> The Jacobian of an element-wise activation $\sigma$ is a diagonal matrix:
+> $$ \frac{\partial a}{\partial z} = \text{diag}(\sigma'(z)) $$
+>
+> So multiplying by it is the same as a Hadamard product:
+> $$ \text{diag}(\sigma'(z)) \, v = v \odot \sigma'(z) $$
+
+So the gradient for the weights is:
+$$ \frac{\partial C}{\partial w_3} = \delta_3 \cdot a_2^T $$
+
+> **Note on Transpose ($a_2^T$)**: In backprop, we push gradients through a linear map $z = Wa + b$. The Jacobian w.r.t. $a$ is $W$, so the chain rule gives:
+>
+> $$ \frac{\partial C}{\partial a} = W^T \frac{\partial C}{\partial z} $$
+>
+> The transpose appears because we’re applying the transpose (adjoint) of the Jacobian to move gradients backward.
+
+**Result**: We have the update for $w_3$.
+
+$$w_{3_{new}} = w_{3_{old}} - \eta \cdot \partial C / \partial w_3$$
+
+
+**Step 2: Propagate Back to $L_2$**
+
+Now we need to find the gradient for the second layer weights: $\frac{\partial C}{\partial w_2}$.
+Using the Chain Rule, we can reuse the error from the layer above:
+$$ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} = \delta_2 \cdot a_1^T $$
+
+But what is $\delta_2$ (the error at layer 2)?
+$$ \delta_2 = \frac{\partial C}{\partial z_2} = \frac{\partial C}{\partial z_3} \cdot \frac{\partial z_3}{\partial z_2} $$
+
+We know $\frac{\partial C}{\partial z_3} = \delta_3$.
+And since $z_3 = w_3 \sigma(z_2) + b_3$:
+$$ \frac{\partial z_3}{\partial z_2} = w_3 \cdot \sigma'(z_2) $$
+
+So, we can calculate $\delta_2$ by "backpropagating" $\delta_3$:
+$$ \delta_2 = (w_3^T \cdot \delta_3) \odot \sigma'(z_2) $$
+
+**The Update Rule for Layer 2:**
+$$ \frac{\partial C}{\partial w_2} = \delta_2 \cdot a_1^T $$
+
+**Result**: We have the update for $w_2$.
+$$w_{2_{new}} = w_{2_{old}} - \eta \cdot \frac{\partial C}{\partial w_2}$$
+
+**Step 3: Propagate Back to $L_1$**
+
+We repeat the exact same process to find the error at the first layer $\delta_1$.
+$$ \delta_1 = (w_2^T \cdot \delta_2) \odot \sigma'(z_1) $$
+
+**The Update Rule for Layer 1:**
+$$ \frac{\partial C}{\partial w_1} = \delta_1 \cdot x^T $$
+(Recall that $a_0 = x$, the input).
+
+**Result**: We have the update for $w_1$.
+$$w_{1_{new}} = w_{1_{old}} - \eta \cdot \frac{\partial C}{\partial w_1}$$
+
+### Summary
+
+So, Backpropagation is the efficient execution of the Chain Rule by utilizing the linear maps of each layer in reverse order.
+*   It computes the local linear map (Jacobian) of a layer.
+*   It takes the incoming gradient vector from the future layer.
+*   It performs a Vector-Jacobian Product to pass the gradient to the past layer.
+
 
 Next: [Back propagation - Simplified Version (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
 

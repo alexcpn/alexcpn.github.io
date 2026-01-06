@@ -10,7 +10,9 @@ Alex Punnen \
 
 # Chapter 7
 
-## Back Propagation Pass 3 (Matrix Calculus)
+## Back Propagation -Matrix Calculus
+
+The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadmard product and matrix transposes with scalar derivation alignment.
 
 Let's take the previous two layered simple neural network,with a Mean Square Error Loss function, and derive the Back Propagation formula with Matrix Calculus now.
 
@@ -120,11 +122,11 @@ Let
 $$
 \begin{aligned}
 
-a^2= \sigma(sum(w^2 \otimes a^1 )) = \sigma(z^2) 
+a^2= \sigma(\sum(w^2 \otimes a^1 )) = \sigma(z^2) 
 \\\\
-z^2 = sum(w^2 \otimes a^1)
+z^2 =  \sum(w^2 \otimes a^1)
 \\\\
-z^2 = sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1 
+z^2 = \sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1 
 
 \end{aligned}
 $$
@@ -134,9 +136,9 @@ We now need to derive an intermediate term which we will use later
 $$
 \begin{aligned}
 \frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
-
+    
 \\\\
-=\frac {\partial sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
+=\frac {\partial \sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
 \\ \\
 \frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
 \end{aligned}
@@ -146,7 +148,7 @@ $$
 Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2
 
 
-The Vector dot product $w.a$ when applied on matrices becomes the elementwise multiplication $w^2 \otimes a^1$ (also called Hadamard product)
+The Vector dot product $w.a$ when applied on matrices becomes the sum of elementwise multiplication (also called Hadamard product) $\sum w^2 \otimes a^1$ 
 
 Going back to  $Eq \;(B.2)$
 
