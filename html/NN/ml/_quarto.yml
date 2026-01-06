@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Neural Networks – Math Intuition"
+  navbar:
+    left:
+      - href: index.md
+        text: Home
+      - href: 1_vectors_dot_product_and_perceptron.md
+        text: Vectors & Perceptron
+      - href: 3_gradient_descent.md
+        text: Gradient Descent
+      - href: 8_backpropogation_full.md
+        text: Backprop (Full)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    math: mathjax
+    code-fold: true
+

@@ -1,4 +1,4 @@
-# The Mathematical Intuition Behind Deep Learning Simplified
+# The Mathematical Intuition Behind Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 

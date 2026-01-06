@@ -1,4 +1,14 @@
 
+# The Mathematical Intuition Behind Deep Learning
+
+Alex Punnen \
+&copy; All Rights Reserved 
+
+---
+
+[Contents](index.md)
+
+# Chapter 3
 
 
 ## Neural Network as a Chain of Functions
@@ -254,9 +264,7 @@ where $\eta$ is the learning rate.
 
 **And how do we find the gradient vector $\nabla C$?**  via Backpropagation
 
-Next: [Backpropagation](4_backpropagation.md)
-
-
+Next: [Backpropagation](4_backpropogation_chainrule.md)
 
 
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png

@@ -1,4 +1,4 @@
-# The Maths behind Neural Networks
+# The Mathematical Intuition Behind Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved
@@ -8,7 +8,7 @@ Alex Punnen \
 [Contents](index.md)
 
 
-# Chapter 7
+# Chapter 6
 
 ## Back Propagation -Matrix Calculus
 

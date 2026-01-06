@@ -1,4 +1,5 @@
-# The Maths behind Neural Networks
+
+# The Mathematical Intuition Behind Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 
@@ -243,7 +244,7 @@ So, Backpropagation is the efficient execution of the Chain Rule by utilizing th
 *   It performs a Vector-Jacobian Product to pass the gradient to the past layer.
 
 
-Next: [Back propagation - Simplified Version (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
+- Next [A Simple NeuralNet with  Back Propagation](6_neuralnetworkimpementation.md)
 
 ---
 

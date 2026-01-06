@@ -1,4 +1,4 @@
-# The Maths behind Neural Networks
+# The Mathematical Intuition Behind Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved
@@ -7,118 +7,37 @@ Alex Punnen \
 
 [Contents](index.md)
 
-# Chapter 8
+# Chapter 7
 
 ## Back Propagation in Full - With Softmax & CrossEntropy Loss
 
-The previous chapters should have given an intuition of Back Propagation. Let's now dive much deeper into Back Propogation. We will need all the information covered in the previous chapters, plus a bit more involved mathematical concepts.
-
-It is good to remember here Geoffrey Hinton's talk available in Youtube - All this was invented not out of some mathematical model; but based on trial and error and checking what works. So do not treat this as distilled science. This is ever evolving.
 
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
 
----
+This is how a proper Neural Network should be. 
 
-Below are some of the concepts that we had already covered in brief in previous chapters; and some which we have not touched previously; but without which it will not be possible to build a practical deep neural network solution.
-
-- Understand what **Scalar's, Vectors, Tensors** are and that Vectors and Tensors are written as matrices and Vector is one dimension matrix whereas Tensor's are many dimensional usually. (Technically a Vector is also a Tensor). After this, you can forget about Tensors and think only of Vectors Matrices and Scalar. Mostly just matrices.
-
-- That **linear algebra for matrices** that will be used is just properties of matrix multiplication and addition that you already know. A linear equation of the form $$y= m*x +c$$ in matrix form used in a neural network is $z_l = w_l* a_{l-1} + b_l$.
-
-- The **Index notation for dealing with Vectors and Matrices** - [A Primer on Index Notation John Crimaldi]
-
-- **Matrix multiplication** plays a major part and there are some parts that may be confusing
-  
-  - Example- **Dot Product** is defined only between Vectors, though many articles and tutorials will be using the dot product. Since each row of a multidimensional matrix acts like a Vector, the Numpy dot function(numpy.dot) works for matrix multiplication for non-vectors as well. Technically **numpy matmul** is the right one to use for matrix multiplication. $np.dot(A,B)$ is same as $np.matmul(A,B)$.numpy.**Numpy einsum** is also used for dimensions more than two. If A and B are two dimensional matrices $np.dot(A,B) = np.einsum('ij,jk->ik', A, B)$. And einsum is much easier than numpy.tensordot to work with. For Hadamard product **numpy.multiply**
-
-    There is no accepted definition of matrix multiplication of dimensions higher than two!
-  
-  - **Hadamard product**. It is a special case of the element-wise multiplication of matrices of the same dimension. It is used in the magic of converting index notation to Matrix notation. You can survive without it, but you cannot convert to Matrix notation without understanding how. It is referred to in Michel Neilsen's famous book [Neural Networks and Deep Learning Michel Neilsen] in writing out the Error of a layer with respect to previous layers.
-
-- Calculus, the concept of Derivatives, **Partial Derivatives, Gradient, Matrix Calculus, Jacobian Matrix**
-
-  - That derivative of a function -the *derivative function* $f'(x)$, gives the slope or gradient of the function at any 'point'. As it is the rate of change of one variable with respect to to another. Visually, say for a function in 2D space , say a function representing a line segment, that means change in Y for a change in X - rise over run,slope.
-  
-  - For multi variable function, example a Vector function, we need the rate of change of many variables with respect to to another, we do so via `Partial derivatives`  concept - notation $\partial$ ; and the gradient becomes a Vector of partial derivatives. To visualize this, picture a hill, or a function of x,y,z variables that can be plotted in a 3D space, a ball dropped on this hill or graph goes down this `gradient vector` .To get the *derivative function* $f'(x,y,z)$ to calculate this gradient you need `multivariable calculus`, again something that you can ignore most of the time,except the slightly different rules while calculating the derivative function.
-
-  - Take this a notch further and we reach the Jacobian matrix. For a Vector of/containing multivariable functions, the partial derivatives with respect to to say a Matrix or Vector of another function, gives a *Matrix of Partial Derivatives* called the `Jacobian Matrix`. And this is also a gradient matrix. It shows the 'slope' of the *derivative function* at a matrix of points. In our case the derivative of the Loss function (which is a scalar function) with respect to Weights (matrix), can be calculated only via intermediate terms, that include the derivative of the Softmax output (Vector) with respect to inputs (matrix) which is the Jacobian matrices. And that is matrix calculus. Again something that you can now ignore henceforth.
-
-  - Knowing what a Jacobian is, and how it is calculated, you can blindly ignore it henceforth. The reason is that, most of the terms of the Jacobian evaluate to Zero for Deep learning application, and usually only the diagonal elements hold up, something which can be represented by index notation. *"So it's entirely possible to compute the derivative of the softmax layer without actual Jacobian matrix multiplication ...the Jacobian of the fully-connected layer is sparse.- [The Softmax function and its derivative-Eli Bendersky]"* 
-
-    - Note -When you convert from Index notation to actual matrix notation, for example for implementation then you will need to understand how the index multiplication transforms to Matrix multiplication - transpose. Example from [The Matrix Calculus You Need For Deep Learning (Derivative with respect to Bias) Terence,Jermy]
-
-$$
-\frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad
-$$
  
-- Calculus - **Chain Rule - Single variable, Multi variable Chain rule, Vector Chain Rule**
- 
-  - Chain rule is used heavily to break down the partial derivate of Loss function with respect to weight into a chain of easily differentiable intermediate terms
-
-  - The Chain rule that is used is actually Vector Chain Rule , but due to nature of Jacobian matrices generated- sparse matrices, this reduces to resemble Chain rule of single variable or Multi-variable Chain Rule. Again the definite article to follow is [The Matrix Calculus You Need For Deep Learning (Derivative with respect to Bias) Terence,Jermy], as some authors refer as Multi variable Chain rule in their articles
-
-    Single Variable Chain Rule
-    $$
-    \begin{aligned}
-    y = f(g(x)) = f(u) \text{ where } u = g(x)
-    \\ \\
-    \frac{dy}{dx} = \frac{dy}{du}\frac{du}{dx}
-    \end{aligned}
-    $$
-
-    **Vector Chain Rule**
-
-     In the notation below, **y** is a Vector output and x is a scalar. Vectors are represented in bold letters though I have skipped it here.
-
-    $$
-    \begin{aligned}
-    y = f(g(x))
-    \\ \\
-    \frac{ \partial y}{ \partial x} = \frac{ \partial y}{\partial g}*\frac{ \partial g}{\partial x}
-    \end{aligned}
-    $$
-
-     Here $\frac{ \partial y}{\partial g}$ and $\frac{ \partial g}{\partial x}$ are two Jacobian matrices containing the set of partial derivatives. But since only the diagonals remain in deep learning application we can skip calculating the Jacobian and write in index notation as
-
-     $$
-    \begin{aligned}
-    \frac{ \partial y}{ \partial x} = \frac{ \partial y_i}{\partial g_i} \frac{ \partial g_i}{\partial x_i}
-    \end{aligned}
-    $$
-
 ## The Neural Network Model
 
 I am writing this out, without index notation, and with the super script representing just the layers of the network.
 
 $$
 \mathbf {
-\bbox[10px, border:2px solid red] { \color{red}{
 \begin{aligned}
  a^0 \rightarrow
-    \bbox[5px, border:2px solid black]  {
-      \underbrace{\text{hidden layers}}_{a^{l-2}} }
+      \underbrace{\text{hidden layers}}_{a^{l-2}} 
       \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
       \underbrace{w^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
-    }
       \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
       \underbrace{\sigma(z^{l-1})}_{a^{l-1}}
-    }
     \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
      \underbrace{w^l a^{l-1}+b^l}_{z^{l}/logits }
-    }
     \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
     \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
-    }
     \,\rightarrow
-  \bbox[5px, border:2px solid black]  {  
     \underbrace{L ( \vec P, \vec Y)}_{\text{CrossEntropyLoss}}
-  }
 \end{aligned}
-}}}
+}
 $$
 
  $Y$ is the target vector or the Truth vector. This is a one hot encoded vector, example  $Y=[0,1,0]$, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Loss algorithm.
@@ -150,7 +69,7 @@ L = -\sum_j y_j \log p_j
 $$
 
 ---
-## On to the rest of the explanation
+
 
 There are too many articles related to Back propagation, many of which are very good.However many explain in terms of index notation and though it is illuminating, to really use this with code, you need to understand how it translates to Matrix notation via Matrix Calculus and with help form StackOverflow related sites.
 
@@ -165,16 +84,14 @@ $$
 
 Where
 $$
-\mathbf {
-L = -\sum_k y_k \log \color{red}{p_k} \,\,and \,p_j = \frac {e^ \color{red}{z_j}} {\sum_k e^{z_k}}
-}
+L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\color{red}{z_j}}} {\sum_k e^{z_k}}
 $$
 
 If you are confused with the indexes, just take a short example and substitute. Basically i,j,k etc are dummy indices used to illustrate in index notation the vectors.
 
 I am going to drop the superscript $l$ denoting the layer number henceforth and focus on the index notation for the softmax vector $P$ and target vector $Y$
 
-Repeating from [Derivative of Softmax Activation -Alijah Ahmed]
+From [Derivative of Softmax Activation -Alijah Ahmed]
 
 $$ \color{red}
   {
@@ -207,7 +124,7 @@ $$
   }
 $$
 
-Using this above and repeating from [Derivative of Softmax Activation -Alijah Ahmed]
+Using this above and from [Derivative of Softmax Activation -Alijah Ahmed]
 
 $$ \color{red}
   {
@@ -271,38 +188,7 @@ Now let's do the derivation for the inner layers
 
 ## Derivative of Loss with respect to Weight in Inner Layers
 
-Adding the diagram once more 
 
-$$
-\mathbf {
-\bbox[10px, border:2px solid red] { \color{red}{
-\begin{aligned}
- a^0 \rightarrow
-    \bbox[5px, border:2px solid black]  {
-      \underbrace{\text{hidden layers}}_{a^{l-2}} }
-      \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
-      \underbrace{w^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
-    }
-      \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
-      \underbrace{\sigma(z^{l-1})}_{a^{l-1}}
-    }
-    \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
-     \underbrace{w^l a^{l-1}+b^l}_{z^{l}/logits }
-    }
-    \,\rightarrow
-    \bbox[5px, border:2px solid black]  {  
-    \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
-    }
-    \,\rightarrow
-  \bbox[5px, border:2px solid black]  {  
-    \underbrace{L ( \vec P, \vec Y)}_{\text{CrossEntropyLoss}}
-  }
-\end{aligned}
-}}}
-$$
 
 The trick here is to find the derivative of the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either $z^x$ or $w^x$ but not with respect to $a^x$. This is to make derivatives easier and intuitive to compute.
 
@@ -361,23 +247,7 @@ $$
 \end{aligned}
 $$
 
-Repeating the steps done in EqA.1 and EqA.2 once more for better clarity
 
-$$
-\begin{aligned}
-\frac {\partial L}{\partial w^{l-2}} 
-=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
-     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}} 
-     \\ \\ = \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-    \frac {\partial z^{l-1}}{\partial a^{l-2}}.
-    \frac {\partial a^{l-2}}{\partial z^{l-2}}
-     .\color{green}{a^{l-3}}
-     \\ \\
-      = \color{blue}{ {\frac {\partial L}{\partial z^{l-1}}}.w^{l-1}.\sigma '(z^{l-2})}
-     .\color{green}{a^{l-3}}
-    \\   ( {\frac {\partial L}{\partial z^{l-1}}} \text{ calculated from previous layer})
-\end{aligned}
-$$
 
 ## Implementation in Python
 
@@ -456,12 +326,12 @@ And the authors go on to explain that $\frac{\partial a}{\partial x}$ can be wri
 
 However,while implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
 
-Taking a simple $2\*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $8*2$ matrix and no longer a square matrix.
+Taking a simple $2*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $4*4$ matrix.
 
 Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian ?
 
 $$
-\frac{\partial a_{i,j}}{\partial x_{i,j}} = J_{k,l} 
+\frac{\partial A}{\partial X} = J
 $$
 
  There is no certainty that this will be a square matrix and we can generalize to the diagonal ? 
@@ -588,5 +458,3 @@ More difficult to follow with proper index notations (I could not) and probably 
 
   [Vector Derivatives]: http://cs231n.stanford.edu/vecDerivs.pdf
  
- ---
- End
