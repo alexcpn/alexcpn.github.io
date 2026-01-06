@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: ../ml2
 
 website:
   title: "The Mathematical Intuition Behind Deep Learning"
