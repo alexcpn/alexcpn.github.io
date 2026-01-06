@@ -74,14 +74,6 @@ $$
 
 A more rigorous explanation of the proof can be found in the book [Neural Networks by R.Rojas] or this [article][perceptron-learning-algorithm].
 
-### The Perceptron Network and the AI winter
-
-The Perceptron network needs the input feature set to be linearly seperable. However
- all problems do not have their feature set which is linearly seperable. So this is a constraint of this system.
-
-The fact that Perceptron could not be trained for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first *AI winter*, as much of the hype generated intially by Frank Rosenblatt's discovery became a disillusionment.
-
- ![linearseperable]
 
 Next: [Gradient Descent and Optimization](3_gradient_descent.md)
 
