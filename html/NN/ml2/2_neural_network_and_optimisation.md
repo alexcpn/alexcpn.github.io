@@ -55,7 +55,7 @@ $$
 f(x) = Wx
 $$
 
-Still one big linear transformation and hence one hyperplane; the problems of not able to seperate features will come. Only because of non-linearity, we can get  multiple hyperplanes and hence a composeable complex decision boundaries that can seperate features.
+Still one big linear transformation and hence one hyperplane; the problems of not able to separate features will come. Only because of non-linearity, we can get  multiple hyperplanes and hence a composable complex decision boundaries that can separate features.
 
 
 So the concept of Vectors, Matrices and Hyperplanes remain the same as before. Let us explore the chain of functions part here
@@ -88,17 +88,27 @@ $$
 
 The goal of training is to find the set of weights $w$ and biases $b$ that minimize this cost $C$.
 
-This means that we need to optimise each component of the function $f(x)$ to reduce the cost propotional to its contribution to the final output. The method to do this is called **Backpropagation**. 
+This means that we need to optimise each component of the function $f(x)$ to reduce the cost proportional to its contribution to the final output. The method to do this is called **Backpropagation**. It helps us calculate the **gradient** of the cost function with respect to each weight and bias.
 
-Before that lets see the how we calculate the amount to reduce via another method called **Gradient Descent**.
+Once the gradient is calculated, we can use **Gradient Descent** to update the weights in the opposite direction of the gradient.
 
+Gradient descent is a simple optimization algorithm that works by iteratively updating the weights in the opposite direction of the gradient.
 
-## Optimization: Gradient Descent
+However neural network is a composition of vector spaces and linear transformations.  Hence gradient descent acts on a very complex space.
 
-Now that we have a Cost Function $C(w, b)$, we need to find the minimum of this function with respect to the weights $w$ and biases $b$.
+There are two or three facts to understand about gradient descent:
 
-We calculate the gradient of the cost function with respect to each weight and bias:
+1. It does not attempt to find the **global minimum**, but rather follows the **local slope** of the cost function and converges to a local minimum or a flat region. **Saddle point** is a good optimisation point.
 
+2. Gradients can **vanish or explode**, leading to slow or unstable convergence. The practical solution to control this is to use **learning rate** and using **adaptive learning rate** methods like **Adam** or **RMSprop**.
+
+3. **Batch Size matters**: Calculating the gradient over the entire dataset (Batch Gradient Descent) is computationally expensive and memory-intensive. In practice, we use **Stochastic Gradient Descent (SGD)** (one example at a time) or, more commonly, **Mini-batch Gradient Descent** (a small batch of examples). This introduces noise into the gradient estimate, which paradoxically helps the optimization process escape shallow local minima and saddle points.
+
+## Optimization: Gradient Descent - Take 1
+
+For the Cost Function $C(w, b)$, we need to find the minimum of this function with respect to the weights $w$ and biases $b$.
+
+We calculate the gradient of the cost function with respect to each weight and bias using backpropagation 
 $$
 \nabla C = \begin{bmatrix}
 \frac{\partial C}{\partial w} \\
@@ -106,7 +116,7 @@ $$
 \end{bmatrix}
 $$
 
-And then update the weights in the opposite direction of the gradient:
+Then update the weights in the opposite direction of the gradient:
 
 $$
 w_{new} = w_{old} - \eta \frac{\partial C}{\partial w}
@@ -115,7 +125,7 @@ $$
 b_{new} = b_{old} - \eta \frac{\partial C}{\partial b}
 $$
 
-where $\eta$ is the **learning rate**.
+where $\eta$ is the **learning rate**. This update rule is called **Gradient Descent**.
 
 ### Why not Newton's Method?
 
@@ -131,9 +141,11 @@ However, for a neural network with millions of weights, calculating the second d
 
 The Error function is a scalar function of the weights and biases. 
 
- Whereas for a simple linear regression, the same Mean Square Error function, the paramters are just one layer feature vectors, the function is a convex funciton (see left in picture)
+The loss (error) is a scalar function of all weights and biases.
 
-Whereas for a deep learning model the function is a composition of multiple non-linear functions, the cost function is not a convex function but rather consists of multiple saddle points and local minima. (see right in picture)
+In linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g. see left in picture).
+
+In deep learning, the loss becomes non-convex because it is the result of composing many nonlinear transformations. This creates a complex landscape with saddle points, flat regions, and multiple minima (e.g. see right in picture).
 
 ![costfunction]
 
@@ -141,7 +153,7 @@ Whereas for a deep learning model the function is a composition of multiple non-
 
 Gradient descent does not attempt to find the global minimum, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.
 
-The cost function is a scalar function of the weights and biases and is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.
+The cost function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.
 
 (*The function is not differentiable at the point where the function is zero ex ReLU. This is not a problem in practice, as optimization algorithms handle such points using [subgradients](images/subgradient.png))
 
@@ -151,22 +163,18 @@ Furthermore, we rarely use full-batch gradient descent. Instead, we use variants
 
 In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset. The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.
 
+
+## Backpropagation
+
 **What does it mean to take the derivative of a scalar function with respect to vector-valued parameters?**
 
-We are trying to find the minimum of this function with respect to the weights $w$ and biases $b$ of the last layer here. 
+Finding the gradient is the job of Backpropagation. 
 
-As the last layer inherits from all the previous layers, the minimum of the cost function with respect to the weights and biases of the whole network is what we calcuate with gradient descent. This is a not a number/scalar but a gradient vector which is a coordinate  representation of the underlying linear map
+Backpropagation is based on Automatic Differentiation. Auto Diff is a fancy term to describe creating a computational graph and then differentiating it- via chain rule.
 
-This is important. How we then update the weights in all the previous layers propogating the gradients backward is the topic of backpropagation which we will see later. This is Automatic Differentiation in reverse mode using the chain rule and making use of the model of the neural networ as a composition of functions.
+Chain rule is a basic rule of differentiation of composite functions.
 
-
-Lets focus still on the gradient descent for now.
-
-The weight is not a scalar but a vector. (represented as matrix)
-
-This means a level of complexity which in usual explantion is not shown.
-
-We have seen that Gradinet descent uses first order derivatives to find the minimum of the function.
+In Neural networks each function is composed of vector functions.
 
 What is a derivative of a vector function? This is something hard to explain in a simple way. It is a matrix of gradients.
 
@@ -175,6 +183,8 @@ Extended version Conal Elliott explains this in detail.
 Quoting from it below.
 
 ---
+
+### Jacobian Matrix 
 
 The derivative $f'(x)$ of a function $f: \mathbb{R} \to \mathbb{R}$ at a point $x$ (in the domain of $f$) is a number, defined as follows:
 
@@ -194,7 +204,8 @@ This difficulty of differentiation with non-scalar domains is usually addressed 
 
 When the codomain $\mathbb{R}^n$ is also non-scalar (i.e., $n > 1$), we have a matrix $J$ (the Jacobian), with $J_{ij} = \partial f_i / \partial x_j$ for $i \in \{1, \dots, n\}$, where each $f_i$ projects out the $i$-th scalar value from the result of $f$.
 
-Moreover, each of these situations has an accompanying chain rule, which says how to differentiate the composition of two functions. Where the scalar chain rule involves multiplying two scalar derivatives, the vector chain rule involves "multiplying" two matrices $A$ and $B$ (the Jacobians), defined as follows:
+Moreover, each of these situations has an accompanying chain rule, which says how to differentiate the composition of two functions. 
+Where the scalar chain rule involves multiplying two scalar derivatives, the vector chain rule involves "multiplying" two matrices $A$ and $B$ (the Jacobians), defined as follows:
 
 $$
 (A \cdot B)_{ij} = \sum_{k=1}^m A_{ik} \cdot B_{kj}
@@ -210,7 +221,7 @@ The numbers, vectors, matrices, etc. mentioned above are all different represent
 
 This above passage is taken from the paper on auto differentiation by Conal Elliott. Why I put it here is that it applies to our case of gradient descent as well. 
 
-So the Loss function is a funciton of weight vectors $w$ and bias vectors $b$. 
+So the Loss function is a function of weight vectors $w$ and bias vectors $b$. 
 
 $$
 C(w, b)
@@ -239,22 +250,20 @@ Mathematically this is more rigorous than the usual explanation of rolling down 
  
  $$w_{new} = w_{old} - \eta \cdot \nabla C$$
 
-    where $\eta$ is the learning rate.
+where $\eta$ is the learning rate.
 
-**And how do we find the gradient vector $\nabla C$?**
-
-Answer: Backpropagation
+**And how do we find the gradient vector $\nabla C$?**  via Backpropagation
 
 ## Backpropagation
 
 Dont be confused by the name. It is just calculating the gradient vector $\nabla C$. for each layer.
 
-Gradinet descent then uses this gradient vector to update the weights in each layer.
+Gradient descent then uses this gradient vector to update the weights in each layer.
 
 These two work in unison to find the minimum of the loss function.
 
 
-Lets first look at a neual network as a scalar composition of functions.
+Lets first look at a neural network as a scalar composition of functions.
 
 Imagine a simple neural network with 3 layers. It is essentially a composition of three functions:
 
@@ -281,8 +290,7 @@ Problem is to find the partial derivative of the loss function with respect to t
 
 To calculate how a change in the first layer's weights ($w_1$) affects the final Cost ($C$), we have to trace the "path of influence" all the way through the network.
 
-A nudge in $w_1$ changes the output of Layer 1.The change in Layer 1 changes the input to Layer 2.The change in Layer 2 changes the input to Layer 3.The change in Layer 3 changes the final Cost.
-
+A nudge in $w_1$ changes the output of Layer 1. The change in Layer 1 changes the input to Layer 2. The change in Layer 2 changes the input to Layer 3. The change in Layer 3 changes the final Cost.
 
 Mathematically, we multiply the derivatives (Linear Maps) of these links together:
 
