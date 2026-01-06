@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>backpropogation_matrix_calculus – The Mathematical Intuition Behind Deep Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-617dda62c7243b6972367a47cbfd8072.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./7_backpropogation_matrix_calculus.html">Backprop (Matrix Calculus)</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_vectors_dot_product_and_perceptron.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vectors &amp; Perceptron</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_perceptron_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Perceptron Training</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_gradient_descent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gradient Descent</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop (Chain Rule)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Neural Network Implementation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Backprop (Matrix Calculus)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8_backpropogation_full.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a></li>
+  <li><a href="#chapter-6" id="toc-chapter-6" class="nav-link" data-scroll-target="#chapter-6">Chapter 6</a>
+  <ul class="collapse">
+  <li><a href="#back-propagation--matrix-calculus" id="toc-back-propagation--matrix-calculus" class="nav-link" data-scroll-target="#back-propagation--matrix-calculus">Back Propagation -Matrix Calculus</a></li>
+  <li><a href="#gradient-vector2d-tensor-of-loss-function-in-last-layer" id="toc-gradient-vector2d-tensor-of-loss-function-in-last-layer" class="nav-link" data-scroll-target="#gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</a></li>
+  <li><a href="#partial-derivative-of-loss-function-with-respect-to-weight" id="toc-partial-derivative-of-loss-function-with-respect-to-weight" class="nav-link" data-scroll-target="#partial-derivative-of-loss-function-with-respect-to-weight">Partial Derivative of Loss function with respect to Weight</a>
+  <ul class="collapse">
+  <li><a href="#now-we-need-to-find-fracpartial-a2partial-w2" id="toc-now-we-need-to-find-fracpartial-a2partial-w2" class="nav-link" data-scroll-target="#now-we-need-to-find-fracpartial-a2partial-w2">Now we need to find <span class="math display">\[\frac{\partial a^2}{\partial w^2}\]</span></a></li>
+  </ul></li>
+  <li><a href="#gradient-vector-of-loss-function-in-inner-layer" id="toc-gradient-vector-of-loss-function-in-inner-layer" class="nav-link" data-scroll-target="#gradient-vector-of-loss-function-in-inner-layer">Gradient Vector of Loss function in Inner Layer</a></li>
+  <li><a href="#final-equations" id="toc-final-equations" class="nav-link" data-scroll-target="#final-equations">Final Equations</a></li>
+  <li><a href="#using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" id="toc-using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" class="nav-link" data-scroll-target="#using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function">Using Gradient Descent to find the optimal weights to reduce the Loss function</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
+<h1>The Mathematical Intuition Behind Deep Learning</h1>
+<p>Alex Punnen<br>
+© All Rights Reserved</p>
+<hr>
+<p><a href="./index.html">Contents</a></p>
+</section>
+<section id="chapter-6" class="level1">
+<h1>Chapter 6</h1>
+<section id="back-propagation--matrix-calculus" class="level2">
+<h2 class="anchored" data-anchor-id="back-propagation--matrix-calculus">Back Propagation -Matrix Calculus</h2>
+<p>The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadmard product and matrix transposes with scalar derivation alignment.</p>
+<p>Let’s take the previous two layered simple neural network,with a Mean Square Error Loss function, and derive the Back Propagation formula with Matrix Calculus now.</p>
+<p>Let’s write the equation of the following neural network</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="kw">is</span> the Input</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>y <span class="kw">is</span> the Output.</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>l <span class="kw">is</span> the number of layers of the Neural Network.</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>a <span class="kw">is</span> the activation function ,(we use sigmoid here)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><span class="math display">\[
+x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
+\]</span></p>
+<p>Where the activation <span class="math inline">\(a^l\)</span> is <span class="math display">\[
+  a^{l} = \sigma(w^l a^{l-1}+b^l).
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+a^{l} = \sigma(z^l) \quad where \quad
+z^l =w^l a^{l-1} +b^l
+\]</span></p>
+<p>Our two layer neural network can be written as</p>
+<p><span class="math display">\[
+\mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
+\]</span></p>
+<p>(<span class="math inline">\(a^2\)</span> does not denote the exponent but just that it is of layer 2)</p>
+<p>Lets write down the derivative of Loss function wrto weight using chain rule</p>
+<p><span class="math display">\[
+\mathbf {
+\frac {\partial C}{\partial w^l}
+= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
+}
+\]</span></p>
+<p>We will use the above equation as the basis for the rest of the chapter.</p>
+<p>&nbsp;</p>
+</section>
+<section id="gradient-vector2d-tensor-of-loss-function-in-last-layer" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</h2>
+<p><span class="math display">\[
+C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
+\]</span></p>
+<p>Assuming a neural net with 2 layers, we have the final Loss as</p>
+<p><span class="math display">\[
+C = \frac{1}{2} \sum_j (y_j-a^2_j)^2
+\]</span></p>
+<p>Where</p>
+<p><span class="math display">\[
+a^2 = \sigma(w^2.a^1)
+\]</span></p>
+<p>We can then write</p>
+<p><span class="math display">\[
+C = \frac{1}{2} \sum_j v^2 \quad \rightarrow (Eq \;A)
+\]</span></p>
+<p>Where</p>
+<p><span class="math display">\[
+v= y-a^2
+\]</span></p>
+</section>
+<section id="partial-derivative-of-loss-function-with-respect-to-weight" class="level2">
+<h2 class="anchored" data-anchor-id="partial-derivative-of-loss-function-with-respect-to-weight">Partial Derivative of Loss function with respect to Weight</h2>
+<p>For the last layer, lets use Chain Rule to split like below</p>
+<p><span class="math display">\[
+\frac {\partial C}{\partial w^2} = \frac{\partial v^2}{\partial v} * \frac{\partial v}{\partial w^2} \quad \rightarrow (Eq \;B)
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial v^2}{\partial v} =2v \quad \rightarrow (Eq \;B.1)
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial v}{\partial w^2}=  \frac{\partial (y-a^2)}{\partial w^2} =
+0-\frac{\partial a^2}{\partial w^2} \quad \rightarrow (Eq \;B.2)
+\]</span></p>
+<p><span class="math display">\[
+\frac {\partial C}{\partial w^2} = \frac{1}{2} *2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
+\]</span> &nbsp;</p>
+<section id="now-we-need-to-find-fracpartial-a2partial-w2" class="level3">
+<h3 class="anchored" data-anchor-id="now-we-need-to-find-fracpartial-a2partial-w2">Now we need to find <span class="math display">\[\frac{\partial a^2}{\partial w^2}\]</span></h3>
+<p>Let</p>
+<p><span class="math display">\[
+\begin{aligned}
+a^2= \sigma(\sum(w^2 \otimes a^1 )) = \sigma(z^2)
+\\\\
+z^2 =  \sum(w^2 \otimes a^1)
+\\\\
+z^2 = \sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1
+\end{aligned}
+\]</span></p>
+<p>We now need to derive an intermediate term which we will use later</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
+\\\\
+=\frac {\partial \sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
+\\ \\
+\frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
+\end{aligned}
+\]</span></p>
+<p>Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2</p>
+<p>The Vector dot product <span class="math inline">\(w.a\)</span> when applied on matrices becomes the sum of elementwise multiplication (also called Hadamard product) <span class="math inline">\(\sum w^2 \otimes a^1\)</span></p>
+<p>Going back to <span class="math inline">\(Eq \;(B.2)\)</span></p>
+<p><span class="math display">\[
+\frac {\partial a^2}{\partial w^2} = \frac{\partial a^2}{\partial z^2} * \frac{\partial z^2}{\partial w^2}
+\]</span></p>
+<p>Using <span class="math inline">\(Eq \;(B.3)\)</span> for the term in left</p>
+<p><span class="math display">\[
+=  \frac{\partial a^2}{\partial z^2} * (a^{1})^T
+\]</span></p>
+<p><span class="math display">\[
+=  \frac{\partial \sigma(z^2)}{\partial z^2} * (a^{1})^T
+\]</span></p>
+<p><span class="math display">\[
+\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
+\]</span></p>
+<p>Now lets got back to partial derivative of Loss function wrto to weight</p>
+<p><span class="math display">\[
+\frac {\partial C}{\partial w^2} = \frac {1}{2}*2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
+\]</span></p>
+<p>Using <span class="math inline">\(Eq \;(B.4)\)</span> to substitute in the last term</p>
+<p><span class="math display">\[
+\begin{aligned}
+= v(0- \sigma^{'}(z^2) * (a^{1})^T)
+\\\\
+= v*-1*\sigma^{'}(z^2) * (a^{1})^T
+\\\\
+= (y-a^2)*-1*\sigma^{'}(z^2) * (a^{1})^T
+\\\\
+\frac {\partial C}{\partial w^2}= (a^2-y)*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
+\end{aligned}
+\]</span> &nbsp;</p>
+</section>
+</section>
+<section id="gradient-vector-of-loss-function-in-inner-layer" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-vector-of-loss-function-in-inner-layer">Gradient Vector of Loss function in Inner Layer</h2>
+<hr>
+<p>&nbsp;</p>
+<p>Now let’s do the same for the inner layer. This is bit more tricky and we use the Chain rule to derive this</p>
+<p>&nbsp;</p>
+<p><span class="math display">\[
+\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
+\]</span></p>
+<p>&nbsp;</p>
+<p>We can calculate the first part of this from <span class="math inline">\(Eq\; (B.4)\)</span> that we derived above</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
+\\\\
+\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
+\end{aligned}
+\]</span></p>
+<p>For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.</p>
+$$
+<span class="math display">\[\begin{aligned}
+\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
+\\\\
+{
+\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
+\\\\
+\frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
+
+\text {Now to calculate} \quad
+
+\frac{\partial(a^2)}{\partial(a^1)} \quad where \quad
+
+a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
+
+\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*
+
+\end{aligned}\]</span>
+<p>$$</p>
+<p>*<a href="https://math.stackexchange.com/a/4065766/284422" class="uri">https://math.stackexchange.com/a/4065766/284422</a></p>
+<p>Putting (4.1) (4.2) and (4.3) together</p>
+</section>
+<section id="final-equations" class="level2">
+<h2 class="anchored" data-anchor-id="final-equations">Final Equations</h2>
+<p><span class="math display">\[  \mathbf{
+\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
+}\]</span></p>
+<p><span class="math display">\[
+\delta^2 = (a^2-y)
+\]</span></p>
+<p>Adding also the partial derivate of loss funciton with respect to weight in the final layer</p>
+<p><span class="math display">\[ \mathbf{
+\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
+}
+\]</span></p>
+<p>You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the back=propagation algorithm is the most elegant dynamic programming till date.</p>
+<p><span class="math display">\[  \mathbf{
+\frac {\partial C}{\partial w^1} = \delta^{2}*\sigma'(z^2)*(a^{0})^T*w^2.\sigma'(z^1) \quad \rightarrow \mathbb Eq \; (5)
+}\]</span></p>
+<p>&nbsp;</p>
+</section>
+<section id="using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" class="level2">
+<h2 class="anchored" data-anchor-id="using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function">Using Gradient Descent to find the optimal weights to reduce the Loss function</h2>
+<p>&nbsp;</p>
+<p>With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example</p>
+<p><span class="math display">\[\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}\]</span></p>
+<p>&nbsp;</p>
+<p>We now need to adjust the previous weight, by gradient descent.</p>
+<p>&nbsp;</p>
+<p>So using the above gradients we get the new weights iteratively like below. If you notice this is exactly what is happening in gradient descent as well; only chain rule is used to calculate the gradients here. Backpropagation is the algorithm that helps calculate the gradients for each layer.</p>
+<p>&nbsp;</p>
+<p><span class="math display">\[\mathbf {
+  W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
+}\]</span></p>
+<p>&nbsp;</p>
+<p>Reference</p>
+<ul>
+<li><a href="https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf" class="uri">https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf</a></li>
+<li><a href="http://neuralnetworksanddeeplearning.com/chap2.html" class="uri">http://neuralnetworksanddeeplearning.com/chap2.html</a></li>
+</ul>
+<p>Next: <a href="./8_backpropogation_full.html">Back Propagation in Full - With Softmax &amp; CrossEntropy Loss</a></p>
+
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

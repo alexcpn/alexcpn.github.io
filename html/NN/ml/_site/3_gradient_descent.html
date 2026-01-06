@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>gradient_descent – The Mathematical Intuition Behind Deep Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-617dda62c7243b6972367a47cbfd8072.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3_gradient_descent.html">Gradient Descent</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_vectors_dot_product_and_perceptron.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vectors &amp; Perceptron</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_perceptron_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Perceptron Training</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_gradient_descent.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Gradient Descent</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop (Chain Rule)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Neural Network Implementation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop (Matrix Calculus)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8_backpropogation_full.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a></li>
+  <li><a href="#chapter-3" id="toc-chapter-3" class="nav-link" data-scroll-target="#chapter-3">Chapter 3</a>
+  <ul class="collapse">
+  <li><a href="#neural-network-as-a-chain-of-functions" id="toc-neural-network-as-a-chain-of-functions" class="nav-link" data-scroll-target="#neural-network-as-a-chain-of-functions">Neural Network as a Chain of Functions</a>
+  <ul class="collapse">
+  <li><a href="#the-forward-pass" id="toc-the-forward-pass" class="nav-link" data-scroll-target="#the-forward-pass">The Forward Pass</a></li>
+  <li><a href="#the-cost-function-loss-function" id="toc-the-cost-function-loss-function" class="nav-link" data-scroll-target="#the-cost-function-loss-function">The Cost Function (Loss Function)</a></li>
+  <li><a href="#the-goal-of-training" id="toc-the-goal-of-training" class="nav-link" data-scroll-target="#the-goal-of-training">The Goal of Training</a></li>
+  </ul></li>
+  <li><a href="#optimization-gradient-descent---take-1" id="toc-optimization-gradient-descent---take-1" class="nav-link" data-scroll-target="#optimization-gradient-descent---take-1">Optimization: Gradient Descent - Take 1</a>
+  <ul class="collapse">
+  <li><a href="#why-not-newtons-method" id="toc-why-not-newtons-method" class="nav-link" data-scroll-target="#why-not-newtons-method">Why not Newton’s Method?</a></li>
+  </ul></li>
+  <li><a href="#take-2---deeper-dive" id="toc-take-2---deeper-dive" class="nav-link" data-scroll-target="#take-2---deeper-dive">Take 2 - Deeper Dive</a></li>
+  <li><a href="#backpropagation" id="toc-backpropagation" class="nav-link" data-scroll-target="#backpropagation">Backpropagation</a>
+  <ul class="collapse">
+  <li><a href="#jacobian-matrix" id="toc-jacobian-matrix" class="nav-link" data-scroll-target="#jacobian-matrix">Jacobian Matrix</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
+<h1>The Mathematical Intuition Behind Deep Learning</h1>
+<p>Alex Punnen<br>
+© All Rights Reserved</p>
+<hr>
+<p><a href="./index.html">Contents</a></p>
+</section>
+<section id="chapter-3" class="level1">
+<h1>Chapter 3</h1>
+<section id="neural-network-as-a-chain-of-functions" class="level2">
+<h2 class="anchored" data-anchor-id="neural-network-as-a-chain-of-functions">Neural Network as a Chain of Functions</h2>
+<p>To understand deep learning, we need to understand the concept of a neural network as a chain of functions.</p>
+<p>A Neural Network is essentially a chain of functions. It consists of a set of inputs connected through ‘weights’ to a set of activation functions, whose output becomes the input for the next layer, and so on.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://i.imgur.com/gE3QKCf.png" class="img-fluid figure-img"></p>
+<figcaption>neuralnetwork</figcaption>
+</figure>
+</div>
+<section id="the-forward-pass" class="level3">
+<h3 class="anchored" data-anchor-id="the-forward-pass">The Forward Pass</h3>
+<p>Let’s consider a simple two-layer neural network.</p>
+<ul>
+<li><span class="math inline">\(x\)</span>: Input vector</li>
+<li><span class="math inline">\(y\)</span>: Output vector (prediction)</li>
+<li><span class="math inline">\(L\)</span>: Number of layers</li>
+<li><span class="math inline">\(w^l, b^l\)</span>: Weights and biases for layer <span class="math inline">\(l\)</span></li>
+<li><span class="math inline">\(a^l\)</span>: Activation of layer <span class="math inline">\(l\)</span> (we use sigmoid <span class="math inline">\(\sigma\)</span> here)</li>
+</ul>
+<p>The flow of data (Forward Pass) can be represented as:</p>
+<p><span class="math display">\[
+x \rightarrow a^{1} \rightarrow \dots \rightarrow a^{L} \rightarrow y
+\]</span></p>
+<p>For any layer <span class="math inline">\(l\)</span>, the activation <span class="math inline">\(a^l\)</span> is calculated as:</p>
+<p><span class="math display">\[
+  a^{l} = \sigma(w^l a^{l-1} + b^l)
+\]</span></p>
+<p>where <span class="math inline">\(a^0 = x\)</span> (the input).</p>
+<p>The linear transformation:</p>
+<p><span class="math inline">\(z = w^T x + b\)</span></p>
+<p>defines a hyperplane (decision boundary) in the feature space.</p>
+<p>The activation function then introduces <em>non-linearity</em>, allowing the network to combine <strong>multiple such hyperplanes into complex decision boundaries.</strong></p>
+<section id="why-non-linearity-is-non-negotiable" class="level4">
+<h4 class="anchored" data-anchor-id="why-non-linearity-is-non-negotiable">Why Non-Linearity Is Non-Negotiable</h4>
+<p>Without activation:</p>
+<p><span class="math display">\[
+f(x) = W_L W_{L-1} \dots W_1 x
+\]</span></p>
+<p>This collapses to:</p>
+<p><span class="math display">\[
+f(x) = Wx
+\]</span></p>
+<p>Still one big linear transformation and hence one hyperplane; the problems of not able to separate features will come. Only because of non-linearity, we can get multiple hyperplanes and hence a composable complex decision boundaries that can separate features.</p>
+<p>So the concept of Vectors, Matrices and Hyperplanes remain the same as before. Let us explore the chain of functions part here</p>
+<p>A neural network with <span class="math inline">\(L\)</span> layers can be represented as a nested function:<span class="math display">\[f(x) = f_L(...f_2(f_1(x))...)\]</span></p>
+<p>Each “link” in the chain is a layer performing a linear transformation followed by a non-linear activation and cascading to the final output.</p>
+</section>
+</section>
+<section id="the-cost-function-loss-function" class="level3">
+<h3 class="anchored" data-anchor-id="the-cost-function-loss-function">The Cost Function (Loss Function)</h3>
+<p>To train this network, we need to measure how “wrong” its predictions are compared to the true values. We do this using a <strong>Cost Function</strong> (or Loss Function).</p>
+<p>A simplest Loss function is just the difference between the predicted output and the true output ($ y(x) - a^L(x) $.)</p>
+<p>But usually we use the square of the difference to make it a non-negative function.</p>
+<p>A common choice is the <strong>Mean Squared Error (MSE)</strong>:</p>
+<p><span class="math display">\[
+C = \frac{1}{2n} \sum_{x} \|y(x) - a^L(x)\|^2
+\]</span></p>
+<ul>
+<li><span class="math inline">\(n\)</span>: Number of training examples</li>
+<li><span class="math inline">\(y(x)\)</span>: The true expected output (label) for input <span class="math inline">\(x\)</span></li>
+<li><span class="math inline">\(a^L(x)\)</span>: The network’s predicted output for input <span class="math inline">\(x\)</span></li>
+</ul>
+</section>
+<section id="the-goal-of-training" class="level3">
+<h3 class="anchored" data-anchor-id="the-goal-of-training">The Goal of Training</h3>
+<p>The goal of training is to find the set of weights <span class="math inline">\(w\)</span> and biases <span class="math inline">\(b\)</span> that minimize this cost <span class="math inline">\(C\)</span>.</p>
+<p>This means that we need to optimise each component of the function <span class="math inline">\(f(x)\)</span> to reduce the cost proportional to its contribution to the final output. The method to do this is called <strong>Backpropagation</strong>. It helps us calculate the <strong>gradient</strong> of the cost function with respect to each weight and bias.</p>
+<p>Once the gradient is calculated, we can use <strong>Gradient Descent</strong> to update the weights in the opposite direction of the gradient.</p>
+<p>Gradient descent is a simple optimization algorithm that works by iteratively updating the weights in the opposite direction of the gradient.</p>
+<p>However neural network is a composition of vector spaces and linear transformations. Hence gradient descent acts on a very complex space.</p>
+<p>There are two or three facts to understand about gradient descent:</p>
+<ol type="1">
+<li><p>It does not attempt to find the <strong>global minimum</strong>, but rather follows the <strong>local slope</strong> of the cost function and converges to a local minimum or a flat region. <strong>Saddle point</strong> is a good optimisation point.</p></li>
+<li><p>Gradients can <strong>vanish or explode</strong>, leading to slow or unstable convergence. The practical solution to control this is to use <strong>learning rate</strong> and using <strong>adaptive learning rate</strong> methods like <strong>Adam</strong> or <strong>RMSprop</strong>.</p></li>
+<li><p><strong>Batch Size matters</strong>: Calculating the gradient over the entire dataset (Batch Gradient Descent) is computationally expensive and memory-intensive. In practice, we use <strong>Stochastic Gradient Descent (SGD)</strong> (one example at a time) or, more commonly, <strong>Mini-batch Gradient Descent</strong> (a small batch of examples). This introduces noise into the gradient estimate, which paradoxically helps the optimization process escape shallow local minima and saddle points.</p></li>
+</ol>
+</section>
+</section>
+<section id="optimization-gradient-descent---take-1" class="level2">
+<h2 class="anchored" data-anchor-id="optimization-gradient-descent---take-1">Optimization: Gradient Descent - Take 1</h2>
+<p>For the Cost Function <span class="math inline">\(C(w, b)\)</span>, we need to find the minimum of this function with respect to the weights <span class="math inline">\(w\)</span> and biases <span class="math inline">\(b\)</span>.</p>
+<p>We calculate the gradient of the cost function with respect to each weight and bias using backpropagation <span class="math display">\[
+\nabla C = \begin{bmatrix}
+\frac{\partial C}{\partial w} \\
+\frac{\partial C}{\partial b}
+\end{bmatrix}
+\]</span></p>
+<p>Then update the weights in the opposite direction of the gradient:</p>
+<p><span class="math display">\[
+w_{new} = w_{old} - \eta \frac{\partial C}{\partial w}
+\]</span> <span class="math display">\[
+b_{new} = b_{old} - \eta \frac{\partial C}{\partial b}
+\]</span></p>
+<p>where <span class="math inline">\(\eta\)</span> is the <strong>learning rate</strong>. This update rule is called <strong>Gradient Descent</strong>.</p>
+<section id="why-not-newtons-method" class="level3">
+<h3 class="anchored" data-anchor-id="why-not-newtons-method">Why not Newton’s Method?</h3>
+<p>You might ask, why not use faster optimization methods like <strong>Newton’s Method</strong> (Newton-Raphson)?</p>
+<p>Newton’s method uses the second derivative (curvature) to find the minimum faster. <span class="math display">\[ w_{new} = w_{old} - \frac{C'(w)}{C''(w)} \]</span></p>
+<p>However, for a neural network with millions of weights, calculating the second derivative (the Hessian matrix) is computationally infeasible. Gradient Descent, which uses only the first derivative, is much more scalable and efficient for Deep Learning.</p>
+</section>
+</section>
+<section id="take-2---deeper-dive" class="level2">
+<h2 class="anchored" data-anchor-id="take-2---deeper-dive">Take 2 - Deeper Dive</h2>
+<p>The Error function is a scalar function of the weights and biases.</p>
+<p>The loss (error) is a scalar function of all weights and biases.</p>
+<p>In linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g.&nbsp;see left in picture).</p>
+<p>In deep learning, the loss becomes non-convex because it is the result of composing many nonlinear transformations. This creates a complex landscape with saddle points, flat regions, and multiple minima (e.g.&nbsp;see right in picture).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/costfunction.png" class="img-fluid figure-img"></p>
+<figcaption>costfunction</figcaption>
+</figure>
+</div>
+<p><strong>How will Gradient Descent work in this case - non convex function?</strong></p>
+<p>Gradient descent does not attempt to find the global minimum, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.</p>
+<p>The cost function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.</p>
+<p>(*The function is not differentiable at the point where the function is zero ex ReLU. This is not a problem in practice, as optimization algorithms handle such points using <a href="images/subgradient.png">subgradients</a>)</p>
+<p>In practice, deep learning works well despite non-convexity, partly because modern networks have millions of parameters and their loss landscapes contain many saddle points and wide, flat minima rather than <a href="images/poorlocalminima.png">poor isolated local minima</a>.</p>
+<p>Furthermore, we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent.</p>
+<p>In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset. The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.</p>
+</section>
+<section id="backpropagation" class="level2">
+<h2 class="anchored" data-anchor-id="backpropagation">Backpropagation</h2>
+<p><strong>What does it mean to take the derivative of a scalar function with respect to vector-valued parameters?</strong></p>
+<p>Finding the gradient is the job of Backpropagation.</p>
+<p>Backpropagation is based on Automatic Differentiation. Auto Diff is a fancy term to describe creating a computational graph and then differentiating it- via chain rule.</p>
+<p>Chain rule is a basic rule of differentiation of composite functions.</p>
+<p>In Neural networks each function is composed of vector functions.</p>
+<p>What is a derivative of a vector function? This is something hard to explain in a simple way. It is a matrix of gradients.</p>
+<p>This paper - The Simple Essence of Automatic Differentiation Extended version Conal Elliott explains this in detail. Quoting from it below.</p>
+<hr>
+<section id="jacobian-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="jacobian-matrix">Jacobian Matrix</h3>
+<p>The derivative <span class="math inline">\(f'(x)\)</span> of a function <span class="math inline">\(f: \mathbb{R} \to \mathbb{R}\)</span> at a point <span class="math inline">\(x\)</span> (in the domain of <span class="math inline">\(f\)</span>) is a number, defined as follows:</p>
+<p><span class="math display">\[
+f'(x) = \lim_{\epsilon \to 0} \frac{f(x + \epsilon) - f(x)}{\epsilon}
+\]</span></p>
+<p>That is, <span class="math inline">\(f'(x)\)</span> tells us how fast <span class="math inline">\(f\)</span> is scaling input changes at <span class="math inline">\(x\)</span>.</p>
+<p>Note here that <span class="math inline">\(\mathbb{R}\)</span> is the set of real numbers and <span class="math inline">\(\epsilon\)</span> is also a real number.</p>
+<p>How well does this definition hold up beyond functions of type <span class="math inline">\(\mathbb{R} \to \mathbb{R}\)</span>?</p>
+<p>When we extend to <span class="math inline">\(\mathbb{R}^m \to \mathbb{R}^n\)</span>, this definition no longer makes sense, as it would rely on dividing by a vector <span class="math inline">\(\epsilon \in \mathbb{R}^m\)</span>.</p>
+<p>This difficulty of differentiation with non-scalar domains is usually addressed with the notion of “partial derivatives” with respect to the <span class="math inline">\(m\)</span> scalar components of the domain <span class="math inline">\(\mathbb{R}^m\)</span>.</p>
+<p>When the codomain <span class="math inline">\(\mathbb{R}^n\)</span> is also non-scalar (i.e., <span class="math inline">\(n &gt; 1\)</span>), we have a matrix <span class="math inline">\(J\)</span> (the Jacobian), with <span class="math inline">\(J_{ij} = \partial f_i / \partial x_j\)</span> for <span class="math inline">\(i \in \{1, \dots, n\}\)</span>, where each <span class="math inline">\(f_i\)</span> projects out the <span class="math inline">\(i\)</span>-th scalar value from the result of <span class="math inline">\(f\)</span>.</p>
+<p>Moreover, each of these situations has an accompanying chain rule, which says how to differentiate the composition of two functions. Where the scalar chain rule involves multiplying two scalar derivatives, the vector chain rule involves “multiplying” two matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (the Jacobians), defined as follows:</p>
+<p><span class="math display">\[
+(A \cdot B)_{ij} = \sum_{k=1}^m A_{ik} \cdot B_{kj}
+\]</span></p>
+<p>Since one can think of scalars as a special case of vectors, and scalar multiplication as a special case of matrix multiplication, perhaps we’ve reached the needed generality.</p>
+<p>The derivative of a function <span class="math inline">\(f: a \to b\)</span> at some value in <span class="math inline">\(a\)</span> is thus not a number, vector, matrix, or higher-dimensional variant, but rather a linear map (also called “linear transformation”) from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, which we will write as <span class="math inline">\(a \multimap b\)</span>.</p>
+<p>The numbers, vectors, matrices, etc. mentioned above are all different representations of linear maps; and the various forms of “multiplication” appearing in their associated chain rules are all implementations of linear map composition for those representations.</p>
+<hr>
+<p>This above passage is taken from the paper on auto differentiation by Conal Elliott. Why I put it here is that it applies to our case of gradient descent as well.</p>
+<p>So the Loss function is a function of weight vectors <span class="math inline">\(w\)</span> and bias vectors <span class="math inline">\(b\)</span>.</p>
+<p><span class="math display">\[
+C(w, b)
+\]</span></p>
+<p>To minimize this, we need the derivative. But since our input is a vector (the weights) and our output is a scalar (the loss), what does the derivative look like?</p>
+<p>Following Conal Elliott’s definition, the derivative is not just a number, but a Linear Map. It is a function that tells us: ‘If we nudge the weights by a tiny vector <span class="math inline">\(\vec{v}\)</span>, how much will the Loss change?’</p>
+<p>We represent this abstract linear map using a concrete list of numbers called the Gradient Vector <span class="math inline">\(\nabla C\)</span>.</p>
+<p><span class="math display">\[
+\nabla C = \begin{bmatrix}
+\frac{\partial C}{\partial w} \\
+\frac{\partial C}{\partial b}
+\end{bmatrix}
+\]</span></p>
+<p>This linear map tells us how any small change in the parameters will change the loss. Gradient descent exploits this first-order approximation by choosing the parameter update that most rapidly decreases the loss.</p>
+<p>Mathematically this is more rigorous than the usual explanation of rolling down the gradient/slope which does not make sense in the context of a vector space.</p>
+<p><strong>So what is Gradient Descent?</strong></p>
+<p>Gradient Descent takes the Gradient Vector found by Backprop and performs a vector subtraction in the weight space:</p>
+<p><span class="math display">\[w_{new} = w_{old} - \eta \cdot \nabla C\]</span></p>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate.</p>
+<p><strong>And how do we find the gradient vector <span class="math inline">\(\nabla C\)</span>?</strong> via Backpropagation</p>
+<p>Next: <a href="./4_backpropogation_chainrule.html">Backpropagation</a></p>
+
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

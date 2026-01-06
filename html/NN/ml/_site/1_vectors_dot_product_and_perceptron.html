@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>vectors_dot_product_and_perceptron – The Mathematical Intuition Behind Deep Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-617dda62c7243b6972367a47cbfd8072.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_vectors_dot_product_and_perceptron.html">Vectors &amp; Perceptron</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_vectors_dot_product_and_perceptron.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Vectors &amp; Perceptron</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_perceptron_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Perceptron Training</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_gradient_descent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gradient Descent</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop (Chain Rule)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Neural Network Implementation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop (Matrix Calculus)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./8_backpropogation_full.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a>
+  <ul class="collapse">
+  <li><a href="#the-magic-of-representation---vector-space-and-hyperplane" id="toc-the-magic-of-representation---vector-space-and-hyperplane" class="nav-link" data-scroll-target="#the-magic-of-representation---vector-space-and-hyperplane">The Magic of Representation - Vector Space and Hyperplane</a>
+  <ul class="collapse">
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors">Vectors</a></li>
+  <li><a href="#matrices---a-way-to-represent-vectors-and-tensors" id="toc-matrices---a-way-to-represent-vectors-and-tensors" class="nav-link" data-scroll-target="#matrices---a-way-to-represent-vectors-and-tensors">Matrices - A way to represent Vectors (and Tensors)</a></li>
+  <li><a href="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." id="toc-two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." class="nav-link" data-scroll-target="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other.">Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other.</a></li>
+  <li><a href="#dot-product" id="toc-dot-product" class="nav-link" data-scroll-target="#dot-product">Dot product</a></li>
+  </ul></li>
+  <li><a href="#dot-product-for-checking-vector-alignment" id="toc-dot-product-for-checking-vector-alignment" class="nav-link" data-scroll-target="#dot-product-for-checking-vector-alignment">Dot Product for checking Vector Alignment</a>
+  <ul class="collapse">
+  <li><a href="#perceptron-learning-rule--intuition-nudging-the-vector" id="toc-perceptron-learning-rule--intuition-nudging-the-vector" class="nav-link" data-scroll-target="#perceptron-learning-rule--intuition-nudging-the-vector">Perceptron Learning Rule- Intuition: Nudging the Vector</a></li>
+  <li><a href="#the-update-rules" id="toc-the-update-rules" class="nav-link" data-scroll-target="#the-update-rules">The Update Rules</a></li>
+  </ul></li>
+  <li><a href="#simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." id="toc-simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." class="nav-link" data-scroll-target="#simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set.">Simple Hyperplane split is not possible for Non linearly seperable feature set).</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
+<h1>The Mathematical Intuition Behind Deep Learning</h1>
+<p>Alex Punnen<br>
+© All Rights Reserved</p>
+<hr>
+<p><a href="./index.html">Contents</a></p>
+<p>Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.</p>
+<p>Have you ever held an integrated circuit or chip in your hand or seen one? It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex, we need to understand the simpler constituents.</p>
+<hr>
+<section id="the-magic-of-representation---vector-space-and-hyperplane" class="level2">
+<h2 class="anchored" data-anchor-id="the-magic-of-representation---vector-space-and-hyperplane">The Magic of Representation - Vector Space and Hyperplane</h2>
+<p>Most people are familiar with neural networks, cost functions, gradient descent, and backpropagation. However, beyond these building blocks is the magic of representations.</p>
+<p>Features live in a multidimensional universe where the concept of a <strong>hyperplane</strong> classifies or clusters similar features together.</p>
+<p>This idea applies equally to the simplest neural networks and to modern architectures such as Transformers.</p>
+<p>One of the earliest neural networks, <strong>Rosenblatt’s Perceptron</strong>, introduced the idea of representing inputs as <strong>vectors</strong> and using the <strong>dot product</strong> to define a decision boundary — a hyperplane that separates input feature vectors.</p>
+<p>First a short refresher.</p>
+<section id="vectors" class="level3">
+<h3 class="anchored" data-anchor-id="vectors">Vectors</h3>
+<p>A vector is an object that has both a magnitude and a direction. Example Force and Velocity. Both have magnitude as well as direction.</p>
+<p>However we need to specify also a context where this vector lives -<a href="https://en.wikipedia.org/wiki/Vector_space">Vector Space</a>. For example when we are thinking about something like <a href="http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf">Force vector</a>, the context is usually 2D or 3D Euclidean world.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/2dvector.jpeg" class="img-fluid figure-img"></p>
+<figcaption>2Dvector</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/3dvector.jpeg" class="img-fluid figure-img"></p>
+<figcaption>3Dvector</figcaption>
+</figure>
+</div>
+<p>(Source: 3Blue1Brown)</p>
+<p>The easiest way to understand the Vector is in such a geometric context, say 2D or 3D cartesian coordinates, and then extrapolate it for other Vector spaces which we encounter but cannot really imagine.</p>
+</section>
+<section id="matrices---a-way-to-represent-vectors-and-tensors" class="level3">
+<h3 class="anchored" data-anchor-id="matrices---a-way-to-represent-vectors-and-tensors">Matrices - A way to represent Vectors (and Tensors)</h3>
+<p>Vectors are represented as matrices. A Vector is a one dimensional matrix.A matrix is defined to be a rectangular array of numbers. Example here is a <a href="https://en.wikipedia.org/wiki/Euclidean_vector">Euclidean Vector</a> in three-dimensional Euclidean space (or <span class="math inline">\(R^{3}\)</span>) with some magnitude and direction (from (0,0,0) origin in this case).</p>
+<p>A vector is represented either as column matrix (m<em>1)or as a row matrix (1</em>m).</p>
+<p><span class="math display">\[
+a = \begin{bmatrix}
+a_{1}\\a_{2}\\a_{3}\
+\end{bmatrix} = \begin{bmatrix} a_{1} &amp; a_{2} &amp;a_{3}\end{bmatrix}
+\]</span></p>
+<p><span class="math inline">\(a_{1},a_{2},a_{3}\)</span> are the component scalars of the vector. A vector is represented as <span class="math inline">\(\vec a\)</span> in the <strong>Vector notation</strong> and as <span class="math inline">\(a_{i}\)</span> in the <strong>Index Notation</strong>.</p>
+</section>
+<section id="two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." class="level3">
+<h3 class="anchored" data-anchor-id="two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other.">Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other.</h3>
+<p>This intuition is especially helpful when we use dot products on neural network weight matrices.</p>
+</section>
+<section id="dot-product" class="level3">
+<h3 class="anchored" data-anchor-id="dot-product">Dot product</h3>
+<p>This is a very important concept in linear algebra and is used in many places in machine learning.</p>
+<p><strong>Algebraically</strong>, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.</p>
+<p>if <span class="math inline">\(\vec a = \left\langle {a_1,a_2,a_3} \right\rangle\)</span> and <span class="math inline">\(\vec b = \left\langle {b_1,b_2,b_3} \right\rangle\)</span>, then</p>
+<p><span class="math inline">\(\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3} = a_ib_i \quad\text {in index notation}\)</span></p>
+<p><strong>Geometrically</strong>, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them</p>
+<p><span class="math display">\[
+\vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dotproduct.png" class="img-fluid figure-img"></p>
+<figcaption>dotproduct</figcaption>
+</figure>
+</div>
+<p>Note- These definitions are equivalent when using Cartesian coordinates (Ref <a href="http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx">8</a>, <a href="https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff">9</a>)</p>
+</section>
+</section>
+<section id="dot-product-for-checking-vector-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="dot-product-for-checking-vector-alignment">Dot Product for checking Vector Alignment</h2>
+<p>If two vectors point in roughly the same direction, their dot product is positive. If they point in opposite directions, the dot product is negative.</p>
+<p>This simple geometric fact becomes a powerful computational tool.</p>
+<p>Imagine a problem where we want to classify whether a leaf is healthy or diseased based on certain features. Each leaf is represented as a feature vector in a two-dimensional space (for simplicity).</p>
+<p>If we can find a weight vector such that:</p>
+<p>Its dot product with healthy leaf vectors is positive</p>
+<p>Its dot product with diseased leaf vectors is negative</p>
+<p>then that weight vector defines a hyperplane that splits the feature space into two regions.</p>
+<p>This is exactly how the Perceptron performs classification.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hyperplane1.png" class="img-fluid figure-img"></p>
+<figcaption>hyperplane1</figcaption>
+</figure>
+</div>
+<p>Imagine we have a problem of classifying if a leaf is healthy or not based on certain features of the leaf. For each leaf we have some feature vector set assume it is a 2D vector space with say color as the feature for simplicity.</p>
+<p>For any <strong>input feature vector</strong> in that vector space, if we have a <strong>weight vector</strong>, whose dot product with one feature vector of the set of input vectors of a certain class (say leaf is healthy) is positive, and with the other set is negative, then that weight vector is splitting the feature vector hyper-plane into two.</p>
+<p>Or in a better way, which shows the vectors properly</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://i.imgur.com/7MsJuS1.png" class="img-fluid figure-img"></p>
+<figcaption>weightvector</figcaption>
+</figure>
+</div>
+<p><strong>In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.</strong></p>
+<p>For any new leaf, if we only extract the same features into a feature vector; we can <em>dot product</em> it with the <em>trained</em> weight vector and find out if it falls in healthy or deceased class.</p>
+<p>Here is a Colab notebook to play around with this.<a href="https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing">14</a></p>
+<section id="perceptron-learning-rule--intuition-nudging-the-vector" class="level3">
+<h3 class="anchored" data-anchor-id="perceptron-learning-rule--intuition-nudging-the-vector">Perceptron Learning Rule- Intuition: Nudging the Vector</h3>
+<p>Imagine the weight vector <span class="math inline">\(w\)</span> as a pointer. We want this pointer to be oriented such that: 1. It points generally in the same direction as <strong>Positive</strong> examples. 2. It points away from <strong>Negative</strong> examples.</p>
+<p>We start with a random weight vector. Then, we iterate through our training data and check how the current <span class="math inline">\(w\)</span> classifies each point.</p>
+<ul>
+<li><strong>If the classification is correct</strong>: We do nothing. The weight vector is already doing its job for this point.</li>
+<li><strong>If the classification is wrong</strong>: We need to “nudge” or rotate the weight vector to correct the error.</li>
+</ul>
+</section>
+<section id="the-update-rules" class="level3">
+<h3 class="anchored" data-anchor-id="the-update-rules">The Update Rules</h3>
+<p>Let’s say we have an input vector <span class="math inline">\(x\)</span>.</p>
+<p><strong>Case 1: False Negative</strong> The input <span class="math inline">\(x\)</span> is a <strong>Positive</strong> example (<span class="math inline">\(y=1\)</span>), but our current <span class="math inline">\(w\)</span> classified it as negative (dot product <span class="math inline">\(w \cdot x &lt; 0\)</span>). * <strong>Action</strong>: We need to rotate <span class="math inline">\(w\)</span> <em>towards</em> <span class="math inline">\(x\)</span>. * <strong>Update</strong>: <span class="math inline">\(w_{new} = w_{old} + x\)</span> * <strong>Result</strong>: Adding <span class="math inline">\(x\)</span> to <span class="math inline">\(w\)</span> makes the new vector more aligned with <span class="math inline">\(x\)</span>, increasing the dot product for the next time.</p>
+<p><strong>Case 2: False Positive</strong> The input <span class="math inline">\(x\)</span> is a <strong>Negative</strong> example (<span class="math inline">\(y=0\)</span> or <span class="math inline">\(-1\)</span>), but our current <span class="math inline">\(w\)</span> classified it as positive (dot product <span class="math inline">\(w \cdot x &gt; 0\)</span>). * <strong>Action</strong>: We need to rotate <span class="math inline">\(w\)</span> <em>away</em> from <span class="math inline">\(x\)</span>. * <strong>Update</strong>: <span class="math inline">\(w_{new} = w_{old} - x\)</span> * <strong>Result</strong>: Subtracting <span class="math inline">\(x\)</span> from <span class="math inline">\(w\)</span> pushes it in the opposite direction, decreasing the dot product.</p>
+<p>We can combine these rules into a single update equation. We often introduce a <strong>learning rate</strong> <span class="math inline">\(\eta\)</span> (a small number like 0.1) to make the updates smoother, preventing the weight vector from jumping around too wildly.</p>
+<p>For each training example <span class="math inline">\((x, y_{target})\)</span>: 1. Compute prediction: <span class="math inline">\(\hat{y} = \text{step\_function}(w \cdot x)\)</span> 2. Calculate error: <span class="math inline">\(error = y_{target} - \hat{y}\)</span> 3. Update weights: <span class="math display">\[ w = w + \eta \cdot error \cdot x \]</span></p>
+<p>This is known as the <strong>Perceptron Learning Rule</strong>.</p>
+<p>Not all problems have their feature set which is <em>linearly seperable</em>. So this is a constraint of this system. For example XOR problem.</p>
+</section>
+</section>
+<section id="simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." class="level2">
+<h2 class="anchored" data-anchor-id="simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set.">Simple Hyperplane split is not possible for Non linearly seperable feature set).</h2>
+<p>The fact that Perceptron could not be used for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first <em>AI winter</em>, as much of the hype generated intially by Frank Rosenblatt’s discovery became a disillusionment.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://i.imgur.com/anmAM48.png" class="img-fluid figure-img"></p>
+<figcaption>linearseperable</figcaption>
+</figure>
+</div>
+<p># Summary</p>
+<p>What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space.</p>
+<p>We can then use the concept of hyperplane to split the feature space into two distinctive sets.</p>
+<p>This is the magic of Representation</p>
+<p>Next <a href="./2_perceptron_training.html">Perceptron Training</a></p>
+
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

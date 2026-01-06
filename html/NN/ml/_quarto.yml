@@ -3,23 +3,40 @@ project:
   output-dir: _site
 
 website:
-  title: "Neural Networks – Math Intuition"
-  navbar:
-    left:
+  title: "The Mathematical Intuition Behind Deep Learning"
+
+  # Put site navigation + search in a left sidebar (docs-style)
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
       - href: index.md
         text: Home
       - href: 1_vectors_dot_product_and_perceptron.md
         text: Vectors & Perceptron
+      - href: 2_perceptron_training.md
+        text: Perceptron Training
       - href: 3_gradient_descent.md
         text: Gradient Descent
+      - href: 4_backpropogation_chainrule.md
+        text: Backprop (Chain Rule)
+      - href: 6_neuralnetworkimpementation.md
+        text: Neural Network Implementation
+      - href: 7_backpropogation_matrix_calculus.md
+        text: Backprop (Matrix Calculus)
       - href: 8_backpropogation_full.md
-        text: Backprop (Full)
+        text: Backprop With Softmax and Cross Entropy
+
+  # Keep the top navbar minimal (no long page list)
+  navbar:
+    search: false
 
 format:
   html:
     theme: cosmo
     toc: true
-    number-sections: true
+    toc-location: left
+    number-sections: false
     math: mathjax
     code-fold: true
 
