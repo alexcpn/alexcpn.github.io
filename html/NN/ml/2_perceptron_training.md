@@ -84,7 +84,6 @@ Next: [Gradient Descent and Optimization](3_gradient_descent.md)
   [Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
    [perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
-  [6]: https://i.imgur.com/OIN3maH.png
   [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
   [linearseperable]: https://i.imgur.com/anmAM48.png
 
