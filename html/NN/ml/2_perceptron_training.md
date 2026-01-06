@@ -18,49 +18,61 @@ We have seen how the concept of splitting the hyper-plane of feature set separat
 
 ![cornellperceptron][6]
 
-## How are the weights learned ?
+## How are the weights learned?
 
-You may have heard about Gradient descent. For Perceptron leaning  is much simpler.
+You may have heard about **Gradient Descent**, which is the backbone of training modern neural networks. However, for the classic Perceptron, the learning algorithm is much simpler and relies on a geometric intuition.
 
-What is done is to start with a randomly initialized weight vector, compute a resultant classification (0 or 1) by taking the dot product with the input feature vector, and **then adjust the weight vector by a tiny bit to the right 'direction**' so that the output is closer to the expected value. Do this iteratively until the output is close enough.
+**The goal is to find a weight vector $w$ that defines a hyperplane separating the two classes of data (e.g., Positive and Negative).**
 
-Question is how to nudge to the correct "direction"?
+Note this term **hyperplane** is used in the context of feature vector space and is used throughout neural network learning.
 
-We want to rotate the weight vector to the direction of the input vector so that the hyperplane is closer to the correct classification.
 
-The error of a perceptron with weight vector w is the number of incorrectly classified points. The learning algorithm must minimize this *error function* $E(w)$
+### The Intuition: Nudging the Vector
 
-One possible strategy is to use a local greedy algorithm which works by computing the error of the perceptron for a given weight vector, looking then for a **direction in weight space** in which to move and update the weight vector.
+Imagine the weight vector $w$ as a pointer. We want this pointer to be oriented such that:
+1.  It points generally in the same direction as **Positive** examples.
+2.  It points away from **Negative** examples.
 
-Taking input from the training example, and doing a dot product with the weight vector; will give you either a value greater that 0 or less than 0.
+We start with a random weight vector. Then, we iterate through our training data and check how the current $w$ classifies each point.
 
- Note that this means which quadrant the feature vector lies; either in the positive quadrant (P) or on the negative side (N).
+*   **If the classification is correct**: We do nothing. The weight vector is already doing its job for this point.
+*   **If the classification is wrong**: We need to "nudge" or rotate the weight vector to correct the error.
 
-If this is as expected, then do nothing. If the dot product comes wrong, that is if input feature vector - say $x$, was $x \in P$, but dot product $w. x < 0$, we need to drag/rotate the weight vector towards x.
+### The Update Rules
 
-$w_n = w +x$
+Let's say we have an input vector $x$.
 
-Which is vector addition, that is $w$ is moved towards $x$. Say that  $x \in N$, but dot product $w. x > 0$ , then we need to do the reverse $w_n = w - x$
+**Case 1: False Negative**
+The input $x$ is a **Positive** example ($y=1$), but our current $w$ classified it as negative (dot product $w \cdot x < 0$).
+*   **Action**: We need to rotate $w$ *towards* $x$.
+*   **Update**: $w_{new} = w_{old} + x$
+*   **Result**: Adding $x$ to $w$ makes the new vector more aligned with $x$, increasing the dot product for the next time.
 
-This is the classical method of perceptron learning
+**Case 2: False Positive**
+The input $x$ is a **Negative** example ($y=0$ or $-1$), but our current $w$ classified it as positive (dot product $w \cdot x > 0$).
+*   **Action**: We need to rotate $w$ *away* from $x$.
+*   **Update**: $w_{new} = w_{old} - x$
+*   **Result**: Subtracting $x$ from $w$ pushes it in the opposite direction, decreasing the dot product.
+
+### The Formal Algorithm
+
+We can combine these rules into a single update equation. We often introduce a **learning rate** $\eta$ (a small number like 0.1) to make the updates smoother, preventing the weight vector from jumping around too wildly.
+
+For each training example $(x, y_{target})$:
+1.  Compute prediction: $\hat{y} = \text{step\_function}(w \cdot x)$
+2.  Calculate error: $error = y_{target} - \hat{y}$
+3.  Update weights:
+    $$ w = w + \eta \cdot error \cdot x $$
+
+This is known as the **Perceptron Learning Rule**.
 
 $$
-w_j = w_j + \delta w_j \\
-\begin{align}
-\delta w_j = 
-\begin{cases}
-    0  \; \text{ if instance is classified correctly}  \\
- +x_j  \; \text{ if Positive instance is classified as negative} \\
- -x_j  \; \text{ if Negative instance is classified as positive} \\
-\end{cases}
-\end{align}
+\Delta w_j = \eta (y_{target} - \text{prediction}) x_j
 $$
 
-This is also called the delta rule. Note that there is some articles that refer to this as gradient descent simplified. But gradient descent depends on the activation function being differentiable. The step function which is the activation function of the perceptron in non continuous and hence non differentiable.
+> **Note**: This is distinct from Gradient Descent. Gradient Descent requires a differentiable activation function to compute gradients (slope). The Perceptron uses a "step function" (hard 0 or 1) which is not differentiable. However, this simple rule is guaranteed to converge if the data is linearly separable.
 
-A more rigorous  explanation of the proof is here from the book
-[Neural Networks by R.Rojas] and more lucid explanation here
- [perceptron-learning-algorithm]
+A more rigorous explanation of the proof can be found in the book [Neural Networks by R.Rojas] or this [article][perceptron-learning-algorithm].
 
 ### The Perceptron Network and the AI winter
 

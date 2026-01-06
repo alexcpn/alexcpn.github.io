@@ -1,4 +1,4 @@
-# The Maths behind Neural Networks
+# The Maths behind Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 
