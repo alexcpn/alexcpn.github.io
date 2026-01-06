@@ -432,7 +432,7 @@ So, Backpropagation is the efficient execution of the Chain Rule by utilizing th
 *   It takes the incoming gradient vector from the future layer.
 *   It performs a Vector-Jacobian Product to pass the gradient to the past layer.
 
-
+Next [Backpropagation Continued](4_backpropagation.md)
 
 
 [neuralnetwork]: https://i.imgur.com/gE3QKCf.png

@@ -172,6 +172,7 @@ The fact that Perceptron could not be used  for XOR or XNOR; which was demonstra
 
  This is the magic of Representation
 
+Next [Perceptron](2_perceptron.md)
 
 
   [1]: https://en.wikipedia.org/wiki/Vector_space

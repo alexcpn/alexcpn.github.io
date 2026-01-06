@@ -139,7 +139,7 @@ Source : Michael Nielsen: NeuralNetwork and Deep Learning book
 
 This is the first pass; there are more details now to fill in; which we will take in subsequent chapters.
 
-Next: [Back propagation - Pass 2 (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
+Next: [Back propagation - Simplified Version (Scalar Calculus)](5_backpropogation_scalar_calculus.md)
 
 ---
 
