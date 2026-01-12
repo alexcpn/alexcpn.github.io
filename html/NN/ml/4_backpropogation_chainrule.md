@@ -10,15 +10,9 @@ Alex Punnen \
 
 # Chapter 4
 
-## Back Propagation 
+In this chapter lets deep dive a bit more into the technique of Back Propagation
 
-Neural network is basically a set of inputs connected through 'weights' to a set of activation functions whose output will be the input for the next layers and so on.
 
-![neuralnetwork]
-
-For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized, and the inputs passed into the activation function and gives an output.
-
- This output or computed values can be compared to the expected value and the difference gives the error of the network. We can create a 'Cost Function' like what we saw in the last chapter say the Mean Squared Error
 
 ## How Backpropagation works
 
@@ -28,7 +22,7 @@ The best way to understand backpropagation is visually and by the way it is done
 
  The below  GIF is a representation of a single path in the last layer($l$ of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.
 
-The central idea is how a small change in weight in the previous layer affects the final output of the network.
+The central idea is how a **small change** in weight in the previous layer affects the final output of the network.
 
 ![backpropogationgif]
 Source : Author
@@ -40,7 +34,7 @@ Here is a more detailed depiction of how the small change in weight adds through
 This is the **Chain Rule** of Calculus and the diagram is trying to illustrate that visually via a chain of activations, via a **Computational Graph**
 
 $$
-\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
+\frac{\partial C_0}{\partial w^l} = \frac{\partial C_0}{\partial a^l} \cdot \frac{\partial a^l}{\partial z^l} \cdot \frac{\partial z^l}{\partial w^l}
 $$
 
 ![backpropogationgif2]
@@ -53,9 +47,7 @@ The weights in each layer are adjusted in proportion to how each layers weights 
 This is by calculating the new weight by following the negative of the gradient of the Cost function - basically by gradient descent.
 
 $$
-
-  W^l_{new} = W^l_{old} - learningRate* \delta C_0/ \delta w^l
-
+  W^l_{new} = W^l_{old} - \eta \cdot \frac{\partial C_0}{\partial w^l}
 $$
 
 For adjusting the weight in the  $(l-1)$ layer, we do similar
@@ -63,13 +55,13 @@ For adjusting the weight in the  $(l-1)$ layer, we do similar
 First calculate how the weight in this layer contributes to the final Cost or Loss
 
 $$
-\delta C_0/\delta w^{l-1} = \delta z^{l-1}/\delta w^{l-1} . \delta a^{l-1}/\delta z^{l-1} . \delta C_0/\delta a^{l-1}
+\frac{\partial C_0}{\partial w^{l-1}} = \frac{\partial C_0}{\partial a^{l-1}} \cdot \frac{\partial a^{l-1}}{\partial z^{l-1}} \cdot \frac{\partial z^{l-1}}{\partial w^{l-1}}
 $$
 
 and using this. Basically we are using Chain rule to find the partial differential using the partial differentials calculated in earlier steps.
 
 $$
-  W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
+  W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C_0}{\partial w^{l-1}}
 $$
 
 ## Nerual Net as a Composition of Vector Functions
@@ -124,7 +116,7 @@ $$\frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial L_3} \cdot \frac{
 
 $$\frac{\partial C}{\partial w_3} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial w_3}$$
 
-Why is this written this way? By the chain rule, the derivative of a composition of functions is the product of the derivatives of the functions. It is thus easy to calculate the gradient of the loss with respect to the weights of each layer.
+Why is this written this way? By the **chain rule**, **the derivative of a composition of functions is the product of the derivatives of the functions**. It is thus easy to calculate the gradient of the loss with respect to the weights of each layer.
 
 Lets calculate the gradient of the loss with respect to the weights of the first layer.
 
@@ -187,6 +179,8 @@ $$ \delta_3 = \frac{\partial C}{\partial z_3} = (a_3 - y) \odot \sigma'(z_3) $$
 >
 > So multiplying by it is the same as a Hadamard product:
 > $$ \text{diag}(\sigma'(z)) \, v = v \odot \sigma'(z) $$
+
+We will see the Jacobian and Gradient Vector later.
 
 So the gradient for the weights is:
 $$ \frac{\partial C}{\partial w_3} = \delta_3 \cdot a_2^T $$

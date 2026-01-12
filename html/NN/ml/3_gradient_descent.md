@@ -114,46 +114,423 @@ There are two or three facts to understand about gradient descent:
 
 3. **Batch Size matters**: Calculating the gradient over the entire dataset (Batch Gradient Descent) is computationally expensive and memory-intensive. In practice, we use **Stochastic Gradient Descent (SGD)** (one example at a time) or, more commonly, **Mini-batch Gradient Descent** (a small batch of examples). This introduces noise into the gradient estimate, which paradoxically helps the optimization process escape shallow local minima and saddle points.
 
-## Optimization: Gradient Descent - Take 1
+## Optimization: Gradient Descent — Take 1
 
-For the Cost Function $C(w, b)$, we need to find the minimum of this function with respect to the weights $w$ and biases $b$.
+Gradient Descent is a simple yet powerful optimization algorithm used to minimize functions by iteratively updating parameters in the direction that reduces the function's output.
 
-We calculate the gradient of the cost function with respect to each weight and bias using backpropagation 
+For basic scalar functions (e.g., $( f(x) = x^2 )$), the update rule is straightforward:
 $$
-\nabla C = \begin{bmatrix}
-\frac{\partial C}{\partial w} \\
-\frac{\partial C}{\partial b}
-\end{bmatrix}
+x \leftarrow x - \eta \frac{df}{dx}
 $$
+where $( \eta )$ is the learning rate.
 
-Then update the weights in the opposite direction of the gradient:
+However, **neural networks are not simple scalar functions**. They are **composite vector-valued functions** — layers of transformations that take in high-dimensional input vectors and eventually output either vectors (like logits) or scalars (like loss values).
 
-$$
-w_{new} = w_{old} - \eta \frac{\partial C}{\partial w}
-$$
-$$
-b_{new} = b_{old} - \eta \frac{\partial C}{\partial b}
-$$
+Understanding how to optimize these complex, high-dimensional functions requires us to extend basic calculus:
+- The **gradient vector** helps when the function outputs a scalar but takes a vector input (e.g., a loss function w.r.t. weights).
+- The **Jacobian matrix** becomes important when both the input and the output are vectors (e.g., when computing gradients layer by layer in backpropagation).
 
-where $\eta$ is the **learning rate**. This update rule is called **Gradient Descent**.
+We'll build up to this step by step — starting with scalar gradients, then moving to vector calculus, Jacobians, and how backpropagation stitches it all together.
 
-### Why not Newton's Method?
-
-You might ask, why not use faster optimization methods like **Newton's Method** (Newton-Raphson)?
-
-Newton's method uses the second derivative (curvature) to find the minimum faster.
-$$ w_{new} = w_{old} - \frac{C'(w)}{C''(w)} $$
-
-However, for a neural network with millions of weights, calculating the second derivative (the Hessian matrix) is computationally infeasible. Gradient Descent, which uses only the first derivative, is much more scalable and efficient for Deep Learning.
-
-## Take 2 - Deeper Dive
+Let’s take it one layer at a time.
 
 
-The Error function is a scalar function of the weights and biases. 
+## Gradient Descent for Scalar Functions
 
-The loss (error) is a scalar function of all weights and biases.
 
-In linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g. see left in picture).
+Consider this simple system that composes two functions:
+
+  
+
+$$L = g(f(x, w_1), w_2)$$
+
+  
+
+Where:
+
+- $x$ is your input (fixed, given by your data)
+
+- $w_1$ and $w_2$ are **parameters you can adjust** (like weights in a neural network)
+
+- $f$ is the first function (think: first layer)
+
+- $g$ is the second function (think: second layer)
+
+- $L$ is the final output
+
+  
+
+Let's make this concrete with simple linear functions:
+
+  
+
+$$f(x, w_1) = x \cdot w_1 + b_1$$
+
+$$g(z, w_2) = z \cdot w_2 + b_2$$
+
+  
+
+So the full composition is:
+
+  
+
+$$L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2$$
+
+  
+
+### Running the Numbers: A Real Example
+
+  
+
+Let's pick actual values and see what happens:
+
+  
+
+**Fixed values:**
+
+- Input: $x = 2.0$
+
+- Bias terms: $b_1 = 1.0$, $b_2 = 0.5$
+
+  
+
+**Current parameter values:**
+
+- $w_1 = 0.5$
+
+- $w_2 = 1.5$
+
+  
+
+**Step 1**: Compute intermediate result from first function:
+
+  
+
+$$z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0$$
+
+  
+
+**Step 2**: Compute final output from second function:
+
+  
+
+$$L = g(z, w_2) = 2.0  \times  1.5 + 0.5 = 3.5$$
+
+  
+
+**The problem**: Suppose we want $L_{\text{target}} = 5.0$ instead!
+
+  
+
+Our current error is:
+
+  
+
+$$E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125$$
+
+  
+
+**The million-dollar question**: How should we change $w_1$ and $w_2$ to reduce this error?
+
+  
+
+### The Adjustment Problem: Which Direction? How Much?
+
+  
+
+Here's what we need to know:
+
+  
+
+1.  **Should we increase or decrease $w_1$?** (Which direction?)
+
+2.  **How sensitive is $L$ to changes in $w_1$?** (How much?)
+
+3.  **Same questions for $w_2$.**
+
+  
+
+This is where derivatives come in! Specifically, we need:
+
+  
+
+$$\frac{\partial L}{\partial w_1} \quad  \text{and} \quad  \frac{\partial L}{\partial w_2}$$
+
+  
+
+These tell us:
+
+-  **Sign**: Positive means "increase $w$ increases $L$", negative means the opposite
+
+-  **Magnitude**: Larger absolute value means $L$ is more sensitive to changes in $w$
+
+  
+
+But there's a complication: $w_1$ doesn't directly affect $L$. It affects $f$, which then affects $g$, which then affects $L$. This is a **composition**, and we need to trace the effect through multiple steps.
+
+This is where the "Chain Rule" of Calculus comes into play.
+
+### The Chain of Effects
+
+  
+
+Let's visualize how changes propagate:
+
+  
+
+```
+
+Change w₁ → Affects f → Changes z → Affects g → Changes L
+
+↓ ↓ ↓ ↓ ↓
+
+Δw₁ ∂f/∂w₁ Δz ∂g/∂z ΔL
+
+```
+
+  
+
+Similarly for $w_2$ (but $w_2$ directly affects $g$):
+
+  
+
+```
+
+Change w₂ → Affects g → Changes L
+
+↓ ↓ ↓
+
+Δw₂ ∂g/∂w₂ ΔL
+
+```
+
+  
+
+The key insight: **To find how $w_1$ affects $L$, we need to multiply the effects at each step.**
+
+  
+
+This is the **chain rule** in action!
+
+  
+
+### The Solution: Applying the Chain Rule
+
+  
+
+For our composition $L = g(f(x, w_1), w_2)$, let's introduce a shorthand: call $z = f(x, w_1)$ the intermediate value.
+
+  
+
+Then:
+
+$$L = g(z, w_2)$$
+
+  
+
+**Computing $\frac{\partial L}{\partial w_1}$:**
+
+  
+
+By the chain rule of calculus:
+
+  
+
+$$\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot  \frac{\partial z}{\partial w_1}$$
+
+  
+
+Let's compute each piece:
+
+  
+
+**Part 1**: How does $L$ change with $z$?
+
+  
+
+$$\frac{\partial L}{\partial z} = \frac{\partial}{\partial z}(z \cdot w_2 + b_2) = w_2 = 1.5$$
+
+  
+
+**Part 2**: How does $z$ change with $w_1$?
+
+  
+
+$$\frac{\partial z}{\partial w_1} = \frac{\partial}{\partial w_1}(x \cdot w_1 + b_1) = x = 2.0$$
+
+  
+
+**Putting it together**:
+
+  
+
+$$\frac{\partial L}{\partial w_1} = 1.5  \times  2.0 = 3.0$$
+
+  
+
+**Interpretation**: If we increase $w_1$ by 0.1, then $L$ increases by approximately $3.0  \times  0.1 = 0.3$.
+
+  
+
+**Computing $\frac{\partial L}{\partial w_2}$:**
+
+  
+
+This is simpler because $w_2$ directly affects $g$:
+
+  
+
+$$\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + b_2) = z = 2.0$$
+
+  
+
+**Interpretation**: If we increase $w_2$ by 0.1, then $L$ increases by approximately $2.0  \times  0.1 = 0.2$.
+
+  
+
+### Making the Update: Gradient Descent
+
+  
+
+Now we can adjust our parameters! Since we want to **increase** $L$ from 3.5 to 5.0, and both gradients are positive, we should increase both $w_1$ and $w_2$.
+
+  
+
+Using gradient descent with learning rate $\alpha = 0.2$:
+
+  
+
+$$w_1^{\text{new}} = w_1 + \alpha  \cdot  \frac{\partial L}{\partial w_1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1$$
+
+  
+
+$$w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9$$
+
+  
+
+**Note**: We're adding (not subtracting) because we want to increase $L$. Normally in machine learning, we minimize error, so we'd use $w - \alpha  \cdot  \frac{\partial E}{\partial w}$.
+
+  
+
+### Verification: Did It Work?
+
+  
+
+Let's recompute with the new weights:
+
+  
+
+**Step 1**: New intermediate value:
+
+  
+
+$$z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2$$
+
+  
+
+**Step 2**: New output:
+
+  
+
+$$L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58$$
+
+  
+
+**Progress check**:
+
+- Before: $L = 3.5$ (error from target = 1.5)
+
+- After: $L = 6.58$ (error from target = -1.58)
+
+- We overshot! But that's okay - we moved in the right direction
+
+  
+
+With a smaller learning rate (say $\alpha = 0.1$), we'd get:
+
+- $w_1^{\text{new}} = 0.8$, $w_2^{\text{new}} = 1.7$
+
+- $z^{\text{new}} = 2.6$, $L^{\text{new}} = 4.92$
+
+- Much closer to our target of 5.0!
+
+    
+This is how Gradient Descent works in a nutshell. The same concepts carry over in deep learning with some added complexity.
+
+## Gradient Descent for a Two-Layer Neural Network (Scalar Form)
+
+Let's apply this to a simple neural network with one hidden layer.
+We have:
+*   **Input**: $x$
+*   **Hidden Layer**: 1 neuron with weight $w_1$, bias $b_1$, activation $\sigma$
+*   **Output Layer**: 1 neuron with weight $w_2$, bias $b_2$, activation $\sigma$
+*   **Target**: $y$
+
+**Forward Pass:**
+1.  $z_1 = w_1 x + b_1$
+2.  $a_1 = \sigma(z_1)$
+3.  $z_2 = w_2 a_1 + b_2$
+4.  $a_2 = \sigma(z_2)$ (This is our prediction $\hat{y}$)
+
+**Loss Function:**
+We use the Mean Squared Error (MSE) for this single example:
+$$ C = \frac{1}{2}(y - a_2)^2 $$
+
+**Goal:**
+Find $\frac{\partial C}{\partial w_1}, \frac{\partial C}{\partial b_1}, \frac{\partial C}{\partial w_2}, \frac{\partial C}{\partial b_2}$ to update the weights.
+
+**Backward Pass (Deriving Gradients):**
+
+**Layer 2 (Output Layer):**
+We want how $C$ changes with $w_2$.
+$$ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} $$
+
+*   $\frac{\partial C}{\partial a_2} = -(y - a_2)$ (Derivative of $\frac{1}{2}(y-a)^2$)
+*   $\frac{\partial a_2}{\partial z_2} = \sigma'(z_2)$ (Derivative of activation)
+*   $\frac{\partial z_2}{\partial w_2} = a_1$
+
+So,
+$$ \frac{\partial C}{\partial w_2} = -(y - a_2) \sigma'(z_2) a_1 $$
+
+Let's define the "error term" for layer 2 as $\delta_2 = -(y - a_2) \sigma'(z_2)$.
+Then:
+$$ \frac{\partial C}{\partial w_2} = \delta_2 a_1 $$
+$$ \frac{\partial C}{\partial b_2} = \delta_2 \cdot 1 = \delta_2 $$
+
+**Layer 1 (Hidden Layer):**
+We want how $C$ changes with $w_1$. The path is longer: $w_1 \to z_1 \to a_1 \to z_2 \to a_2 \to C$.
+$$ \frac{\partial C}{\partial w_1} = \underbrace{\frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2}}_{\delta_2} \cdot \frac{\partial z_2}{\partial a_1} \cdot \frac{\partial a_1}{\partial z_1} \cdot \frac{\partial z_1}{\partial w_1} $$
+
+*   We know the first part is $\delta_2$.
+*   $\frac{\partial z_2}{\partial a_1} = w_2$
+*   $\frac{\partial a_1}{\partial z_1} = \sigma'(z_1)$
+*   $\frac{\partial z_1}{\partial w_1} = x$
+
+So,
+$$ \frac{\partial C}{\partial w_1} = \delta_2 \cdot w_2 \cdot \sigma'(z_1) \cdot x $$
+
+Let's define the error term for layer 1 as $\delta_1 = \delta_2 w_2 \sigma'(z_1)$.
+Then:
+$$ \frac{\partial C}{\partial w_1} = \delta_1 x $$
+$$ \frac{\partial C}{\partial b_1} = \delta_1 $$
+
+**The Update:**
+$$ w_1 \leftarrow w_1 - \eta \delta_1 x $$
+$$ w_2 \leftarrow w_2 - \eta \delta_2 a_1 $$
+
+This pattern—calculating an error term $\delta$ at the output and propagating it back using the weights—is why it's called **Backpropagation**.
+
+Note that we are using here scalar form of gradient descent and not directly applicable to real neural networks.  But this gives us the intuition of how backpropagation works.
+
+## Some other notes related to Gradient Descent
+
+
+
+The Loss/Cost function is a scalar function of the weights and biases. 
+
+The loss/error is a scalar function of all weights and biases.
+
+In simpler Machine Learning problems like linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g. see left in picture).
 
 In deep learning, the loss becomes non-convex because it is the result of composing many nonlinear transformations. This creates a complex landscape with saddle points, flat regions, and multiple minima (e.g. see right in picture).
 
@@ -161,108 +538,20 @@ In deep learning, the loss becomes non-convex because it is the result of compos
 
 **How will Gradient Descent work in this case - non convex function?**
 
-Gradient descent does not attempt to find the global minimum, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.
+Gradient descent does not attempt to find the **global minimum**, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.
 
-The cost function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.
+The Loss function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.
 
 (*The function is not differentiable at the point where the function is zero ex ReLU. This is not a problem in practice, as optimization algorithms handle such points using [subgradients](images/subgradient.png))
 
 In practice, deep learning works well despite non-convexity, partly because modern networks have millions of parameters and their loss landscapes contain many saddle points and wide, flat minima rather than [poor isolated local minima](images/poorlocalminima.png).
 
-Furthermore, we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent.
+Also we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent that acts as form of sampling.
 
-In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset. The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.
+In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset. 
 
+The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.
 
-## Backpropagation
-
-**What does it mean to take the derivative of a scalar function with respect to vector-valued parameters?**
-
-Finding the gradient is the job of Backpropagation. 
-
-Backpropagation is based on Automatic Differentiation. Auto Diff is a fancy term to describe creating a computational graph and then differentiating it- via chain rule.
-
-Chain rule is a basic rule of differentiation of composite functions.
-
-In Neural networks each function is composed of vector functions.
-
-What is a derivative of a vector function? This is something hard to explain in a simple way. It is a matrix of gradients.
-
-This paper - The Simple Essence of Automatic Differentiation
-Extended version Conal Elliott explains this in detail.
-Quoting from it below.
-
----
-
-### Jacobian Matrix 
-
-The derivative $f'(x)$ of a function $f: \mathbb{R} \to \mathbb{R}$ at a point $x$ (in the domain of $f$) is a number, defined as follows:
-
-$$
-f'(x) = \lim_{\epsilon \to 0} \frac{f(x + \epsilon) - f(x)}{\epsilon}
-$$
-
-That is, $f'(x)$ tells us how fast $f$ is scaling input changes at $x$.
-
-Note here that $\mathbb{R}$ is the set of real numbers and $\epsilon$ is also a real number.
-
-How well does this definition hold up beyond functions of type $\mathbb{R} \to \mathbb{R}$? 
-
-When we extend to $\mathbb{R}^m \to \mathbb{R}^n$, this definition no longer makes sense, as it would rely on dividing by a vector $\epsilon \in \mathbb{R}^m$.
-
-This difficulty of differentiation with non-scalar domains is usually addressed with the notion of "partial derivatives" with respect to the $m$ scalar components of the domain $\mathbb{R}^m$.
-
-When the codomain $\mathbb{R}^n$ is also non-scalar (i.e., $n > 1$), we have a matrix $J$ (the Jacobian), with $J_{ij} = \partial f_i / \partial x_j$ for $i \in \{1, \dots, n\}$, where each $f_i$ projects out the $i$-th scalar value from the result of $f$.
-
-Moreover, each of these situations has an accompanying chain rule, which says how to differentiate the composition of two functions. 
-Where the scalar chain rule involves multiplying two scalar derivatives, the vector chain rule involves "multiplying" two matrices $A$ and $B$ (the Jacobians), defined as follows:
-
-$$
-(A \cdot B)_{ij} = \sum_{k=1}^m A_{ik} \cdot B_{kj}
-$$
-
-Since one can think of scalars as a special case of vectors, and scalar multiplication as a special case of matrix multiplication, perhaps we've reached the needed generality.
-
-The derivative of a function $f: a \to b$ at some value in $a$ is thus not a number, vector, matrix, or higher-dimensional variant, but rather a linear map (also called "linear transformation") from $a$ to $b$, which we will write as $a \multimap b$. 
-
-The numbers, vectors, matrices, etc. mentioned above are all different representations of linear maps; and the various forms of "multiplication" appearing in their associated chain rules are all implementations of linear map composition for those representations.
-
----
-
-This above passage is taken from the paper on auto differentiation by Conal Elliott. Why I put it here is that it applies to our case of gradient descent as well. 
-
-So the Loss function is a function of weight vectors $w$ and bias vectors $b$. 
-
-$$
-C(w, b)
-$$
-
-To minimize this, we need the derivative. But since our input is a vector (the weights) and our output is a scalar (the loss), what does the derivative look like?
-
-Following Conal Elliott's definition, the derivative is not just a number, but a Linear Map. It is a function that tells us: 'If we nudge the weights by a tiny vector $\vec{v}$, how much will the Loss change?'
-
-We represent this abstract linear map using a concrete list of numbers called the Gradient Vector $\nabla C$.
-
-$$
-\nabla C = \begin{bmatrix}
-\frac{\partial C}{\partial w} \\
-\frac{\partial C}{\partial b}
-\end{bmatrix}
-$$
-
-This linear map tells us how any small change in the parameters will change the loss. Gradient descent exploits this first-order approximation by choosing the parameter update that most rapidly decreases the loss.
-
-Mathematically this is more rigorous than the usual explanation of rolling down the gradient/slope which does not make sense in the context of a vector space.
-
-**So what is Gradient Descent?**
-
- Gradient Descent takes the Gradient Vector found by Backprop and performs a vector subtraction in the weight space:
- 
- $$w_{new} = w_{old} - \eta \cdot \nabla C$$
-
-where $\eta$ is the learning rate.
-
-**And how do we find the gradient vector $\nabla C$?**  via Backpropagation
 
 Next: [Backpropagation](4_backpropogation_chainrule.md)
 

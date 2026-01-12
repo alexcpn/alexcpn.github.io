@@ -53,10 +53,11 @@ $$
 
 $a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represented as $\vec a$ in the **Vector notation** and as $a_{i}$ in the **Index Notation**. 
 
+
 ### Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other. 
 
-
 This intuition is especially helpful when we use dot products on neural network weight matrices.
+
 
 ### Dot product
 
@@ -69,6 +70,14 @@ if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langl
 
 $\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3} = a_ib_i \quad\text {in index notation}$
 
+In Matrix notation, 
+
+$$
+\vec a \cdot \vec b = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix} \begin{bmatrix} b_{1}\\b_{2}\\b_{3}\end{bmatrix} = a_ib_i 
+$$
+
+
+
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 
 $$
@@ -78,6 +87,14 @@ $$
  ![dotproduct](images/dotproduct.png)
 
 Note- These definitions are equivalent when using Cartesian coordinates (Ref [8], [9])
+
+
+### Transpose
+
+The transpose of a matrix is an operator which flips a matrix over its diagonal; that is, it switches the row and column indices of the matrix A by producing another matrix, often denoted by $A^T$.
+
+**This is important because the dot product of two vectors can be written as the matrix product of a row vector and a column vector:
+$\vec a \cdot \vec b = a^T b$**
 
 ## Dot Product for checking Vector Alignment
 

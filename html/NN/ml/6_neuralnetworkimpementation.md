@@ -12,7 +12,7 @@ Alex Punnen \
 ## A Simple NeuralNet with  Back Propagation
 
 
-With the derivative of the Cost function dervied from the last chapter, we can code the network
+With the derivative of the Cost function derived from the last chapter, we can code the network
 
 We will use matrices to represent input and weight matrices.
 
@@ -44,7 +44,7 @@ This is a 4*1 matrix that represent the expected output. That is for input [0,0,
 
 **A neural network is implemented as a set of matrices representing the weights of the network.**
 
-Let's create a two layered network. Before that please not the formula for the neural network
+Let's create a two layered network. Before that please note the formula for the neural network
 
 So basically the output at layer l is the dot product of the weight matrix of layer l and input of the previous layer.
 
@@ -78,7 +78,7 @@ w2 = np.random.random((4,1))
 
 We can have an array of the weights to loop through, but for the time being let's hard-code these. Note that 'np' stands for the popular numpy array library in Python.
 
-We also need to code in our non linearity.We will use the Sigmoid function here.
+We also need to code in our non-linearity. We will use the Sigmoid function here.
 
 ```python
 def sigmoid(x):
@@ -150,7 +150,7 @@ np.random.seed(1)
 # pretty print numpy array
 np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
 
-# let us code our sigmoid funciton
+# let us code our sigmoid function
 def sigmoid(x):
     return 1/(1+np.exp(-x))
 
@@ -160,7 +160,7 @@ def derv_sigmoid(x):
 
 #---------------------------------------------------------------
 
-# Two layered NW. Using from (1) and the equations we derived as explanaionns
+# Two layered NW. Using from (1) and the equations we derived as explanations
 # (1) http://iamtrask.github.io/2015/07/12/basic-python-network/
 #---------------------------------------------------------------
 
@@ -173,7 +173,7 @@ x = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
 # desired output for each of the training set above
 y = np.array([[0,1,1,0]]).T
 
-# Explanaiton - as long as input has two ones, but not three, ouput is One
+# Explanation - as long as input has two ones, but not three, output is One
 """
 Input [0,0,1]  Output = 0
 Input [0,1,1]  Output = 1
@@ -181,7 +181,7 @@ Input [1,0,1]  Output = 1
 Input [1,1,1]  Output = 0
 """
 
-# Randomly initalised weights
+# Randomly initialized weights
 weight1 =  np.random.random((3,4)) 
 weight2 =  np.random.random((4,1)) 
 
@@ -197,12 +197,12 @@ for iter in range(0,iterations):
   z2= np.dot(a1,weight2)
   a2 = sigmoid(z2) 
   if iter == 0:
-    print("Intial Ouput \n",a2)
+    print("Initial Output \n",a2)
 
   # Backward Pass - Backpropagation 
   delta2  = (a2-y)
   #---------------------------------------------------------------
-  # Calcluating change of Cost/Loss wrto weight of 2nd/last layer
+  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
   # Eq (A) ---> dC_dw2 = delta2*derv_sigmoid(z2)*a1.T
   #---------------------------------------------------------------
 
@@ -210,51 +210,50 @@ for iter in range(0,iterations):
   dC_dw2  = a1.T.dot(dC_dw2_1)
   
   #---------------------------------------------------------------
-  # Calcluating change of Cost/Loss wrto weight of 2nd/last layer
+  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
   # Eq (B)---> dC_dw1 = derv_sigmoid(z1)*delta2*derv_sigmoid(z2)*weight2*a0.T
   # dC_dw1 = derv_sigmoid(z1)*dC_dw2*weight2_1*a0.T
   #---------------------------------------------------------------
 
-  dC_dw1 =  np.multiply(dC_dw2_1,weight2.T) * derv_sigmoid(z1)
-  # todo - the weight2.T is the only thing not in equation here
+  dC_dw1 =  np.dot(dC_dw2_1, weight2.T) * derv_sigmoid(z1)
   dC_dw1 = a0.T.dot(dC_dw1)
 
   #---------------------------------------------------------------
-  #Gradinent descent
+  #Gradient descent
   #---------------------------------------------------------------
  
   weight2 = weight2 - learningRate*(dC_dw2)
   weight1 = weight1 - learningRate*(dC_dw1)
 
 
-print("New ouput",a2)
+print("New output",a2)
 
 #---------------------------------------------------------------
 # Training is done, weight2 and weight2 are primed for output y
 #---------------------------------------------------------------
 
-# Lets test out, two ones in input and one zero, ouput should be One
+# Lets test out, two ones in input and one zero, output should be One
 x = np.array([[1,0,1]])
 z1= np.dot(x,weight1)
 a1 = sigmoid(z1) 
 z2= np.dot(a1,weight2)
 a2 = sigmoid(z2) 
-print("Ouput after Training is \n",a2)
+print("Output after Training is \n",a2)
 ```
 
 Output
 
 ```console
-Intial Ouput 
+Initial Output 
  [[ 0.758]
  [ 0.771]
  [ 0.791]
  [ 0.801]]
-New ouput [[ 0.028]
+New output [[ 0.028]
  [ 0.925]
  [ 0.925]
  [ 0.090]]
-Ouput after Training is 
+Output after Training is 
  [[ 0.925]]
  ```
 
