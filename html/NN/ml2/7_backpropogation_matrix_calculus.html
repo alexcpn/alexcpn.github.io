@@ -234,13 +234,26 @@ window.Quarto = {
   <li><a href="#chapter-6" id="toc-chapter-6" class="nav-link" data-scroll-target="#chapter-6">Chapter 6</a>
   <ul class="collapse">
   <li><a href="#back-propagation--matrix-calculus" id="toc-back-propagation--matrix-calculus" class="nav-link" data-scroll-target="#back-propagation--matrix-calculus">Back Propagation -Matrix Calculus</a></li>
-  <li><a href="#gradient-vector2d-tensor-of-loss-function-in-last-layer" id="toc-gradient-vector2d-tensor-of-loss-function-in-last-layer" class="nav-link" data-scroll-target="#gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</a></li>
-  <li><a href="#partial-derivative-of-loss-function-with-respect-to-weight" id="toc-partial-derivative-of-loss-function-with-respect-to-weight" class="nav-link" data-scroll-target="#partial-derivative-of-loss-function-with-respect-to-weight">Partial Derivative of Loss function with respect to Weight</a>
+  <li><a href="#some-math-intuition" id="toc-some-math-intuition" class="nav-link" data-scroll-target="#some-math-intuition">Some Math Intuition</a>
   <ul class="collapse">
-  <li><a href="#now-we-need-to-find-fracpartial-a2partial-w2" id="toc-now-we-need-to-find-fracpartial-a2partial-w2" class="nav-link" data-scroll-target="#now-we-need-to-find-fracpartial-a2partial-w2">Now we need to find <span class="math display">\[\frac{\partial a^2}{\partial w^2}\]</span></a></li>
+  <li><a href="#gradient-vector" id="toc-gradient-vector" class="nav-link" data-scroll-target="#gradient-vector">Gradient Vector</a></li>
   </ul></li>
-  <li><a href="#gradient-vector-of-loss-function-in-inner-layer" id="toc-gradient-vector-of-loss-function-in-inner-layer" class="nav-link" data-scroll-target="#gradient-vector-of-loss-function-in-inner-layer">Gradient Vector of Loss function in Inner Layer</a></li>
-  <li><a href="#final-equations" id="toc-final-equations" class="nav-link" data-scroll-target="#final-equations">Final Equations</a></li>
+  <li><a href="#jacobian-matrix" id="toc-jacobian-matrix" class="nav-link" data-scroll-target="#jacobian-matrix">Jacobian Matrix</a>
+  <ul class="collapse">
+  <li><a href="#the-chain-rule-with-matrices" id="toc-the-chain-rule-with-matrices" class="nav-link" data-scroll-target="#the-chain-rule-with-matrices">The Chain Rule with Matrices</a></li>
+  <li><a href="#backpropogation-trick---vjp-vector-jacobian-product-and-jvp-jacobian-vector-product" id="toc-backpropogation-trick---vjp-vector-jacobian-product-and-jvp-jacobian-vector-product" class="nav-link" data-scroll-target="#backpropogation-trick---vjp-vector-jacobian-product-and-jvp-jacobian-vector-product">BackPropogation Trick - VJP (Vector Jacobian Product) and JVP (Jacobian Vector Product)</a></li>
+  <li><a href="#hadamard-product" id="toc-hadamard-product" class="nav-link" data-scroll-target="#hadamard-product">Hadamard Product</a></li>
+  </ul></li>
+  <li><a href="#backpropagation-derivation" id="toc-backpropagation-derivation" class="nav-link" data-scroll-target="#backpropagation-derivation">Backpropagation Derivation</a>
+  <ul class="collapse">
+  <li><a href="#the-2-layer-neural-network-model" id="toc-the-2-layer-neural-network-model" class="nav-link" data-scroll-target="#the-2-layer-neural-network-model">The 2-Layer Neural Network Model</a></li>
+  <li><a href="#gradient-vector2d-tensor-of-loss-function-in-last-layer" id="toc-gradient-vector2d-tensor-of-loss-function-in-last-layer" class="nav-link" data-scroll-target="#gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</a></li>
+  </ul></li>
+  <li><a href="#jacobian-of-loss-function-in-inner-layer" id="toc-jacobian-of-loss-function-in-inner-layer" class="nav-link" data-scroll-target="#jacobian-of-loss-function-in-inner-layer">Jacobian of Loss function in Inner Layer</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-backpropagation-equations" id="toc-summary-of-backpropagation-equations" class="nav-link" data-scroll-target="#summary-of-backpropagation-equations">Summary of Backpropagation Equations</a></li>
+  <li><a href="#summary-of-backpropagation-equations-in-terms-of-say-numpy" id="toc-summary-of-backpropagation-equations-in-terms-of-say-numpy" class="nav-link" data-scroll-target="#summary-of-backpropagation-equations-in-terms-of-say-numpy">Summary of Backpropagation Equations in terms of say Numpy</a></li>
+  </ul></li>
   <li><a href="#using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" id="toc-using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" class="nav-link" data-scroll-target="#using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function">Using Gradient Descent to find the optimal weights to reduce the Loss function</a></li>
   </ul></li>
   </ul>
@@ -267,7 +280,10 @@ window.Quarto = {
 <h1>Chapter 6</h1>
 <section id="back-propagation--matrix-calculus" class="level2">
 <h2 class="anchored" data-anchor-id="back-propagation--matrix-calculus">Back Propagation -Matrix Calculus</h2>
-<p>The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadmard product and matrix transposes with scalar derivation alignment.</p>
+<p>The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.</p>
+<p>But we have not really explained why we use Hadamard product and matrix transposes with scalar derivation alignment.</p>
+<p>This is due to Matrix Calculus which is the real way in which we should be deriving the Back Propagation formula.</p>
+<p>Lets explore this in this chapter. Note that we are still not using a Softmax activation function in the output layer as is usually the case with Deep Neural Networks. Deriving the Back Propagation formula with Softmax activation function is bit more complex and we will do that in a later chapter.</p>
 <p>Let’s take the previous two layered simple neural network,with a Mean Square Error Loss function, and derive the Back Propagation formula with Matrix Calculus now.</p>
 <p>Let’s write the equation of the following neural network</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="kw">is</span> the Input</span>
@@ -278,196 +294,244 @@ window.Quarto = {
 x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 \]</span></p>
 <p>Where the activation <span class="math inline">\(a^l\)</span> is <span class="math display">\[
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
+  a^{l} = \sigma(W^l a^{l-1}+b^l).
 \]</span></p>
 <p>and</p>
 <p><span class="math display">\[
 a^{l} = \sigma(z^l) \quad where \quad
-z^l =w^l a^{l-1} +b^l
+z^l =W^l a^{l-1} +b^l
 \]</span></p>
 <p>Our two layer neural network can be written as</p>
 <p><span class="math display">\[
 \mathbf { a^0 \rightarrow a^{1} \rightarrow  a^{2} \rightarrow  y }
 \]</span></p>
 <p>(<span class="math inline">\(a^2\)</span> does not denote the exponent but just that it is of layer 2)</p>
-<p>Lets write down the derivative of Loss function wrto weight using chain rule</p>
-<p><span class="math display">\[
-\mathbf {
-\frac {\partial C}{\partial w^l}
-= \frac {\partial a^l}{\partial w^l} . \frac {\partial C}{\partial a^l}
-}
-\]</span></p>
-<p>We will use the above equation as the basis for the rest of the chapter.</p>
-<p>&nbsp;</p>
 </section>
-<section id="gradient-vector2d-tensor-of-loss-function-in-last-layer" class="level2">
-<h2 class="anchored" data-anchor-id="gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</h2>
+<section id="some-math-intuition" class="level2">
+<h2 class="anchored" data-anchor-id="some-math-intuition">Some Math Intuition</h2>
+<p>The concept of a Neural Network as a composition of functions remains central.</p>
+<p>In our network, most layers represent functions that map a <strong>Vector to a Vector</strong> (<span class="math inline">\(\mathbb{R}^n \to \mathbb{R}^m\)</span>). For example, the hidden layers take an input vector and produce an activation vector.</p>
+<p>However, the final step—calculating the Loss—is different. It maps the final output vector <span class="math inline">\(a^L\)</span> (and the target <span class="math inline">\(y\)</span>) to a single <strong>Scalar</strong> value, the Cost <span class="math inline">\(C\)</span> (<span class="math inline">\(\mathbb{R}^n \to \mathbb{R}\)</span>).</p>
+<section id="gradient-vector" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-vector">Gradient Vector</h3>
+<p>When we take the derivative of a scalar-valued function (like the Cost <span class="math inline">\(C\)</span>) with respect to a vector (like the weights <span class="math inline">\(w\)</span>), the result is a vector of the same size as <span class="math inline">\(w\)</span>. This is called the <strong>Gradient Vector</strong>.</p>
 <p><span class="math display">\[
-C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
+\nabla_w C = \begin{bmatrix} \frac{\partial C}{\partial w_1} \\ \vdots \\ \frac{\partial C}{\partial w_n} \end{bmatrix}
 \]</span></p>
-<p>Assuming a neural net with 2 layers, we have the final Loss as</p>
+<p>Why is it called a “gradient”?</p>
+<p>Because the gradient points in the direction of steepest increase of the function.</p>
+<p>Moving a tiny step along <span class="math inline">\(+\nabla_w C\)</span> increases the cost the fastest.</p>
+<p>Moving a tiny step against it, i.e.&nbsp;along <span class="math inline">\(-\nabla_w C\)</span>, decreases the cost the fastest.</p>
+<p>That’s exactly why gradient descent updates parameters like this:</p>
 <p><span class="math display">\[
-C = \frac{1}{2} \sum_j (y_j-a^2_j)^2
+w \leftarrow w - \eta \nabla_w C
 \]</span></p>
-<p>Where</p>
-<p><span class="math display">\[
-a^2 = \sigma(w^2.a^1)
-\]</span></p>
-<p>We can then write</p>
-<p><span class="math display">\[
-C = \frac{1}{2} \sum_j v^2 \quad \rightarrow (Eq \;A)
-\]</span></p>
-<p>Where</p>
-<p><span class="math display">\[
-v= y-a^2
-\]</span></p>
-</section>
-<section id="partial-derivative-of-loss-function-with-respect-to-weight" class="level2">
-<h2 class="anchored" data-anchor-id="partial-derivative-of-loss-function-with-respect-to-weight">Partial Derivative of Loss function with respect to Weight</h2>
-<p>For the last layer, lets use Chain Rule to split like below</p>
-<p><span class="math display">\[
-\frac {\partial C}{\partial w^2} = \frac{\partial v^2}{\partial v} * \frac{\partial v}{\partial w^2} \quad \rightarrow (Eq \;B)
-\]</span></p>
-<p><span class="math display">\[
-\frac{\partial v^2}{\partial v} =2v \quad \rightarrow (Eq \;B.1)
-\]</span></p>
-<p><span class="math display">\[
-\frac{\partial v}{\partial w^2}=  \frac{\partial (y-a^2)}{\partial w^2} =
-0-\frac{\partial a^2}{\partial w^2} \quad \rightarrow (Eq \;B.2)
-\]</span></p>
-<p><span class="math display">\[
-\frac {\partial C}{\partial w^2} = \frac{1}{2} *2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
-\]</span> &nbsp;</p>
-<section id="now-we-need-to-find-fracpartial-a2partial-w2" class="level3">
-<h3 class="anchored" data-anchor-id="now-we-need-to-find-fracpartial-a2partial-w2">Now we need to find <span class="math display">\[\frac{\partial a^2}{\partial w^2}\]</span></h3>
-<p>Let</p>
-<p><span class="math display">\[
-\begin{aligned}
-a^2= \sigma(\sum(w^2 \otimes a^1 )) = \sigma(z^2)
-\\\\
-z^2 =  \sum(w^2 \otimes a^1)
-\\\\
-z^2 = \sum(k^2) \; \text {, where} \; k^2=w^2 \otimes a^1
-\end{aligned}
-\]</span></p>
-<p>We now need to derive an intermediate term which we will use later</p>
-<p><span class="math display">\[
-\begin{aligned}
-\frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
-\\\\
-=\frac {\partial \sum(k^2)}{\partial k^2}* \frac {\partial (w^2 \otimes a^1 )} {\partial w^2}
-\\ \\
-\frac{\partial z^2}{\partial w^2} = (1^{\rightarrow})^T* diag(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
-\end{aligned}
-\]</span></p>
-<p>Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2</p>
-<p>The Vector dot product <span class="math inline">\(w.a\)</span> when applied on matrices becomes the sum of elementwise multiplication (also called Hadamard product) <span class="math inline">\(\sum w^2 \otimes a^1\)</span></p>
-<p>Going back to <span class="math inline">\(Eq \;(B.2)\)</span></p>
-<p><span class="math display">\[
-\frac {\partial a^2}{\partial w^2} = \frac{\partial a^2}{\partial z^2} * \frac{\partial z^2}{\partial w^2}
-\]</span></p>
-<p>Using <span class="math inline">\(Eq \;(B.3)\)</span> for the term in left</p>
-<p><span class="math display">\[
-=  \frac{\partial a^2}{\partial z^2} * (a^{1})^T
-\]</span></p>
-<p><span class="math display">\[
-=  \frac{\partial \sigma(z^2)}{\partial z^2} * (a^{1})^T
-\]</span></p>
-<p><span class="math display">\[
-\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
-\]</span></p>
-<p>Now lets got back to partial derivative of Loss function wrto to weight</p>
-<p><span class="math display">\[
-\frac {\partial C}{\partial w^2} = \frac {1}{2}*2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
-\]</span></p>
-<p>Using <span class="math inline">\(Eq \;(B.4)\)</span> to substitute in the last term</p>
-<p><span class="math display">\[
-\begin{aligned}
-= v(0- \sigma^{'}(z^2) * (a^{1})^T)
-\\\\
-= v*-1*\sigma^{'}(z^2) * (a^{1})^T
-\\\\
-= (y-a^2)*-1*\sigma^{'}(z^2) * (a^{1})^T
-\\\\
-\frac {\partial C}{\partial w^2}= (a^2-y)*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
-\end{aligned}
-\]</span> &nbsp;</p>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate.</p>
+<p>So the gradient vector is more than a list of derivatives—it’s the local direction that tells us how to change parameters to reduce the loss.</p>
+<p>See the Colab <a href="https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing">1</a> for a generated visualization of this.</p>
+<p>The first image is the plotting of the Cost function</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gradientvec1.png" class="img-fluid figure-img"></p>
+<figcaption>gradient_vector</figcaption>
+</figure>
+</div>
+<p>The second image where you see the cones are the gradient vector of the Cost function wrto weights plotted in 3D space.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gradientvec2.png" class="img-fluid figure-img"></p>
+<figcaption>gradient_vector</figcaption>
+</figure>
+</div>
 </section>
 </section>
-<section id="gradient-vector-of-loss-function-in-inner-layer" class="level2">
-<h2 class="anchored" data-anchor-id="gradient-vector-of-loss-function-in-inner-layer">Gradient Vector of Loss function in Inner Layer</h2>
+<section id="jacobian-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="jacobian-matrix">Jacobian Matrix</h2>
+<p>The second key concept is the <strong>Jacobian Matrix</strong>.</p>
+<p>As mentioned earlier, in our network, most layers represent functions that map a <strong>Vector to a Vector</strong> (<span class="math inline">\(\mathbb{R}^n \to \mathbb{R}^m\)</span>). For example, a hidden layer takes an input vector <span class="math inline">\(x\)</span> and produces an activation vector <span class="math inline">\(a\)</span>.</p>
+<p>What is the derivative of a vector-valued function with respect to a vector input? This is where the Jacobian comes in.</p>
+<p>For a function <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span> that maps an input vector <span class="math inline">\(x\)</span> of size <span class="math inline">\(n\)</span> to an output vector <span class="math inline">\(y\)</span> of size <span class="math inline">\(m\)</span>, the derivative is an <span class="math inline">\(m \times n\)</span> matrix called the Jacobian Matrix <span class="math inline">\(J\)</span>.</p>
+<p>The entry <span class="math inline">\(J_{ij}\)</span> is the partial derivative of the <span class="math inline">\(i\)</span>-th output component with respect to the <span class="math inline">\(j\)</span>-th input component:</p>
+<p><span class="math display">\[
+J_{ij} = \frac{\partial f_i}{\partial x_j}
+\]</span></p>
+<section id="the-chain-rule-with-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="the-chain-rule-with-matrices">The Chain Rule with Matrices</h3>
+<p>The beauty of the Jacobian is that it allows us to generalize the chain rule.</p>
+<p>For scalar functions, the chain rule is just multiplication: <span class="math inline">\((f \circ g)'(x) = f'(g(x)) \cdot g'(x)\)</span>.</p>
+<p>For vector functions, the chain rule becomes <strong>Matrix Multiplication</strong> of the Jacobians:</p>
+<p>If we have a composition of functions <span class="math inline">\(y = f(g(x))\)</span>, and we let <span class="math inline">\(A\)</span> be the Jacobian of <span class="math inline">\(f\)</span> and <span class="math inline">\(B\)</span> be the Jacobian of <span class="math inline">\(g\)</span>, then the Jacobian of the composition is simply the matrix product <span class="math inline">\(A \cdot B\)</span>.</p>
+<p><span class="math display">\[
+(A \cdot B)_{ij} = \sum_{k=1}^m A_{ik} \cdot B_{kj}
+\]</span></p>
+<p>So, the Jacobian is a matrix of partial derivatives that represents the local linear approximation of a vector function. When we say the Jacobian represents a “local linear approximation,” we mean:</p>
+<p><span class="math display">\[ \text{Change in Output} \approx \text{Jacobian Matrix} \cdot \text{Change in Input} \]</span></p>
+<p><span class="math display">\[ \Delta y \approx J \cdot \Delta x \]</span></p>
+<p>It tells us: “If I nudge the input vector by a tiny vector <span class="math inline">\(\Delta x\)</span>, the output vector will change by roughly the matrix-vector product <span class="math inline">\(J \cdot \Delta x\)</span>.”</p>
+</section>
+<section id="backpropogation-trick---vjp-vector-jacobian-product-and-jvp-jacobian-vector-product" class="level3">
+<h3 class="anchored" data-anchor-id="backpropogation-trick---vjp-vector-jacobian-product-and-jvp-jacobian-vector-product">BackPropogation Trick - VJP (Vector Jacobian Product) and JVP (Jacobian Vector Product)</h3>
+<p>There is one more trick that we can use to make backpropogation more efficient.</p>
+<p>Let me explain with an example.</p>
+<p>Suppose we have a chain of functions: <span class="math inline">\(y = f(g(h(x)))\)</span>. To find the derivative <span class="math inline">\(\frac{\partial y}{\partial x}\)</span>, the chain rule tells us to multiply the Jacobians: <span class="math display">\[ J_{total} = J_f \cdot J_g \cdot J_h \]</span></p>
+<p>If <span class="math inline">\(x, h, g, f\)</span> are all vectors of size 1000, then each Jacobian is a <span class="math inline">\(1000 \times 1000\)</span> matrix. Multiplying them is expensive (<span class="math inline">\(O(N^3)\)</span>).</p>
+<p><strong>However, in Backpropagation, we always start with a scalar Loss function.</strong> The final derivative <span class="math inline">\(\frac{\partial C}{\partial y}\)</span> is a row vector (size <span class="math inline">\(1 \times N\)</span>).</p>
+<p>So we are computing: <span class="math display">\[ \nabla C = \underbrace{\frac{\partial C}{\partial y}}_{1 \times N} \cdot \underbrace{J_f}_{N \times N} \cdot \underbrace{J_g}_{N \times N} \cdot \underbrace{J_h}_{N \times N} \]</span></p>
+<p>Notice the order of operations matters! 1. <strong>Jacobian-Matrix Product</strong>: If we multiply the matrices first (<span class="math inline">\(J_f \cdot J_g\)</span>), we do expensive matrix-matrix multiplication. 2. <strong>Vector-Jacobian Product (VJP)</strong>: If we multiply from left to right: * <span class="math inline">\(v_1 = \frac{\partial C}{\partial y} \cdot J_f\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_2 = v_1 \cdot J_g\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_3 = v_2 \cdot J_h\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector)</p>
+<p>We <strong>never</strong> explicitly compute or store the full Jacobian matrix. We only compute the product of a vector with the Jacobian. This is much faster (<span class="math inline">\(O(N^2)\)</span>) and uses less memory.</p>
+<p>This is the secret sauce of efficient Backpropagation!</p>
+</section>
+<section id="hadamard-product" class="level3">
+<h3 class="anchored" data-anchor-id="hadamard-product">Hadamard Product</h3>
+<p>Another important operation we use is the <strong>Hadamard Product</strong> (denoted by <span class="math inline">\(\odot\)</span> or sometimes <span class="math inline">\(\circ\)</span>). This is simply <strong>element-wise multiplication</strong> of two vectors or matrices of the same size.</p>
+<p><span class="math display">\[
+\begin{bmatrix} a_1 \\ a_2 \end{bmatrix} \odot \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 \cdot b_1 \\ a_2 \cdot b_2 \end{bmatrix}
+\]</span></p>
+<p>It is different from the dot product (which sums the results to a scalar) and matrix multiplication. In backpropagation, it often appears when we apply the chain rule through an activation function that operates element-wise (like sigmoid or ReLU).</p>
 <hr>
-<p>&nbsp;</p>
-<p>Now let’s do the same for the inner layer. This is bit more tricky and we use the Chain rule to derive this</p>
-<p>&nbsp;</p>
-<p><span class="math display">\[
-\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} . \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
-\]</span></p>
-<p>&nbsp;</p>
-<p>We can calculate the first part of this from <span class="math inline">\(Eq\; (B.4)\)</span> that we derived above</p>
-<p><span class="math display">\[
-\begin{aligned}
-\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow (Eq \;B.4)
-\\\\
-\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) * (a^{0})^T \quad \rightarrow (4.1)
-\end{aligned}
-\]</span></p>
-<p>For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.</p>
-$$
-<span class="math display">\[\begin{aligned}
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
-\\\\
-{
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2}*2*(a^2-y) =(a^2-y) = \delta^{2}  }
-\\\\
-\frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
-
-\text {Now to calculate} \quad
-
-\frac{\partial(a^2)}{\partial(a^1)} \quad where \quad
-
-a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2.\sigma'(w^2 a^{1}+b^2) = w^2.\sigma'(z^2)\rightarrow (4.3)*
-
-\end{aligned}\]</span>
-<p>$$</p>
-<p>*<a href="https://math.stackexchange.com/a/4065766/284422" class="uri">https://math.stackexchange.com/a/4065766/284422</a></p>
-<p>Putting (4.1) (4.2) and (4.3) together</p>
 </section>
-<section id="final-equations" class="level2">
-<h2 class="anchored" data-anchor-id="final-equations">Final Equations</h2>
-<p><span class="math display">\[  \mathbf{
-\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
-}\]</span></p>
+</section>
+<section id="backpropagation-derivation" class="level2">
+<h2 class="anchored" data-anchor-id="backpropagation-derivation">Backpropagation Derivation</h2>
+<section id="the-2-layer-neural-network-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-2-layer-neural-network-model">The 2-Layer Neural Network Model</h3>
+<p>For this derivation, we use a simple 2-layer network (one hidden layer, one output layer):</p>
 <p><span class="math display">\[
-\delta^2 = (a^2-y)
+x \xrightarrow{W^1, b^1} a^1 \xrightarrow{W^2, b^2} a^2
 \]</span></p>
-<p>Adding also the partial derivate of loss funciton with respect to weight in the final layer</p>
-<p><span class="math display">\[ \mathbf{
-\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
-}
+<p><strong>Forward Pass Equations:</strong> 1. <strong>Hidden Layer:</strong> <span class="math display">\[ z^1 = W^1 x + b^1 \]</span> <span class="math display">\[ a^1 = \sigma(z^1) \]</span> 2. <strong>Output Layer:</strong> <span class="math display">\[ z^2 = W^2 a^1 + b^2 \]</span> <span class="math display">\[ a^2 = \sigma(z^2) \]</span></p>
+<p>We use the <strong>Mean Squared Error (MSE)</strong> loss function: <span class="math display">\[ C = \frac{1}{2} \|y - a^2\|^2 \]</span></p>
+</section>
+<section id="gradient-vector2d-tensor-of-loss-function-in-last-layer" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-vector2d-tensor-of-loss-function-in-last-layer">Gradient Vector/2D-Tensor of Loss function in last layer</h3>
+<p><span class="math display">\[
+C = \frac{1}{2} \|y - a^2\|^2 = \frac{1}{2} \sum_j (y_j-a^2_j)^2
 \]</span></p>
-<p>You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the back=propagation algorithm is the most elegant dynamic programming till date.</p>
-<p><span class="math display">\[  \mathbf{
-\frac {\partial C}{\partial w^1} = \delta^{2}*\sigma'(z^2)*(a^{0})^T*w^2.\sigma'(z^1) \quad \rightarrow \mathbb Eq \; (5)
-}\]</span></p>
+<p>Where: <span class="math display">\[
+a^2 = \sigma(z^2) \quad \text{and} \quad z^2 = W^2 a^1 + b^2
+\]</span></p>
+<p>We want to find <span class="math inline">\(\frac{\partial C}{\partial W^2}\)</span>. Using the Chain Rule:</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial W^2} = \frac{\partial C}{\partial z^2} \cdot \frac{\partial z^2}{\partial W^2}
+\]</span></p>
+<p>Let’s define the <strong>error term</strong> <span class="math inline">\(\delta^2\)</span> as the derivative of the cost with respect to the pre-activation <span class="math inline">\(z^2\)</span>:</p>
+<p><span class="math display">\[
+\delta^2 \equiv \frac{\partial C}{\partial z^2} = \frac{\partial C}{\partial a^2} \odot \frac{\partial a^2}{\partial z^2}
+\]</span></p>
+<ol type="1">
+<li><span class="math inline">\(\frac{\partial C}{\partial a^2} = (a^2 - y)\)</span></li>
+<li><span class="math inline">\(\frac{\partial a^2}{\partial z^2} = \sigma'(z^2)\)</span></li>
+</ol>
+<p>So, using the Hadamard product (<span class="math inline">\(\odot\)</span>) for element-wise multiplication:</p>
+<hr>
+<p>Note that none of these terms are exponents but super scripts.!</p>
+<p><strong>Hadamard product or Element-wise multiplication</strong></p>
+<p>The confusion usually lies in this term:<span class="math display">\[\frac{\partial a}{\partial z}\]</span></p>
+<p>Since <span class="math inline">\(a\)</span> is a vector and <span class="math inline">\(z\)</span> is a vector, the derivative of one with respect to the other is technically a Jacobian Matrix, not a vector.However, because the activation function <span class="math inline">\(\sigma\)</span> is applied element-wise (i.e., <span class="math inline">\(a_i\)</span> depends only on <span class="math inline">\(z_i\)</span>, not on <span class="math inline">\(z_j\)</span> - That is - activation function in one layer is just dependent of the output of only the previous layer and no other layers), all off-diagonal elements of this Jacobian are zero.</p>
+<p><span class="math display">\[
+J = \frac{\partial a}{\partial z} = \begin{bmatrix}
+\sigma'(z_1) &amp; 0 &amp; \dots \\
+0 &amp; \sigma'(z_2) &amp; \dots \\
+\vdots &amp; \vdots &amp; \ddots
+\end{bmatrix}\]</span></p>
+<p>When you apply the chain rule, you are multiplying the gradient vector <span class="math inline">\(\nabla_a C\)</span> by this diagonal matrix <span class="math inline">\(J\)</span> - VJP (Vector-Jacobian Product).</p>
+<p>Key Identity: Multiplying a vector by a diagonal matrix is mathematically identical to taking the Hadamard product of the vector and the diagonal elements and this is why we use Hadamard product in backpropogation.</p>
+<p><span class="math display">\[
+\delta^2 = (a^2 - y) \odot \sigma'(z^2)
+\]</span></p>
+<hr>
+<p>Now for the second part, we need to find how the Cost changes with respect to the weights <span class="math inline">\(W^2\)</span>.</p>
+<p>We know that <span class="math inline">\(z^2 = W^2 a^1\)</span>. In index notation, for a single element <span class="math inline">\(z^2_i\)</span>: <span class="math display">\[ z^2_i = \sum_k W^2_{ik} a^1_k \]</span></p>
+<p>We want to find <span class="math inline">\(\frac{\partial C}{\partial W^2_{ik}}\)</span>. Using the chain rule: <span class="math display">\[ \frac{\partial C}{\partial W^2_{ik}} = \frac{\partial C}{\partial z^2_i} \cdot \frac{\partial z^2_i}{\partial W^2_{ik}} \]</span></p>
+<ol type="1">
+<li>We already defined <span class="math inline">\(\frac{\partial C}{\partial z^2_i} = \delta^2_i\)</span>.</li>
+<li>From the linear equation <span class="math inline">\(z^2_i = \dots + W^2_{ik} a^1_k + \dots\)</span>, the derivative with respect to <span class="math inline">\(W^2_{ik}\)</span> is simply <span class="math inline">\(a^1_k\)</span>.</li>
+</ol>
+<p>So: <span class="math display">\[ \frac{\partial C}{\partial W^2_{ik}} = \delta^2_i \cdot a^1_k \]</span></p>
+<p>If we organize these gradients into a matrix, the element at row <span class="math inline">\(i\)</span> and column <span class="math inline">\(k\)</span> is the product of the <span class="math inline">\(i\)</span>-th element of <span class="math inline">\(\delta^2\)</span> and the <span class="math inline">\(k\)</span>-th element of <span class="math inline">\(a^1\)</span>.</p>
+<p>Let’s visualize the matrix of gradients <span class="math inline">\(\nabla W\)</span>:<span class="math display">\[\nabla W =
+\begin{bmatrix}
+\frac{\partial C}{\partial W_{11}} &amp; \frac{\partial C}{\partial W_{12}} \\
+\frac{\partial C}{\partial W_{21}} &amp; \frac{\partial C}{\partial W_{22}}
+\end{bmatrix}\]</span>Substitute the result from step 3 (<span class="math inline">\(\delta_i \cdot a_k\)</span>):<span class="math display">\[\nabla W =
+\begin{bmatrix}
+\delta_1 a_1 &amp; \delta_1 a_2 \\
+\delta_2 a_1 &amp; \delta_2 a_2
+\end{bmatrix}\]</span></p>
+<p>This is exactly the definition of the <strong>Outer Product</strong> <span class="math inline">\(\otimes\)</span> of two vectors:</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial W^2} =  \delta^2 \otimes a^1 = \delta^2  (a^1)^T \quad \rightarrow (Eq \; 3)
+\]</span></p>
+<p>This gives us the gradient matrix for the last layer weights.</p>
 <p>&nbsp;</p>
+</section>
+</section>
+<section id="jacobian-of-loss-function-in-inner-layer" class="level2">
+<h2 class="anchored" data-anchor-id="jacobian-of-loss-function-in-inner-layer">Jacobian of Loss function in Inner Layer</h2>
+<p>Now let’s do the same for the inner layer (<span class="math inline">\(W^1\)</span>).</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial W^1} = \frac{\partial C}{\partial z^1} \cdot \frac{\partial z^1}{\partial W^1} = \delta^1 (a^0)^T
+\]</span></p>
+<p>We need to find <span class="math inline">\(\delta^1 = \frac{\partial C}{\partial z^1}\)</span>. We can backpropagate the error <span class="math inline">\(\delta^2\)</span> from the next layer:</p>
+<p><span class="math display">\[
+\delta^1 = \frac{\partial C}{\partial z^1} = \left( (W^2)^T \delta^2 \right) \odot \sigma'(z^1)
+\]</span></p>
+<p><strong>Explanation:</strong> 1. We propagate <span class="math inline">\(\delta^2\)</span> backwards through the weights <span class="math inline">\((W^2)^T\)</span>. 2. We multiply element-wise by the derivative of the activation function <span class="math inline">\(\sigma'(z^1)\)</span>.</p>
+<p>Putting it all together:</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial W^1} = \left( (W^2)^T \delta^2 \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
+\]</span></p>
+<section id="summary-of-backpropagation-equations" class="level3">
+<h3 class="anchored" data-anchor-id="summary-of-backpropagation-equations">Summary of Backpropagation Equations</h3>
+<ol type="1">
+<li><strong>Compute Output Error:</strong> <span class="math display">\[ \delta^L = (a^L - y) \odot \sigma'(z^L) \]</span></li>
+<li><strong>Backpropagate Error:</strong> <span class="math display">\[ \delta^l = ((W^{l+1})^T \delta^{l+1}) \odot \sigma'(z^l) \]</span></li>
+<li><strong>Compute Gradients:</strong> <span class="math display">\[ \frac{\partial C}{\partial W^l} = \delta^l (a^{l-1})^T \]</span></li>
+</ol>
+<p>&nbsp;</p>
+</section>
+<section id="summary-of-backpropagation-equations-in-terms-of-say-numpy" class="level3">
+<h3 class="anchored" data-anchor-id="summary-of-backpropagation-equations-in-terms-of-say-numpy">Summary of Backpropagation Equations in terms of say Numpy</h3>
+<p>Here is how these equations translate to Python code using NumPy, assuming standard column vectors (shape <code>(N, 1)</code>).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward pass context:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># x, a1, a2 are column vectors</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># W1, W2 are weight matrices</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sigmoid_prime(z) is the derivative of activation</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute Output Error (Hadamard Product)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># '*' operator in numpy is element-wise multiplication (Hadamard)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>delta2 <span class="op">=</span> (a2 <span class="op">-</span> y) <span class="op">*</span> sigmoid_prime(z2) </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gradient for W2 (Outer Product)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># We need shape (n_out, 1) @ (1, n_hidden) -&gt; (n_out, n_hidden)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dC_dW2 <span class="op">=</span> np.matmul(delta2, a1.T)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative using einsum for outer product:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># dC_dW2 = np.einsum('i,j-&gt;ij', delta2.flatten(), a1.flatten())</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Backpropagate Error to Hidden Layer</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrix multiplication (W2.T @ delta2) followed by Hadamard product</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>delta1 <span class="op">=</span> np.matmul(W2.T, delta2) <span class="op">*</span> sigmoid_prime(z1)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Gradient for W1 (Outer Product)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>dC_dW1 <span class="op">=</span> np.matmul(delta1, x.T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
 </section>
 <section id="using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" class="level2">
 <h2 class="anchored" data-anchor-id="using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function">Using Gradient Descent to find the optimal weights to reduce the Loss function</h2>
 <p>&nbsp;</p>
-<p>With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layel - in this example</p>
-<p><span class="math display">\[\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}\]</span></p>
+<p>With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layer - in this example</p>
+<p><span class="math display">\[\frac {\partial C}{\partial W^1},\frac {\partial C}{\partial W^2}\]</span></p>
 <p>&nbsp;</p>
 <p>We now need to adjust the previous weight, by gradient descent.</p>
 <p>&nbsp;</p>
 <p>So using the above gradients we get the new weights iteratively like below. If you notice this is exactly what is happening in gradient descent as well; only chain rule is used to calculate the gradients here. Backpropagation is the algorithm that helps calculate the gradients for each layer.</p>
 <p>&nbsp;</p>
 <p><span class="math display">\[\mathbf {
-  W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
+  W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C}{\partial W^{l-1}}
 }\]</span></p>
 <p>&nbsp;</p>
+<p>Where <span class="math inline">\(\eta\)</span> is the learning rate.</p>
 <p>Reference</p>
 <ul>
 <li><a href="https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf" class="uri">https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf</a></li>

@@ -207,7 +207,10 @@ window.Quarto = {
   <li><a href="#derivative-of-loss-with-respect-to-weight-in-inner-layers" id="toc-derivative-of-loss-with-respect-to-weight-in-inner-layers" class="nav-link" data-scroll-target="#derivative-of-loss-with-respect-to-weight-in-inner-layers">Derivative of Loss with respect to Weight in Inner Layers</a></li>
   <li><a href="#implementation-in-python" id="toc-implementation-in-python" class="nav-link" data-scroll-target="#implementation-in-python">Implementation in Python</a></li>
   <li><a href="#gradient-descent-1" id="toc-gradient-descent-1" class="nav-link" data-scroll-target="#gradient-descent-1">Gradient descent</a></li>
-  <li><a href="#some-implementation-details" id="toc-some-implementation-details" class="nav-link" data-scroll-target="#some-implementation-details">Some Implementation details</a></li>
+  <li><a href="#some-implementation-details" id="toc-some-implementation-details" class="nav-link" data-scroll-target="#some-implementation-details">Some Implementation details</a>
+  <ul class="collapse">
+  <li><a href="#the-jacobian-matrix-and-why-hadamard-appears" id="toc-the-jacobian-matrix-and-why-hadamard-appears" class="nav-link" data-scroll-target="#the-jacobian-matrix-and-why-hadamard-appears">The Jacobian Matrix (and why Hadamard appears)</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
@@ -246,11 +249,11 @@ window.Quarto = {
 a^0 \rightarrow
       \underbrace{\text{hidden layers}}_{a^{l-2}}
       \,\rightarrow
-      \underbrace{w^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
+      \underbrace{W^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
       \,\rightarrow
       \underbrace{\sigma(z^{l-1})}_{a^{l-1}}
     \,\rightarrow
-     \underbrace{w^l a^{l-1}+b^l}_{z^{l}/logits }
+     \underbrace{W^l a^{l-1}+b^l}_{z^{l}/logits }
     \,\rightarrow
     \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
     \,\rightarrow
@@ -258,7 +261,7 @@ a^0 \rightarrow
 \end{aligned}
 }
 \]</span></p>
-<p><span class="math inline">\(Y\)</span> is the target vector or the Truth vector. This is a one hot encoded vector, example <span class="math inline">\(Y=[0,1,0]\)</span>, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Loss algorithm.</p>
+<p><span class="math inline">\(Y\)</span> is the target vector or the Truth vector. This is a one hot encoded vector, example <span class="math inline">\(Y=[0,1,0]\)</span>, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Descent algorithm.</p>
 <p><span class="math inline">\(P\)</span> is the Softmax output and is the activation of the last layer <span class="math inline">\(a^l\)</span>. This is a vector. All elements of the Softmax output add to 1; hence this is a probability distribution unlike a Sigmoid output.The Cross Entropy Loss <span class="math inline">\(L\)</span> is a Scalar.</p>
 <p>Note the Index notation is the representation an element of a Vector or a Tensor, and is easier to deal with while deriving out the equations.</p>
 <p><strong>Softmax</strong> (in Index notation)</p>
@@ -282,8 +285,8 @@ L = -\sum_j y_j \log p_j
 <h3 class="anchored" data-anchor-id="crossentropy-loss-with-respect-to-weight-in-last-layer">CrossEntropy Loss with respect to Weight in last layer</h3>
 <p><span class="math display">\[
 \mathbf {
-\frac {\partial L}{\partial w^l}
-=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}} \rightarrow \quad EqA1
+\frac {\partial L}{\partial W^l}
+=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}} \rightarrow \quad EqA1
 }
 \]</span></p>
 <p>Where <span class="math display">\[
@@ -295,17 +298,17 @@ L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\
 $$ {
 <span class="math display">\[\begin{aligned}
 
-    \frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_j y_k \log {p_k})}}{\partial z_i}
+    \frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_k y_k \log {p_k})}}{\partial z_i}
    \\ \\ \text {taking the summation outside} \\ \\
-   = -\sum_j y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
+   = -\sum_k y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
   \\ \\ \color{grey}{\text {since }
   \frac{d}{dx} (f(g(x))) = f'(g(x))g'(x) }
   \\ \\
-  = -\sum_k y_k * \frac {1}{p_k} *\frac {\partial { p_k}}{\partial z_i}
+  = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
   
 \end{aligned}\]</span>
 <p>} $$</p>
-<p>The last term <span class="math inline">\(\frac {\partial { p_k}}{\partial z_i}\)</span> is the derivative of Softmax with respect to it’s inputs also called logits. This is easy to derive and there are many sites that describe it. Example [Derivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here <a href="https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/">The Softmax function and its derivative-Eli Bendersky</a></p>
+<p>The last term <span class="math inline">\(\frac {\partial { p_k}}{\partial z_i}\)</span> is the derivative of Softmax with respect to its inputs also called logits. This is easy to derive and there are many sites that describe it. Example [Derivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here <a href="https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/">The Softmax function and its derivative-Eli Bendersky</a></p>
 <p><span class="math display">\[
 \color{red}
   {
@@ -322,21 +325,21 @@ $$ {
 $$ {
 <span class="math display">\[\begin{aligned}
 
-\frac {\partial L}{\partial z_i} = -\sum_k y_k * \frac {1}{p_k} *\frac {\partial { p_k}}{\partial z_i}
+\frac {\partial L}{\partial z_i} = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
 \\ \\
-  =-\sum_k y_k * \frac {1}{p_k} * p_i(\delta_{ij} -p_j)
+  =-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_i(\delta_{ij} -p_j)
 \\ \\ \text{these i and j are dummy indices and we can rewrite  this as}
 \\ \\
-=-\sum_k y_k * \frac {1}{p_k} * p_k(\delta_{ik} -p_i)
+=-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_k(\delta_{ik} -p_i)
 \\ \\ \text{taking the two cases and adding in above equation } \\ \\
-\delta_{ij} = 1 \text{ when i =k} \text{ and }
-   \delta_{ij} = 0 \text{ when i} \ne \text{k}
+\delta_{ik} = 1 \text{ when i =k} \text{ and }
+   \delta_{ik} = 0 \text{ when i} \ne \text{k}
    \\ \\
-   = [- \sum_i y_i * \frac {1}{p_i} * p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k * \frac {1}{p_k} * p_k(0 -p_i) ]
+   = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
     \\ \\
-     = [- y_i * \frac {1}{p_i} * p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k * \frac {1}{p_k} * p_k(0 -p_i) ]
+     = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
   \\ \\
-     = [- y_i(1 -p_i)]+[-\sum_{k \ne i}  y_k *(0 -p_i) ]
+     = [- y_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot (0 -p_i) ]
       \\ \\
      = -y_i + y_i.p_i + \sum_{k \ne i}  y_k.p_i
      \\ \\
@@ -354,14 +357,14 @@ $$ {
 <p>We need to put this back in <span class="math inline">\(EqA1\)</span>. We now need to calculate the second term, to complete the equation</p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac {\partial L}{\partial w^l}
-=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
+\frac {\partial L}{\partial W^l}
+=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}}
 \\ \\
-z^{l} = (w^l a^{l-1}+b^l)
+z^{l} = (W^l a^{l-1}+b^l)
 \\
-\color{green}{\frac {\partial z^l}{\partial w^l} = a^{l-1}}
+\color{green}{\frac {\partial z^l}{\partial W^l} = (a^{l-1})^T}
 \\ \\ \text{Putting all together} \\ \\
-\frac {\partial L}{\partial w^l} = (p_i - y_i) *a^{l-1} \quad  \rightarrow \quad \mathbf  {EqA1}
+\frac {\partial L}{\partial W^l} = (p - y) \cdot (a^{l-1})^T \quad  \rightarrow \quad \mathbf  {EqA1}
 \end{aligned}
 \]</span></p>
 </section>
@@ -370,7 +373,7 @@ z^{l} = (w^l a^{l-1}+b^l)
 <h2 class="anchored" data-anchor-id="gradient-descent">Gradient descent</h2>
 <p>Using Gradient descent we can keep adjusting the last layer like</p>
 <p><span class="math display">\[
-     w{^l}{_i} = w{^l}{_i} -\alpha *  \frac {\partial L}{\partial w^l}
+     W{^l} = W{^l} -\alpha \cdot \frac {\partial L}{\partial W^l}
 \]</span></p>
 <p>Now let’s do the derivation for the inner layers</p>
 </section>
@@ -379,9 +382,9 @@ z^{l} = (w^l a^{l-1}+b^l)
 <p>The trick here is to find the derivative of the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either <span class="math inline">\(z^x\)</span> or <span class="math inline">\(w^x\)</span> but not with respect to <span class="math inline">\(a^x\)</span>. This is to make derivatives easier and intuitive to compute.</p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac {\partial L}{\partial w^{l-1}}
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} \rightarrow \text{EqA2}
+\frac {\partial L}{\partial W^{l-1}}
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+     \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} \rightarrow \text{EqA2}
 \end{aligned}
 \]</span></p>
 <p>We represent the first part in terms of what we computed earlier ie <span class="math inline">\(\color{blue}{\frac {\partial L}{\partial z^{l}}}\)</span></p>
@@ -405,24 +408,23 @@ a^{l-1} = \sigma (z^{l-1})     \text{ which makes }
 
 \\ \\ \text{ Putting together we get the first part of Eq A2 }
 \\\\
-\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =\color{blue}{(p_i- y_i).w^l.\sigma }\color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
+\color{blue}{\frac {\partial L}{\partial z^{l-1}}} = \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
 \\ \\
-z^{l-1} = w^{l-1} a^{l-2}+b^{l-1}
+z^{l-1} = W^{l-1} a^{l-2}+b^{l-1}
     \text{ which makes }
-    \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}=a^{l-2}}
+    \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}=(a^{l-2})^T}
 \\ \\
-\frac {\partial L}{\partial w^{l-1}}
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} = \color{blue}{(p_i- y_i).w^l.\sigma '(z^{l-1} )}.\color{green}{a^{l-2}}
+\frac {\partial L}{\partial W^{l-1}}
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+     \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} = \left( \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma '(z^{l-1} ) \right) \cdot \color{green}{(a^{l-2})^T}
 \end{aligned}\]</span>
 <p>$$</p>
 <p><strong>Note</strong> All the other layers should use the previously calculated value of <span class="math inline">\(\color{blue}{\frac {\partial L}{\partial z^{l-i}}}\)</span> where <span class="math inline">\(i= current layer-1\)</span></p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac {\partial L}{\partial w^{l-2}}
-=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
-     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}}
-      \  \color{red}{ \ne (p_i- y_i)}.\color{blue}{w^{l-1}.\sigma '(z^{l-2} )}.\color{green}{a^{l-3}}
+\frac {\partial L}{\partial W^{l-2}}
+=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}} \cdot
+     \color{green}{\frac {\partial z^{l-2}}{\partial W^{l-2}}}
 \end{aligned}
 \]</span></p>
 </section>
@@ -434,62 +436,49 @@ z^{l-1} = w^{l-1} a^{l-2}+b^{l-1}
 <h2 class="anchored" data-anchor-id="gradient-descent-1">Gradient descent</h2>
 <p>Using Gradient descent we can keep adjusting the inner layers like</p>
 <p><span class="math display">\[
-     w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}}
+     W{^{l-1}} = W{^{l-1}} -\alpha \cdot \frac {\partial L}{\partial W^{l-1}}
 \]</span></p>
 </section>
 <section id="some-implementation-details" class="level2">
 <h2 class="anchored" data-anchor-id="some-implementation-details">Some Implementation details</h2>
-<p>Feel free to skip this section. These are some doubts that can come during implementation,and can be refereed to if needed.</p>
+<p>Feel free to skip this section. These are some doubts that can come during implementation,and can be referred to if needed.</p>
 <p><strong>From Index Notation to Matrix Notation</strong></p>
 <p>The above equations are correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in <em>Matrix Notation</em>. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. (<span class="math inline">\(\odot\)</span>). This is illustrated and commented in the code and deviates from the equations as is,</p>
 <p>Example <span class="math display">\[
-\frac{\partial z^2}{\partial w^2} = (a^{1})^T
+\frac{\partial z^2}{\partial W^2} = (a^{1})^T
 \]</span></p>
-<p><strong>The Jacobian Matrix</strong></p>
-<p>For an input vector <span class="math inline">\(\textbf{x} = \{x_1, x_2, \dots, x_n\}\)</span> on which an element wise function is applied; say the activation function sigmoid <span class="math inline">\(\sigma\)</span>; and it give the output vector <span class="math inline">\(\textbf{a} = \{a_1, a_2, \dots, a_n\}\)</span></p>
-<p>$a_i= f(x_i); $</p>
-<p>In scalar case this becomes <span class="math inline">\(\frac { \partial f(x)}{ \partial x} = f'(x)\)</span></p>
-<p>In Vector case, that is when we take the derivative of a vector with respect to another vector to get the following (square) Jacobian matrix</p>
-<p>Example from <a href="https://aew61.github.io/blog/artificial_neural_networks/1_background/1.b_activation_functions_and_derivatives.html">ref 2</a></p>
+<section id="the-jacobian-matrix-and-why-hadamard-appears" class="level3">
+<h3 class="anchored" data-anchor-id="the-jacobian-matrix-and-why-hadamard-appears">The Jacobian Matrix (and why Hadamard appears)</h3>
+<p>Let <span class="math inline">\(x \in \mathbb{R}^n\)</span> be an input vector and let an elementwise function <span class="math inline">\(f\)</span> (e.g., sigmoid) produce an output vector <span class="math inline">\(a \in \mathbb{R}^n\)</span>:</p>
 <p><span class="math display">\[
-\begin{aligned}
-\\ \\
-\text{The Jacobain, J } = \frac {\partial a}{\partial x} =
-\begin{bmatrix}
-                \frac{\partial a_{1}}{\partial x_{1}}  &amp; \frac{\partial a_{2}}{\partial x_{1}}     &amp; \dots     &amp; \frac{\partial a_{n}}{\partial x_{1}}    \\
-                \frac{\partial a_{1}}{\partial x_{2}}  &amp; \frac{\partial a_{2}}{\partial x_{2}}     &amp; \dots     &amp; \frac{\partial a_{n}}{\partial x_{2}}    \\
-                \vdots  &amp; \vdots    &amp; \ddots    &amp; \vdots    \\
-                \frac{\partial a_{1}}{\partial x_{n}}  &amp; \frac{\partial a_{2}}{\partial x_{n}}    &amp; \dots     &amp; \frac{\partial a_{n}}{\partial x_{n}}    \\
-\end{bmatrix}
-\end{aligned}
+a = f(x), \quad a_i = f(x_i)
 \]</span></p>
-<p>The diagonal of J are the only terms that can be nonzero:</p>
+<p>In the scalar case, the derivative is just:</p>
 <p><span class="math display">\[
-\begin{aligned}
-J = \begin{bmatrix}
-                \frac{\partial a_{1}}{\partial x_{1}}  &amp; 0     &amp; \dots     &amp; 0    \\
-                0  &amp; \frac{\partial a_{2}}{\partial x_{2}}     &amp; \dots     &amp; 0    \\
-                \vdots  &amp; \vdots    &amp; \ddots    &amp; \vdots    \\
-                0  &amp; 0    &amp; \dots     &amp; \frac{\partial a_{n}}{\partial x_{n}}    \\
-        \end{bmatrix}
-\end{aligned}
+\frac{d}{dx} f(x) = f'(x)
 \]</span></p>
+<p>In the vector case, the derivative of a vector-valued function with respect to a vector input is the Jacobian matrix:</p>
 <p><span class="math display">\[
-\text{ As }
-(\frac{\partial a}{\partial x})_{ij} = \frac{\partial a_i}{\partial x_j} = \frac { \partial f(x_i)}{ \partial x_j} =
+J = \frac{\partial a}{\partial x} \in \mathbb{R}^{n \times n}, \quad J_{ij} = \frac{\partial a_i}{\partial x_j}
+\]</span></p>
+<p>For an elementwise function <span class="math inline">\(a_i = f(x_i)\)</span>, each output component depends only on the corresponding input component, so:</p>
+<p><span class="math display">\[
+\frac{\partial a_i}{\partial x_j} =
 \begin{cases}
-f'(x_i)  &amp; \text{if $i=j$} \\
-0 &amp; \text{otherwise}
+f'(x_i) &amp; \text{if } i = j \\
+0 &amp; \text{if } i \neq j
 \end{cases}
-\]</span> And the authors go on to explain that <span class="math inline">\(\frac{\partial a}{\partial x}\)</span> can be written as <span class="math inline">\(\text{diag}(f'(x))\)</span> and the Hadamard or element-wise multiplication (<span class="math inline">\(\odot\)</span> or <span class="math inline">\(\circ\)</span>) can be applied instead of matrix multiplication to this Jacobian matrix like <span class="math inline">\(\odot f'(x)\)</span> when applying the Chain Rule and converting from index notation to matrix notation.</p>
-<p>However,while implementing the neural network practically the input is not a <strong>Vector</strong> but an <span class="math inline">\(M*N\)</span> dimensional <strong>Matrix</strong> ; <span class="math inline">\(M, N &gt; 1\)</span>.</p>
-<p>Taking a simple <span class="math inline">\(2*2\)</span> input matrix on which the sigmoid activation function is done; the Jacobian of the same is a <span class="math inline">\(4*4\)</span> matrix.</p>
-<p>Does it make sense to say the derivative of Matrix <span class="math inline">\(a_{i,j}\)</span> - where an element-wise function is applied; over the input matrix <span class="math inline">\(x_{i,j}\)</span> as a Jacobian ?</p>
-<p><span class="math display">\[
-\frac{\partial A}{\partial X} = J
 \]</span></p>
-<p>There is no certainty that this will be a square matrix and we can generalize to the diagonal ?</p>
-<p>However, all articles treat this matrix case as a generalization of the Vector case and write <span class="math inline">\(\frac{\partial a}{\partial x}\)</span> as the <span class="math inline">\(\text{diag}(f'(x))\)</span>, and then use the element-wise/Hadamard product for the Chain Rule. This way also in implementation. But there is no meaning of diagonal in a non-square matrix.</p>
+<p>and therefore the Jacobian is diagonal:</p>
+<p><span class="math display">\[
+\frac{\partial a}{\partial x} = \text{diag}(f'(x))
+\]</span></p>
+<p><strong>Why this becomes a Hadamard product in backprop</strong></p>
+<p>Suppose we have a vector <span class="math inline">\(v\)</span> coming from later in the chain rule (e.g., <span class="math inline">\(v = \frac{\partial C}{\partial a}\)</span>). Then:</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial x} = \left( \frac{\partial a}{\partial x} \right)^T \frac{\partial C}{\partial a} = \text{diag}(f'(x)) \cdot v = f'(x) \odot v
+\]</span></p>
+<p>So the Hadamard product appears because the Jacobian of an elementwise function is diagonal, and multiplying by a diagonal matrix is the same as elementwise multiplication.</p>
 <hr>
 <p>What is basically done is to flatten the Matrix out</p>
 <p><span class="math display">\[
@@ -543,7 +532,9 @@ A =
 <hr>
 <p>Hence <span class="math inline">\(\frac{\partial a_{ {i}{j}}}{\partial X}\)</span> can be written as <span class="math inline">\(\text{ diag}(f'(X))\)</span> ; <span class="math inline">\((A =f(X))\)</span></p>
 <p>Note that Multiplication of a vector by a diagonal matrix is element-wise multiplication or the Hadamard product; <em>And matrices in Deep Learning implementation can be seen as stacked vectors for simplification.</em></p>
-<p>More details about this here <a href="https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix">Jacobian Matrix for Element wise Opeation on a Matrix (not Vector)</a></p>
+<p>More details about this here <a href="https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix">Jacobian Matrix for Element wise Operation on a Matrix (not Vector)</a></p>
+<p>Note that another way of interpreting this as treating weights as Tensor and then certain Jacobian operation can be treated as between Tensors and Vectors.</p>
+</section>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>

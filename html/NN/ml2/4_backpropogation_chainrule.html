@@ -198,7 +198,6 @@ window.Quarto = {
   <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a></li>
   <li><a href="#chapter-4" id="toc-chapter-4" class="nav-link" data-scroll-target="#chapter-4">Chapter 4</a>
   <ul class="collapse">
-  <li><a href="#back-propagation" id="toc-back-propagation" class="nav-link" data-scroll-target="#back-propagation">Back Propagation</a></li>
   <li><a href="#how-backpropagation-works" id="toc-how-backpropagation-works" class="nav-link" data-scroll-target="#how-backpropagation-works">How Backpropagation works</a></li>
   <li><a href="#writing-this-out-as-chain-rule" id="toc-writing-this-out-as-chain-rule" class="nav-link" data-scroll-target="#writing-this-out-as-chain-rule">Writing this out as Chain Rule</a></li>
   <li><a href="#nerual-net-as-a-composition-of-vector-functions" id="toc-nerual-net-as-a-composition-of-vector-functions" class="nav-link" data-scroll-target="#nerual-net-as-a-composition-of-vector-functions">Nerual Net as a Composition of Vector Functions</a>
@@ -230,24 +229,13 @@ window.Quarto = {
 </section>
 <section id="chapter-4" class="level1">
 <h1>Chapter 4</h1>
-<section id="back-propagation" class="level2">
-<h2 class="anchored" data-anchor-id="back-propagation">Back Propagation</h2>
-<p>Neural network is basically a set of inputs connected through ‘weights’ to a set of activation functions whose output will be the input for the next layers and so on.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://i.imgur.com/gE3QKCf.png" class="img-fluid figure-img"></p>
-<figcaption>neuralnetwork</figcaption>
-</figure>
-</div>
-<p>For training a neural network we need a dataset which has the input and expected output. The weights are randomly initialized, and the inputs passed into the activation function and gives an output.</p>
-<p>This output or computed values can be compared to the expected value and the difference gives the error of the network. We can create a ‘Cost Function’ like what we saw in the last chapter say the Mean Squared Error</p>
-</section>
+<p>In this chapter lets deep dive a bit more into the technique of Back Propagation</p>
 <section id="how-backpropagation-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-backpropagation-works">How Backpropagation works</h2>
-<p>Consider a neural network with multiple layers. The weight of layer <span class="math inline">\(l\)</span> is <span class="math inline">\(w^l\)</span>. And for the previous layer it is <span class="math inline">\(w^{(l-1)}\)</span>.</p>
+<p>Consider a neural network with multiple layers. The weight of layer <span class="math inline">\(l\)</span> is <span class="math inline">\(W^l\)</span>. And for the previous layer it is <span class="math inline">\(W^{(l-1)}\)</span>.</p>
 <p>The best way to understand backpropagation is visually and by the way it is done by the tree representation of 3Blue1Brown video linked <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">here</a>.</p>
 <p>The below GIF is a representation of a single path in the last layer(<span class="math inline">\(l\)</span> of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.</p>
-<p>The central idea is how a small change in weight in the previous layer affects the final output of the network.</p>
+<p>The central idea is how a <strong>small change</strong> in weight in the previous layer affects the final output of the network.</p>
 <p><img src="https://i.imgur.com/jQOLUG3.gif" class="img-fluid" alt="backpropogationgif"> Source : Author</p>
 </section>
 <section id="writing-this-out-as-chain-rule" class="level2">
@@ -255,23 +243,23 @@ window.Quarto = {
 <p>Here is a more detailed depiction of how the small change in weight adds through the chain to affect the final cost, and <strong>how much</strong> the small change of weight in an inner layer affect the final cost.</p>
 <p>This is the <strong>Chain Rule</strong> of Calculus and the diagram is trying to illustrate that visually via a chain of activations, via a <strong>Computational Graph</strong></p>
 <p><span class="math display">\[
-\delta C_0/\delta w^l = \delta z^l/\delta w^l . \delta a^l/\delta z^l . \delta C_0/\delta a^l
+\frac{\partial C_0}{\partial W^l} = \frac{\partial C_0}{\partial a^l} \cdot \frac{\partial a^l}{\partial z^l} \cdot \frac{\partial z^l}{\partial W^l}
 \]</span></p>
 <p><img src="https://i.imgur.com/AgyuOr2.gif" class="img-fluid" alt="backpropogationgif2"> Source : Author</p>
 <p>Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost. We have already seen this in the previous chapter.</p>
 <p>The weights in each layer are adjusted in proportion to how each layers weights affected the Cost function.</p>
 <p>This is by calculating the new weight by following the negative of the gradient of the Cost function - basically by gradient descent.</p>
-<p>$$</p>
-<p>W^l_{new} = W^l_{old} - learningRate* C_0/ w^l</p>
-<p>$$</p>
+<p><span class="math display">\[
+  W^l_{new} = W^l_{old} - \eta \cdot \frac{\partial C_0}{\partial W^l}
+\]</span></p>
 <p>For adjusting the weight in the <span class="math inline">\((l-1)\)</span> layer, we do similar</p>
 <p>First calculate how the weight in this layer contributes to the final Cost or Loss</p>
 <p><span class="math display">\[
-\delta C_0/\delta w^{l-1} = \delta z^{l-1}/\delta w^{l-1} . \delta a^{l-1}/\delta z^{l-1} . \delta C_0/\delta a^{l-1}
+\frac{\partial C_0}{\partial W^{l-1}} = \frac{\partial C_0}{\partial a^{l-1}} \cdot \frac{\partial a^{l-1}}{\partial z^{l-1}} \cdot \frac{\partial z^{l-1}}{\partial W^{l-1}}
 \]</span></p>
 <p>and using this. Basically we are using Chain rule to find the partial differential using the partial differentials calculated in earlier steps.</p>
 <p><span class="math display">\[
-  W^{l-1}_{new} = W^{l-1}_{old} - learningRate* \delta C_0/ \delta w^{l-1}
+  W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C_0}{\partial W^{l-1}}
 \]</span></p>
 </section>
 <section id="nerual-net-as-a-composition-of-vector-functions" class="level2">
@@ -289,45 +277,45 @@ a_3 = L_3(L_2(L_1(x)))
 z_i = W_i a_{i-1} + b_i, \quad a_i = \sigma(z_i)
 \]</span></p>
 <p>And gradient descent is defined as:</p>
-<p><span class="math display">\[w_{i_{new}} = w_{i_{old}} - \eta \cdot \partial C / \partial w_i\]</span></p>
+<p><span class="math display">\[W_{i_{new}} = W_{i_{old}} - \eta \cdot \partial C / \partial W_i\]</span></p>
 <p>Problem is to find the partial derivative of the loss function with respect to the weights at each layer.</p>
-<p>To calculate how a change in the first layer’s weights (<span class="math inline">\(w_1\)</span>) affects the final Cost (<span class="math inline">\(C\)</span>), we have to trace the “path of influence” all the way through the network.</p>
-<p>A nudge in <span class="math inline">\(w_1\)</span> changes the output of Layer 1. The change in Layer 1 changes the input to Layer 2. The change in Layer 2 changes the input to Layer 3. The change in Layer 3 changes the final Cost.</p>
+<p>To calculate how a change in the first layer’s weights (<span class="math inline">\(W_1\)</span>) affects the final Cost (<span class="math inline">\(C\)</span>), we have to trace the “path of influence” all the way through the network.</p>
+<p>A nudge in <span class="math inline">\(W_1\)</span> changes the output of Layer 1. The change in Layer 1 changes the input to Layer 2. The change in Layer 2 changes the input to Layer 3. The change in Layer 3 changes the final Cost.</p>
 <p>Mathematically, we multiply the derivatives (Linear Maps) of these links together:</p>
 <p>We need to update weights of three layers</p>
-<p><span class="math display">\[w_{1_{new}} = w_{1_{old}} - \eta \cdot \partial C / \partial w_1\]</span></p>
-<p><span class="math display">\[w_{2_{new}} = w_{2_{old}} - \eta \cdot \partial C / \partial w_2\]</span></p>
-<p><span class="math display">\[w_{3_{new}} = w_{3_{old}} - \eta \cdot \partial C / \partial w_3\]</span></p>
-<p>And for that we need to find $ C / w_1 $, $ C / w_2 $, $ C / w_3 $.</p>
+<p><span class="math display">\[W_{1_{new}} = W_{1_{old}} - \eta \cdot \partial C / \partial W_1\]</span></p>
+<p><span class="math display">\[W_{2_{new}} = W_{2_{old}} - \eta \cdot \partial C / \partial W_2\]</span></p>
+<p><span class="math display">\[W_{3_{new}} = W_{3_{old}} - \eta \cdot \partial C / \partial W_3\]</span></p>
+<p>And for that we need to find $ C / W_1 $, $ C / W_2 $, $ C / W_3 $.</p>
 <p>Lets write down the chain rule for each layer:</p>
-<p><span class="math display">\[\frac{\partial C}{\partial w_1} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1} \cdot \frac{\partial L_1}{\partial w_1}\]</span></p>
-<p><span class="math display">\[\frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial w_2}\]</span></p>
-<p><span class="math display">\[\frac{\partial C}{\partial w_3} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial w_3}\]</span></p>
-<p>Why is this written this way? By the chain rule, the derivative of a composition of functions is the product of the derivatives of the functions. It is thus easy to calculate the gradient of the loss with respect to the weights of each layer.</p>
+<p><span class="math display">\[\frac{\partial C}{\partial W_1} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1} \cdot \frac{\partial L_1}{\partial W_1}\]</span></p>
+<p><span class="math display">\[\frac{\partial C}{\partial W_2} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial W_2}\]</span></p>
+<p><span class="math display">\[\frac{\partial C}{\partial W_3} = \frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial W_3}\]</span></p>
+<p>Why is this written this way? By the <strong>chain rule</strong>, <strong>the derivative of a composition of functions is the product of the derivatives of the functions</strong>. It is thus easy to calculate the gradient of the loss with respect to the weights of each layer.</p>
 <p>Lets calculate the gradient of the loss with respect to the weights of the first layer.</p>
 <p>Notice something interesting?</p>
 <ul>
-<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial w_3}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3}\)</span>.</p></li>
-<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial w_2}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}\)</span>.</p></li>
-<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial w_1}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1}\)</span>.</p></li>
+<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial W_3}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3}\)</span>.</p></li>
+<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial W_2}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}\)</span>.</p></li>
+<li><p>To calculate <span class="math inline">\(\frac{\partial C}{\partial W_1}\)</span>, we need <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2} \cdot \frac{\partial L_2}{\partial L_1}\)</span>.</p></li>
 </ul>
 <p>We are re-calculating the same terms over and over again!</p>
-<p>If we start from the <strong>Output</strong> (Layer 3) and move <strong>Backwards</strong>: 1. We calculate <span class="math inline">\(\frac{\partial C}{\partial L_3}\)</span> once. We use it to find the update for <span class="math inline">\(w_3\)</span>.</p>
+<p>If we start from the <strong>Output</strong> (Layer 3) and move <strong>Backwards</strong>: 1. We calculate <span class="math inline">\(\frac{\partial C}{\partial L_3}\)</span> once. We use it to find the update for <span class="math inline">\(W_3\)</span>.</p>
 <ol start="2" type="1">
-<li><p>We pass this value back to find <span class="math inline">\(\frac{\partial C}{\partial L_2}\)</span> (which is <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}\)</span>). We use it to find the update for <span class="math inline">\(w_2\)</span>.</p></li>
-<li><p>We pass <em>that</em> value back to find <span class="math inline">\(\frac{\partial C}{\partial L_1}\)</span>. We use it to find the update for <span class="math inline">\(w_1\)</span>.</p></li>
+<li><p>We pass this value back to find <span class="math inline">\(\frac{\partial C}{\partial L_2}\)</span> (which is <span class="math inline">\(\frac{\partial C}{\partial L_3} \cdot \frac{\partial L_3}{\partial L_2}\)</span>). We use it to find the update for <span class="math inline">\(W_2\)</span>.</p></li>
+<li><p>We pass <em>that</em> value back to find <span class="math inline">\(\frac{\partial C}{\partial L_1}\)</span>. We use it to find the update for <span class="math inline">\(W_1\)</span>.</p></li>
 </ol>
 <p>This avoids redundant calculations and is why it’s called <strong>Backpropagation</strong>.</p>
 <p>It is essentially <strong>Dynamic Programming</strong> applied to the Chain Rule.</p>
 <section id="the-backpropagation-algorithm-step-by-step" class="level3">
 <h3 class="anchored" data-anchor-id="the-backpropagation-algorithm-step-by-step">The Backpropagation Algorithm Step-by-Step</h3>
 <p><strong>Step 1: The Output Layer (<span class="math inline">\(L_3\)</span>)</strong></p>
-<p>We want to find the gradient <span class="math inline">\(\frac{\partial C}{\partial w_3}\)</span>. Using the Chain Rule: <span class="math display">\[ \frac{\partial C}{\partial w_3} = \frac{\partial C}{\partial a_3} \cdot \frac{\partial a_3}{\partial z_3} \cdot \frac{\partial z_3}{\partial w_3} \]</span></p>
+<p>We want to find the gradient <span class="math inline">\(\frac{\partial C}{\partial W_3}\)</span>. Using the Chain Rule: <span class="math display">\[ \frac{\partial C}{\partial W_3} = \frac{\partial C}{\partial a_3} \cdot \frac{\partial a_3}{\partial z_3} \cdot \frac{\partial z_3}{\partial W_3} \]</span></p>
 <p>Let’s break it down term by term:</p>
 <ol type="1">
 <li><p><strong>Derivative of Cost w.r.t Activation</strong> (<span class="math inline">\(\frac{\partial C}{\partial a_3}\)</span>): For MSE <span class="math inline">\(C = \frac{1}{2}(a_3 - y)^2\)</span>: <span class="math display">\[ \frac{\partial C}{\partial a_3} = (a_3 - y) \]</span></p></li>
 <li><p><strong>Derivative of Activation w.r.t Input</strong> (<span class="math inline">\(\frac{\partial a_3}{\partial z_3}\)</span>): Since <span class="math inline">\(a_3 = \sigma(z_3)\)</span>: <span class="math display">\[ \frac{\partial a_3}{\partial z_3} = \sigma'(z_3) \]</span></p></li>
-<li><p><strong>Derivative of Input w.r.t Weights</strong> (<span class="math inline">\(\frac{\partial z_3}{\partial w_3}\)</span>): Since <span class="math inline">\(z_3 = w_3 a_2 + b_3\)</span>: <span class="math display">\[ \frac{\partial z_3}{\partial w_3} = a_2 \]</span></p></li>
+<li><p><strong>Derivative of Input w.r.t Weights</strong> (<span class="math inline">\(\frac{\partial z_3}{\partial W_3}\)</span>): Since <span class="math inline">\(z_3 = W_3 a_2 + b_3\)</span>: <span class="math display">\[ \frac{\partial z_3}{\partial W_3} = a_2 \]</span></p></li>
 </ol>
 <p><strong>Combining them:</strong> We define the “error” term <span class="math inline">\(\delta_3\)</span> at the output layer as: <span class="math display">\[ \delta_3 = \frac{\partial C}{\partial z_3} = (a_3 - y) \odot \sigma'(z_3) \]</span></p>
 <blockquote class="blockquote">
@@ -335,25 +323,26 @@ z_i = W_i a_{i-1} + b_i, \quad a_i = \sigma(z_i)
 <p>The Jacobian of an element-wise activation <span class="math inline">\(\sigma\)</span> is a diagonal matrix: <span class="math display">\[ \frac{\partial a}{\partial z} = \text{diag}(\sigma'(z)) \]</span></p>
 <p>So multiplying by it is the same as a Hadamard product: <span class="math display">\[ \text{diag}(\sigma'(z)) \, v = v \odot \sigma'(z) \]</span></p>
 </blockquote>
-<p>So the gradient for the weights is: <span class="math display">\[ \frac{\partial C}{\partial w_3} = \delta_3 \cdot a_2^T \]</span></p>
+<p>We will see the Jacobian and Gradient Vector later.</p>
+<p>So the gradient for the weights is: <span class="math display">\[ \frac{\partial C}{\partial W_3} = \delta_3 \cdot a_2^T \]</span></p>
 <blockquote class="blockquote">
 <p><strong>Note on Transpose (<span class="math inline">\(a_2^T\)</span>)</strong>: In backprop, we push gradients through a linear map <span class="math inline">\(z = Wa + b\)</span>. The Jacobian w.r.t. <span class="math inline">\(a\)</span> is <span class="math inline">\(W\)</span>, so the chain rule gives:</p>
 <p><span class="math display">\[ \frac{\partial C}{\partial a} = W^T \frac{\partial C}{\partial z} \]</span></p>
 <p>The transpose appears because we’re applying the transpose (adjoint) of the Jacobian to move gradients backward.</p>
 </blockquote>
-<p><strong>Result</strong>: We have the update for <span class="math inline">\(w_3\)</span>.</p>
-<p><span class="math display">\[w_{3_{new}} = w_{3_{old}} - \eta \cdot \partial C / \partial w_3\]</span></p>
+<p><strong>Result</strong>: We have the update for <span class="math inline">\(W_3\)</span>.</p>
+<p><span class="math display">\[W_{3_{new}} = W_{3_{old}} - \eta \cdot \partial C / \partial W_3\]</span></p>
 <p><strong>Step 2: Propagate Back to <span class="math inline">\(L_2\)</span></strong></p>
-<p>Now we need to find the gradient for the second layer weights: <span class="math inline">\(\frac{\partial C}{\partial w_2}\)</span>. Using the Chain Rule, we can reuse the error from the layer above: <span class="math display">\[ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} = \delta_2 \cdot a_1^T \]</span></p>
+<p>Now we need to find the gradient for the second layer weights: <span class="math inline">\(\frac{\partial C}{\partial W_2}\)</span>. Using the Chain Rule, we can reuse the error from the layer above: <span class="math display">\[ \frac{\partial C}{\partial W_2} = \frac{\partial C}{\partial z_2} \cdot \frac{\partial z_2}{\partial W_2} = \delta_2 \cdot a_1^T \]</span></p>
 <p>But what is <span class="math inline">\(\delta_2\)</span> (the error at layer 2)? <span class="math display">\[ \delta_2 = \frac{\partial C}{\partial z_2} = \frac{\partial C}{\partial z_3} \cdot \frac{\partial z_3}{\partial z_2} \]</span></p>
-<p>We know <span class="math inline">\(\frac{\partial C}{\partial z_3} = \delta_3\)</span>. And since <span class="math inline">\(z_3 = w_3 \sigma(z_2) + b_3\)</span>: <span class="math display">\[ \frac{\partial z_3}{\partial z_2} = w_3 \cdot \sigma'(z_2) \]</span></p>
-<p>So, we can calculate <span class="math inline">\(\delta_2\)</span> by “backpropagating” <span class="math inline">\(\delta_3\)</span>: <span class="math display">\[ \delta_2 = (w_3^T \cdot \delta_3) \odot \sigma'(z_2) \]</span></p>
-<p><strong>The Update Rule for Layer 2:</strong> <span class="math display">\[ \frac{\partial C}{\partial w_2} = \delta_2 \cdot a_1^T \]</span></p>
-<p><strong>Result</strong>: We have the update for <span class="math inline">\(w_2\)</span>. <span class="math display">\[w_{2_{new}} = w_{2_{old}} - \eta \cdot \frac{\partial C}{\partial w_2}\]</span></p>
+<p>We know <span class="math inline">\(\frac{\partial C}{\partial z_3} = \delta_3\)</span>. And since <span class="math inline">\(z_3 = W_3 \sigma(z_2) + b_3\)</span>: <span class="math display">\[ \frac{\partial z_3}{\partial z_2} = W_3 \cdot \sigma'(z_2) \]</span></p>
+<p>So, we can calculate <span class="math inline">\(\delta_2\)</span> by “backpropagating” <span class="math inline">\(\delta_3\)</span>: <span class="math display">\[ \delta_2 = (W_3^T \cdot \delta_3) \odot \sigma'(z_2) \]</span></p>
+<p><strong>The Update Rule for Layer 2:</strong> <span class="math display">\[ \frac{\partial C}{\partial W_2} = \delta_2 \cdot a_1^T \]</span></p>
+<p><strong>Result</strong>: We have the update for <span class="math inline">\(W_2\)</span>. <span class="math display">\[W_{2_{new}} = W_{2_{old}} - \eta \cdot \frac{\partial C}{\partial W_2}\]</span></p>
 <p><strong>Step 3: Propagate Back to <span class="math inline">\(L_1\)</span></strong></p>
-<p>We repeat the exact same process to find the error at the first layer <span class="math inline">\(\delta_1\)</span>. <span class="math display">\[ \delta_1 = (w_2^T \cdot \delta_2) \odot \sigma'(z_1) \]</span></p>
-<p><strong>The Update Rule for Layer 1:</strong> <span class="math display">\[ \frac{\partial C}{\partial w_1} = \delta_1 \cdot x^T \]</span> (Recall that <span class="math inline">\(a_0 = x\)</span>, the input).</p>
-<p><strong>Result</strong>: We have the update for <span class="math inline">\(w_1\)</span>. <span class="math display">\[w_{1_{new}} = w_{1_{old}} - \eta \cdot \frac{\partial C}{\partial w_1}\]</span></p>
+<p>We repeat the exact same process to find the error at the first layer <span class="math inline">\(\delta_1\)</span>. <span class="math display">\[ \delta_1 = (W_2^T \cdot \delta_2) \odot \sigma'(z_1) \]</span></p>
+<p><strong>The Update Rule for Layer 1:</strong> <span class="math display">\[ \frac{\partial C}{\partial W_1} = \delta_1 \cdot x^T \]</span> (Recall that <span class="math inline">\(a_0 = x\)</span>, the input).</p>
+<p><strong>Result</strong>: We have the update for <span class="math inline">\(W_1\)</span>. <span class="math display">\[W_{1_{new}} = W_{1_{old}} - \eta \cdot \frac{\partial C}{\partial W_1}\]</span></p>
 </section>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>

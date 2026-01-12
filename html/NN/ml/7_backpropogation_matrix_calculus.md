@@ -7,7 +7,6 @@ Alex Punnen \
 
 [Contents](index.md)
 
-
 # Chapter 6
 
 ## Back Propagation -Matrix Calculus
@@ -95,11 +94,11 @@ See the Colab [1] for a generated visualization of this.
 
 The first image is the plotting of the Cost function
 
-![gradient vector](images/gradientvec1.png)
+![gradient_vector](images/gradientvec1.png)
 
 The second image where you see the cones are the gradient vector of the Cost function wrto weights plotted in 3D space.
 
-![gradient vector](images/gradientvec2.png)
+![gradient_vector](images/gradientvec2.png)
 
 
 ## Jacobian Matrix
@@ -181,6 +180,7 @@ $$
 It is different from the dot product (which sums the results to a scalar) and matrix multiplication. In backpropagation, it often appears when we apply the chain rule through an activation function that operates element-wise (like sigmoid or ReLU).
 
 ---
+
 ## Backpropagation Derivation
 
 ### The 2-Layer Neural Network Model

@@ -260,7 +260,7 @@ window.Quarto = {
 <h1>Chapter 5</h1>
 <section id="a-simple-neuralnet-with-back-propagation" class="level2">
 <h2 class="anchored" data-anchor-id="a-simple-neuralnet-with-back-propagation">A Simple NeuralNet with Back Propagation</h2>
-<p>With the derivative of the Cost function dervied from the last chapter, we can code the network</p>
+<p>With the derivative of the Cost function derived from the last chapter, we can code the network</p>
 <p>We will use matrices to represent input and weight matrices.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    [</span>
@@ -280,7 +280,7 @@ window.Quarto = {
 <p>Note you can change the output and try to train the Neural network</p>
 <p>This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.</p>
 <p><strong>A neural network is implemented as a set of matrices representing the weights of the network.</strong></p>
-<p>Let’s create a two layered network. Before that please not the formula for the neural network</p>
+<p>Let’s create a two layered network. Before that please note the formula for the neural network</p>
 <p>So basically the output at layer l is the dot product of the weight matrix of layer l and input of the previous layer.</p>
 <p>Now let’s see how the matrix dot product works based on the shape of matrices.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[m<span class="op">*</span>n].[n<span class="op">*</span>x] <span class="op">=</span> [m<span class="op">*</span>x]</span>
@@ -297,7 +297,7 @@ window.Quarto = {
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.random.random((<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> np.random.random((<span class="dv">4</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>We can have an array of the weights to loop through, but for the time being let’s hard-code these. Note that ‘np’ stands for the popular numpy array library in Python.</p>
-<p>We also need to code in our non linearity.We will use the Sigmoid function here.</p>
+<p>We also need to code in our non-linearity. We will use the Sigmoid function here.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>x))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -348,7 +348,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pretty print numpy array</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(formatter<span class="op">=</span>{<span class="st">'float'</span>: <span class="st">'</span><span class="sc">{: 0.3f}</span><span class="st">'</span>.<span class="bu">format</span>})</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># let us code our sigmoid funciton</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># let us code our sigmoid function</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>x))</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
@@ -358,7 +358,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Two layered NW. Using from (1) and the equations we derived as explanaionns</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Two layered NW. Using from (1) and the equations we derived as explanations</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># (1) http://iamtrask.github.io/2015/07/12/basic-python-network/</span></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
@@ -371,7 +371,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co"># desired output for each of the training set above</span></span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>]]).T</span>
 <span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Explanaiton - as long as input has two ones, but not three, ouput is One</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Explanation - as long as input has two ones, but not three, output is One</span></span>
 <span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">Input [0,0,1]  Output = 0</span></span>
 <span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co">Input [0,1,1]  Output = 1</span></span>
@@ -379,7 +379,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co">Input [1,1,1]  Output = 0</span></span>
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Randomly initalised weights</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Randomly initialized weights</span></span>
 <span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>weight1 <span class="op">=</span>  np.random.random((<span class="dv">3</span>,<span class="dv">4</span>)) </span>
 <span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>weight2 <span class="op">=</span>  np.random.random((<span class="dv">4</span>,<span class="dv">1</span>)) </span>
 <span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
@@ -395,12 +395,12 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  z2<span class="op">=</span> np.dot(a1,weight2)</span>
 <span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  a2 <span class="op">=</span> sigmoid(z2) </span>
 <span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">iter</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Intial Ouput </span><span class="ch">\n</span><span class="st">"</span>,a2)</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Initial Output </span><span class="ch">\n</span><span class="st">"</span>,a2)</span>
 <span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Backward Pass - Backpropagation </span></span>
 <span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  delta2  <span class="op">=</span> (a2<span class="op">-</span>y)</span>
 <span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcluating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
 <span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (A) ---&gt; dC_dw2 = delta2*derv_sigmoid(z2)*a1.T</span></span>
 <span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
 <span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a></span>
@@ -408,47 +408,46 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  dC_dw2  <span class="op">=</span> a1.T.dot(dC_dw2_1)</span>
 <span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcluating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
 <span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (B)---&gt; dC_dw1 = derv_sigmoid(z1)*delta2*derv_sigmoid(z2)*weight2*a0.T</span></span>
 <span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dC_dw1 = derv_sigmoid(z1)*dC_dw2*weight2_1*a0.T</span></span>
 <span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
 <span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span>  np.multiply(dC_dw2_1,weight2.T) <span class="op">*</span> derv_sigmoid(z1)</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>  <span class="co"># todo - the weight2.T is the only thing not in equation here</span></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span> a0.T.dot(dC_dw1)</span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Gradinent descent</span></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  weight2 <span class="op">=</span> weight2 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw2)</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>  weight1 <span class="op">=</span> weight1 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw1)</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span>  np.dot(dC_dw2_1, weight2.T) <span class="op">*</span> derv_sigmoid(z1)</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span> a0.T.dot(dC_dw1)</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Gradient descent</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  weight2 <span class="op">=</span> weight2 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw2)</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  weight1 <span class="op">=</span> weight1 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw1)</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"New ouput"</span>,a2)</span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Training is done, weight2 and weight2 are primed for output y</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets test out, two ones in input and one zero, ouput should be One</span></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]])</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>z1<span class="op">=</span> np.dot(x,weight1)</span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(z1) </span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>z2<span class="op">=</span> np.dot(a1,weight2)</span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(z2) </span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ouput after Training is </span><span class="ch">\n</span><span class="st">"</span>,a2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"New output"</span>,a2)</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Training is done, weight2 and weight2 are primed for output y</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets test out, two ones in input and one zero, output should be One</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]])</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>z1<span class="op">=</span> np.dot(x,weight1)</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(z1) </span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>z2<span class="op">=</span> np.dot(a1,weight2)</span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(z2) </span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output after Training is </span><span class="ch">\n</span><span class="st">"</span>,a2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Output</p>
-<pre class="console"><code>Intial Ouput 
+<pre class="console"><code>Initial Output 
  [[ 0.758]
  [ 0.771]
  [ 0.791]
  [ 0.801]]
-New ouput [[ 0.028]
+New output [[ 0.028]
  [ 0.925]
  [ 0.925]
  [ 0.090]]
-Ouput after Training is 
+Output after Training is 
  [[ 0.925]]</code></pre>
 <p>We have trained the NW for getting the output similar to <span class="math inline">\(y\)</span>; that is [0,1,0,1]</p>
 <p>The code in <a href="https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing">Colab</a></p>

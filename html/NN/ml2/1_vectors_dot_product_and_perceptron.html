@@ -203,6 +203,7 @@ window.Quarto = {
   <li><a href="#matrices---a-way-to-represent-vectors-and-tensors" id="toc-matrices---a-way-to-represent-vectors-and-tensors" class="nav-link" data-scroll-target="#matrices---a-way-to-represent-vectors-and-tensors">Matrices - A way to represent Vectors (and Tensors)</a></li>
   <li><a href="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." id="toc-two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." class="nav-link" data-scroll-target="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other.">Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other.</a></li>
   <li><a href="#dot-product" id="toc-dot-product" class="nav-link" data-scroll-target="#dot-product">Dot product</a></li>
+  <li><a href="#transpose" id="toc-transpose" class="nav-link" data-scroll-target="#transpose">Transpose</a></li>
   </ul></li>
   <li><a href="#dot-product-for-checking-vector-alignment" id="toc-dot-product-for-checking-vector-alignment" class="nav-link" data-scroll-target="#dot-product-for-checking-vector-alignment">Dot Product for checking Vector Alignment</a>
   <ul class="collapse">
@@ -280,6 +281,10 @@ a_{1}\\a_{2}\\a_{3}\
 <p><strong>Algebraically</strong>, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.</p>
 <p>if <span class="math inline">\(\vec a = \left\langle {a_1,a_2,a_3} \right\rangle\)</span> and <span class="math inline">\(\vec b = \left\langle {b_1,b_2,b_3} \right\rangle\)</span>, then</p>
 <p><span class="math inline">\(\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3} = a_ib_i \quad\text {in index notation}\)</span></p>
+<p>In Matrix notation,</p>
+<p><span class="math display">\[
+\vec a \cdot \vec b = \begin{bmatrix} a_{1} &amp; a_{2} &amp;a_{3}\end{bmatrix} \begin{bmatrix} b_{1}\\b_{2}\\b_{3}\end{bmatrix} = a_ib_i
+\]</span></p>
 <p><strong>Geometrically</strong>, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them</p>
 <p><span class="math display">\[
 \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta
@@ -291,6 +296,11 @@ a_{1}\\a_{2}\\a_{3}\
 </figure>
 </div>
 <p>Note- These definitions are equivalent when using Cartesian coordinates (Ref <a href="http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx">8</a>, <a href="https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff">9</a>)</p>
+</section>
+<section id="transpose" class="level3">
+<h3 class="anchored" data-anchor-id="transpose">Transpose</h3>
+<p>The transpose of a matrix is an operator which flips a matrix over its diagonal; that is, it switches the row and column indices of the matrix A by producing another matrix, often denoted by <span class="math inline">\(A^T\)</span>.</p>
+<p><strong>This is important because the dot product of two vectors can be written as the matrix product of a row vector and a column vector: <span class="math inline">\(\vec a \cdot \vec b = a^T b\)</span></strong></p>
 </section>
 </section>
 <section id="dot-product-for-checking-vector-alignment" class="level2">

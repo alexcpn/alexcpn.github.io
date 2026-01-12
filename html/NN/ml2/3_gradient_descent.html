@@ -204,15 +204,18 @@ window.Quarto = {
   <li><a href="#the-cost-function-loss-function" id="toc-the-cost-function-loss-function" class="nav-link" data-scroll-target="#the-cost-function-loss-function">The Cost Function (Loss Function)</a></li>
   <li><a href="#the-goal-of-training" id="toc-the-goal-of-training" class="nav-link" data-scroll-target="#the-goal-of-training">The Goal of Training</a></li>
   </ul></li>
-  <li><a href="#optimization-gradient-descent---take-1" id="toc-optimization-gradient-descent---take-1" class="nav-link" data-scroll-target="#optimization-gradient-descent---take-1">Optimization: Gradient Descent - Take 1</a>
+  <li><a href="#optimization-gradient-descent-take-1" id="toc-optimization-gradient-descent-take-1" class="nav-link" data-scroll-target="#optimization-gradient-descent-take-1">Optimization: Gradient Descent — Take 1</a></li>
+  <li><a href="#gradient-descent-for-scalar-functions" id="toc-gradient-descent-for-scalar-functions" class="nav-link" data-scroll-target="#gradient-descent-for-scalar-functions">Gradient Descent for Scalar Functions</a>
   <ul class="collapse">
-  <li><a href="#why-not-newtons-method" id="toc-why-not-newtons-method" class="nav-link" data-scroll-target="#why-not-newtons-method">Why not Newton’s Method?</a></li>
+  <li><a href="#running-the-numbers-a-real-example" id="toc-running-the-numbers-a-real-example" class="nav-link" data-scroll-target="#running-the-numbers-a-real-example">Running the Numbers: A Real Example</a></li>
+  <li><a href="#the-adjustment-problem-which-direction-how-much" id="toc-the-adjustment-problem-which-direction-how-much" class="nav-link" data-scroll-target="#the-adjustment-problem-which-direction-how-much">The Adjustment Problem: Which Direction? How Much?</a></li>
+  <li><a href="#the-chain-of-effects" id="toc-the-chain-of-effects" class="nav-link" data-scroll-target="#the-chain-of-effects">The Chain of Effects</a></li>
+  <li><a href="#the-solution-applying-the-chain-rule" id="toc-the-solution-applying-the-chain-rule" class="nav-link" data-scroll-target="#the-solution-applying-the-chain-rule">The Solution: Applying the Chain Rule</a></li>
+  <li><a href="#making-the-update-gradient-descent" id="toc-making-the-update-gradient-descent" class="nav-link" data-scroll-target="#making-the-update-gradient-descent">Making the Update: Gradient Descent</a></li>
+  <li><a href="#verification-did-it-work" id="toc-verification-did-it-work" class="nav-link" data-scroll-target="#verification-did-it-work">Verification: Did It Work?</a></li>
   </ul></li>
-  <li><a href="#take-2---deeper-dive" id="toc-take-2---deeper-dive" class="nav-link" data-scroll-target="#take-2---deeper-dive">Take 2 - Deeper Dive</a></li>
-  <li><a href="#backpropagation" id="toc-backpropagation" class="nav-link" data-scroll-target="#backpropagation">Backpropagation</a>
-  <ul class="collapse">
-  <li><a href="#jacobian-matrix" id="toc-jacobian-matrix" class="nav-link" data-scroll-target="#jacobian-matrix">Jacobian Matrix</a></li>
-  </ul></li>
+  <li><a href="#gradient-descent-for-a-two-layer-neural-network-scalar-form" id="toc-gradient-descent-for-a-two-layer-neural-network-scalar-form" class="nav-link" data-scroll-target="#gradient-descent-for-a-two-layer-neural-network-scalar-form">Gradient Descent for a Two-Layer Neural Network (Scalar Form)</a></li>
+  <li><a href="#some-other-notes-related-to-gradient-descent" id="toc-some-other-notes-related-to-gradient-descent" class="nav-link" data-scroll-target="#some-other-notes-related-to-gradient-descent">Some other notes related to Gradient Descent</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -315,34 +318,179 @@ C = \frac{1}{2n} \sum_{x} \|y(x) - a^L(x)\|^2
 </ol>
 </section>
 </section>
-<section id="optimization-gradient-descent---take-1" class="level2">
-<h2 class="anchored" data-anchor-id="optimization-gradient-descent---take-1">Optimization: Gradient Descent - Take 1</h2>
-<p>For the Cost Function <span class="math inline">\(C(w, b)\)</span>, we need to find the minimum of this function with respect to the weights <span class="math inline">\(w\)</span> and biases <span class="math inline">\(b\)</span>.</p>
-<p>We calculate the gradient of the cost function with respect to each weight and bias using backpropagation <span class="math display">\[
-\nabla C = \begin{bmatrix}
-\frac{\partial C}{\partial w} \\
-\frac{\partial C}{\partial b}
-\end{bmatrix}
-\]</span></p>
-<p>Then update the weights in the opposite direction of the gradient:</p>
-<p><span class="math display">\[
-w_{new} = w_{old} - \eta \frac{\partial C}{\partial w}
-\]</span> <span class="math display">\[
-b_{new} = b_{old} - \eta \frac{\partial C}{\partial b}
-\]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the <strong>learning rate</strong>. This update rule is called <strong>Gradient Descent</strong>.</p>
-<section id="why-not-newtons-method" class="level3">
-<h3 class="anchored" data-anchor-id="why-not-newtons-method">Why not Newton’s Method?</h3>
-<p>You might ask, why not use faster optimization methods like <strong>Newton’s Method</strong> (Newton-Raphson)?</p>
-<p>Newton’s method uses the second derivative (curvature) to find the minimum faster. <span class="math display">\[ w_{new} = w_{old} - \frac{C'(w)}{C''(w)} \]</span></p>
-<p>However, for a neural network with millions of weights, calculating the second derivative (the Hessian matrix) is computationally infeasible. Gradient Descent, which uses only the first derivative, is much more scalable and efficient for Deep Learning.</p>
+<section id="optimization-gradient-descent-take-1" class="level2">
+<h2 class="anchored" data-anchor-id="optimization-gradient-descent-take-1">Optimization: Gradient Descent — Take 1</h2>
+<p>Gradient Descent is a simple yet powerful optimization algorithm used to minimize functions by iteratively updating parameters in the direction that reduces the function’s output.</p>
+<p>For basic scalar functions (e.g., <span class="math inline">\(( f(x) = x^2 )\)</span>), the update rule is straightforward: <span class="math display">\[
+x \leftarrow x - \eta \frac{df}{dx}
+\]</span> where <span class="math inline">\(( \eta )\)</span> is the learning rate.</p>
+<p>However, <strong>neural networks are not simple scalar functions</strong>. They are <strong>composite vector-valued functions</strong> — layers of transformations that take in high-dimensional input vectors and eventually output either vectors (like logits) or scalars (like loss values).</p>
+<p>Understanding how to optimize these complex, high-dimensional functions requires us to extend basic calculus: - The <strong>gradient vector</strong> helps when the function outputs a scalar but takes a vector input (e.g., a loss function w.r.t. weights). - The <strong>Jacobian matrix</strong> becomes important when both the input and the output are vectors (e.g., when computing gradients layer by layer in backpropagation).</p>
+<p>We’ll build up to this step by step — starting with scalar gradients, then moving to vector calculus, Jacobians, and how backpropagation stitches it all together.</p>
+<p>Let’s take it one layer at a time.</p>
+</section>
+<section id="gradient-descent-for-scalar-functions" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-descent-for-scalar-functions">Gradient Descent for Scalar Functions</h2>
+<p>Consider this simple system that composes two functions:</p>
+<p><span class="math display">\[L = g(f(x, w_1), w_2)\]</span></p>
+<p>Where:</p>
+<ul>
+<li><p><span class="math inline">\(x\)</span> is your input (fixed, given by your data)</p></li>
+<li><p><span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> are <strong>parameters you can adjust</strong> (like weights in a neural network)</p></li>
+<li><p><span class="math inline">\(f\)</span> is the first function (think: first layer)</p></li>
+<li><p><span class="math inline">\(g\)</span> is the second function (think: second layer)</p></li>
+<li><p><span class="math inline">\(L\)</span> is the final output</p></li>
+</ul>
+<p>Let’s make this concrete with simple linear functions:</p>
+<p><span class="math display">\[f(x, w_1) = x \cdot w_1 + b_1\]</span></p>
+<p><span class="math display">\[g(z, w_2) = z \cdot w_2 + b_2\]</span></p>
+<p>So the full composition is:</p>
+<p><span class="math display">\[L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2\]</span></p>
+<section id="running-the-numbers-a-real-example" class="level3">
+<h3 class="anchored" data-anchor-id="running-the-numbers-a-real-example">Running the Numbers: A Real Example</h3>
+<p>Let’s pick actual values and see what happens:</p>
+<p><strong>Fixed values:</strong></p>
+<ul>
+<li><p>Input: <span class="math inline">\(x = 2.0\)</span></p></li>
+<li><p>Bias terms: <span class="math inline">\(b_1 = 1.0\)</span>, <span class="math inline">\(b_2 = 0.5\)</span></p></li>
+</ul>
+<p><strong>Current parameter values:</strong></p>
+<ul>
+<li><p><span class="math inline">\(w_1 = 0.5\)</span></p></li>
+<li><p><span class="math inline">\(w_2 = 1.5\)</span></p></li>
+</ul>
+<p><strong>Step 1</strong>: Compute intermediate result from first function:</p>
+<p><span class="math display">\[z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0\]</span></p>
+<p><strong>Step 2</strong>: Compute final output from second function:</p>
+<p><span class="math display">\[L = g(z, w_2) = 2.0  \times  1.5 + 0.5 = 3.5\]</span></p>
+<p><strong>The problem</strong>: Suppose we want <span class="math inline">\(L_{\text{target}} = 5.0\)</span> instead!</p>
+<p>Our current error is:</p>
+<p><span class="math display">\[E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125\]</span></p>
+<p><strong>The million-dollar question</strong>: How should we change <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> to reduce this error?</p>
+</section>
+<section id="the-adjustment-problem-which-direction-how-much" class="level3">
+<h3 class="anchored" data-anchor-id="the-adjustment-problem-which-direction-how-much">The Adjustment Problem: Which Direction? How Much?</h3>
+<p>Here’s what we need to know:</p>
+<ol type="1">
+<li><p><strong>Should we increase or decrease <span class="math inline">\(w_1\)</span>?</strong> (Which direction?)</p></li>
+<li><p><strong>How sensitive is <span class="math inline">\(L\)</span> to changes in <span class="math inline">\(w_1\)</span>?</strong> (How much?)</p></li>
+<li><p><strong>Same questions for <span class="math inline">\(w_2\)</span>.</strong></p></li>
+</ol>
+<p>This is where derivatives come in! Specifically, we need:</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w_1} \quad  \text{and} \quad  \frac{\partial L}{\partial w_2}\]</span></p>
+<p>These tell us:</p>
+<ul>
+<li><p><strong>Sign</strong>: Positive means “increase <span class="math inline">\(w\)</span> increases <span class="math inline">\(L\)</span>”, negative means the opposite</p></li>
+<li><p><strong>Magnitude</strong>: Larger absolute value means <span class="math inline">\(L\)</span> is more sensitive to changes in <span class="math inline">\(w\)</span></p></li>
+</ul>
+<p>But there’s a complication: <span class="math inline">\(w_1\)</span> doesn’t directly affect <span class="math inline">\(L\)</span>. It affects <span class="math inline">\(f\)</span>, which then affects <span class="math inline">\(g\)</span>, which then affects <span class="math inline">\(L\)</span>. This is a <strong>composition</strong>, and we need to trace the effect through multiple steps.</p>
+<p>This is where the “Chain Rule” of Calculus comes into play.</p>
+</section>
+<section id="the-chain-of-effects" class="level3">
+<h3 class="anchored" data-anchor-id="the-chain-of-effects">The Chain of Effects</h3>
+<p>Let’s visualize how changes propagate:</p>
+<pre><code>
+Change w₁ → Affects f → Changes z → Affects g → Changes L
+
+↓ ↓ ↓ ↓ ↓
+
+Δw₁ ∂f/∂w₁ Δz ∂g/∂z ΔL
+</code></pre>
+<p>Similarly for <span class="math inline">\(w_2\)</span> (but <span class="math inline">\(w_2\)</span> directly affects <span class="math inline">\(g\)</span>):</p>
+<pre><code>
+Change w₂ → Affects g → Changes L
+
+↓ ↓ ↓
+
+Δw₂ ∂g/∂w₂ ΔL
+</code></pre>
+<p>The key insight: <strong>To find how <span class="math inline">\(w_1\)</span> affects <span class="math inline">\(L\)</span>, we need to multiply the effects at each step.</strong></p>
+<p>This is the <strong>chain rule</strong> in action!</p>
+</section>
+<section id="the-solution-applying-the-chain-rule" class="level3">
+<h3 class="anchored" data-anchor-id="the-solution-applying-the-chain-rule">The Solution: Applying the Chain Rule</h3>
+<p>For our composition <span class="math inline">\(L = g(f(x, w_1), w_2)\)</span>, let’s introduce a shorthand: call <span class="math inline">\(z = f(x, w_1)\)</span> the intermediate value.</p>
+<p>Then:</p>
+<p><span class="math display">\[L = g(z, w_2)\]</span></p>
+<p><strong>Computing <span class="math inline">\(\frac{\partial L}{\partial w_1}\)</span>:</strong></p>
+<p>By the chain rule of calculus:</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot  \frac{\partial z}{\partial w_1}\]</span></p>
+<p>Let’s compute each piece:</p>
+<p><strong>Part 1</strong>: How does <span class="math inline">\(L\)</span> change with <span class="math inline">\(z\)</span>?</p>
+<p><span class="math display">\[\frac{\partial L}{\partial z} = \frac{\partial}{\partial z}(z \cdot w_2 + b_2) = w_2 = 1.5\]</span></p>
+<p><strong>Part 2</strong>: How does <span class="math inline">\(z\)</span> change with <span class="math inline">\(w_1\)</span>?</p>
+<p><span class="math display">\[\frac{\partial z}{\partial w_1} = \frac{\partial}{\partial w_1}(x \cdot w_1 + b_1) = x = 2.0\]</span></p>
+<p><strong>Putting it together</strong>:</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w_1} = 1.5  \times  2.0 = 3.0\]</span></p>
+<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w_1\)</span> by 0.1, then <span class="math inline">\(L\)</span> increases by approximately <span class="math inline">\(3.0  \times  0.1 = 0.3\)</span>.</p>
+<p><strong>Computing <span class="math inline">\(\frac{\partial L}{\partial w_2}\)</span>:</strong></p>
+<p>This is simpler because <span class="math inline">\(w_2\)</span> directly affects <span class="math inline">\(g\)</span>:</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + b_2) = z = 2.0\]</span></p>
+<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w_2\)</span> by 0.1, then <span class="math inline">\(L\)</span> increases by approximately <span class="math inline">\(2.0  \times  0.1 = 0.2\)</span>.</p>
+</section>
+<section id="making-the-update-gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="making-the-update-gradient-descent">Making the Update: Gradient Descent</h3>
+<p>Now we can adjust our parameters! Since we want to <strong>increase</strong> <span class="math inline">\(L\)</span> from 3.5 to 5.0, and both gradients are positive, we should increase both <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span>.</p>
+<p>Using gradient descent with learning rate <span class="math inline">\(\alpha = 0.2\)</span>:</p>
+<p><span class="math display">\[w_1^{\text{new}} = w_1 + \alpha  \cdot  \frac{\partial L}{\partial w_1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1\]</span></p>
+<p><span class="math display">\[w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9\]</span></p>
+<p><strong>Note</strong>: We’re adding (not subtracting) because we want to increase <span class="math inline">\(L\)</span>. Normally in machine learning, we minimize error, so we’d use <span class="math inline">\(w - \alpha  \cdot  \frac{\partial E}{\partial w}\)</span>.</p>
+</section>
+<section id="verification-did-it-work" class="level3">
+<h3 class="anchored" data-anchor-id="verification-did-it-work">Verification: Did It Work?</h3>
+<p>Let’s recompute with the new weights:</p>
+<p><strong>Step 1</strong>: New intermediate value:</p>
+<p><span class="math display">\[z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2\]</span></p>
+<p><strong>Step 2</strong>: New output:</p>
+<p><span class="math display">\[L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58\]</span></p>
+<p><strong>Progress check</strong>:</p>
+<ul>
+<li><p>Before: <span class="math inline">\(L = 3.5\)</span> (error from target = 1.5)</p></li>
+<li><p>After: <span class="math inline">\(L = 6.58\)</span> (error from target = -1.58)</p></li>
+<li><p>We overshot! But that’s okay - we moved in the right direction</p></li>
+</ul>
+<p>With a smaller learning rate (say <span class="math inline">\(\alpha = 0.1\)</span>), we’d get:</p>
+<ul>
+<li><p><span class="math inline">\(w_1^{\text{new}} = 0.8\)</span>, <span class="math inline">\(w_2^{\text{new}} = 1.7\)</span></p></li>
+<li><p><span class="math inline">\(z^{\text{new}} = 2.6\)</span>, <span class="math inline">\(L^{\text{new}} = 4.92\)</span></p></li>
+<li><p>Much closer to our target of 5.0!</p></li>
+</ul>
+<p>This is how Gradient Descent works in a nutshell. The same concepts carry over in deep learning with some added complexity.</p>
 </section>
 </section>
-<section id="take-2---deeper-dive" class="level2">
-<h2 class="anchored" data-anchor-id="take-2---deeper-dive">Take 2 - Deeper Dive</h2>
-<p>The Error function is a scalar function of the weights and biases.</p>
-<p>The loss (error) is a scalar function of all weights and biases.</p>
-<p>In linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g.&nbsp;see left in picture).</p>
+<section id="gradient-descent-for-a-two-layer-neural-network-scalar-form" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-descent-for-a-two-layer-neural-network-scalar-form">Gradient Descent for a Two-Layer Neural Network (Scalar Form)</h2>
+<p>Let’s apply this to a simple neural network with one hidden layer. We have: * <strong>Input</strong>: <span class="math inline">\(x\)</span> * <strong>Hidden Layer</strong>: 1 neuron with weight <span class="math inline">\(w_1\)</span>, bias <span class="math inline">\(b_1\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Output Layer</strong>: 1 neuron with weight <span class="math inline">\(w_2\)</span>, bias <span class="math inline">\(b_2\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Target</strong>: <span class="math inline">\(y\)</span></p>
+<p><strong>Forward Pass:</strong> 1. <span class="math inline">\(z_1 = w_1 x + b_1\)</span> 2. <span class="math inline">\(a_1 = \sigma(z_1)\)</span> 3. <span class="math inline">\(z_2 = w_2 a_1 + b_2\)</span> 4. <span class="math inline">\(a_2 = \sigma(z_2)\)</span> (This is our prediction <span class="math inline">\(\hat{y}\)</span>)</p>
+<p><strong>Loss Function:</strong> We use the Mean Squared Error (MSE) for this single example: <span class="math display">\[ C = \frac{1}{2}(y - a_2)^2 \]</span></p>
+<p><strong>Goal:</strong> Find <span class="math inline">\(\frac{\partial C}{\partial w_1}, \frac{\partial C}{\partial b_1}, \frac{\partial C}{\partial w_2}, \frac{\partial C}{\partial b_2}\)</span> to update the weights.</p>
+<p><strong>Backward Pass (Deriving Gradients):</strong></p>
+<p><strong>Layer 2 (Output Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w_2\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} \]</span></p>
+<ul>
+<li><span class="math inline">\(\frac{\partial C}{\partial a_2} = -(y - a_2)\)</span> (Derivative of <span class="math inline">\(\frac{1}{2}(y-a)^2\)</span>)</li>
+<li><span class="math inline">\(\frac{\partial a_2}{\partial z_2} = \sigma'(z_2)\)</span> (Derivative of activation)</li>
+<li><span class="math inline">\(\frac{\partial z_2}{\partial w_2} = a_1\)</span></li>
+</ul>
+<p>So, <span class="math display">\[ \frac{\partial C}{\partial w_2} = -(y - a_2) \sigma'(z_2) a_1 \]</span></p>
+<p>Let’s define the “error term” for layer 2 as <span class="math inline">\(\delta_2 = -(y - a_2) \sigma'(z_2)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w_2} = \delta_2 a_1 \]</span> <span class="math display">\[ \frac{\partial C}{\partial b_2} = \delta_2 \cdot 1 = \delta_2 \]</span></p>
+<p><strong>Layer 1 (Hidden Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w_1\)</span>. The path is longer: <span class="math inline">\(w_1 \to z_1 \to a_1 \to z_2 \to a_2 \to C\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w_1} = \underbrace{\frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2}}_{\delta_2} \cdot \frac{\partial z_2}{\partial a_1} \cdot \frac{\partial a_1}{\partial z_1} \cdot \frac{\partial z_1}{\partial w_1} \]</span></p>
+<ul>
+<li>We know the first part is <span class="math inline">\(\delta_2\)</span>.</li>
+<li><span class="math inline">\(\frac{\partial z_2}{\partial a_1} = w_2\)</span></li>
+<li><span class="math inline">\(\frac{\partial a_1}{\partial z_1} = \sigma'(z_1)\)</span></li>
+<li><span class="math inline">\(\frac{\partial z_1}{\partial w_1} = x\)</span></li>
+</ul>
+<p>So, <span class="math display">\[ \frac{\partial C}{\partial w_1} = \delta_2 \cdot w_2 \cdot \sigma'(z_1) \cdot x \]</span></p>
+<p>Let’s define the error term for layer 1 as <span class="math inline">\(\delta_1 = \delta_2 w_2 \sigma'(z_1)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w_1} = \delta_1 x \]</span> <span class="math display">\[ \frac{\partial C}{\partial b_1} = \delta_1 \]</span></p>
+<p><strong>The Update:</strong> <span class="math display">\[ w_1 \leftarrow w_1 - \eta \delta_1 x \]</span> <span class="math display">\[ w_2 \leftarrow w_2 - \eta \delta_2 a_1 \]</span></p>
+<p>This pattern—calculating an error term <span class="math inline">\(\delta\)</span> at the output and propagating it back using the weights—is why it’s called <strong>Backpropagation</strong>.</p>
+<p>Note that we are using here scalar form of gradient descent and not directly applicable to real neural networks. But this gives us the intuition of how backpropagation works.</p>
+</section>
+<section id="some-other-notes-related-to-gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="some-other-notes-related-to-gradient-descent">Some other notes related to Gradient Descent</h2>
+<p>The Loss/Cost function is a scalar function of the weights and biases.</p>
+<p>The loss/error is a scalar function of all weights and biases.</p>
+<p>In simpler Machine Learning problems like linear regression with MSE, the loss is a convex quadratic in the parameters, so optimization is well-behaved (a bowl-shaped surface)(e.g.&nbsp;see left in picture).</p>
 <p>In deep learning, the loss becomes non-convex because it is the result of composing many nonlinear transformations. This creates a complex landscape with saddle points, flat regions, and multiple minima (e.g.&nbsp;see right in picture).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -351,69 +499,17 @@ b_{new} = b_{old} - \eta \frac{\partial C}{\partial b}
 </figure>
 </div>
 <p><strong>How will Gradient Descent work in this case - non convex function?</strong></p>
-<p>Gradient descent does not attempt to find the global minimum, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.</p>
-<p>The cost function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.</p>
+<p>Gradient descent does not attempt to find the <strong>global minimum</strong>, but rather follows the local slope of the cost function and converges to a local minimum or a flat region.</p>
+<p>The Loss function is differentiable almost everywhere*. At any point in parameter space, the gradient indicates the direction of steepest local increase, and moving in the opposite direction reduces the cost. During optimization, the algorithm may encounter local minima or saddle points.</p>
 <p>(*The function is not differentiable at the point where the function is zero ex ReLU. This is not a problem in practice, as optimization algorithms handle such points using <a href="images/subgradient.png">subgradients</a>)</p>
 <p>In practice, deep learning works well despite non-convexity, partly because modern networks have millions of parameters and their loss landscapes contain many saddle points and wide, flat minima rather than <a href="images/poorlocalminima.png">poor isolated local minima</a>.</p>
-<p>Furthermore, we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent.</p>
-<p>In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset. The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.</p>
-</section>
-<section id="backpropagation" class="level2">
-<h2 class="anchored" data-anchor-id="backpropagation">Backpropagation</h2>
-<p><strong>What does it mean to take the derivative of a scalar function with respect to vector-valued parameters?</strong></p>
-<p>Finding the gradient is the job of Backpropagation.</p>
-<p>Backpropagation is based on Automatic Differentiation. Auto Diff is a fancy term to describe creating a computational graph and then differentiating it- via chain rule.</p>
-<p>Chain rule is a basic rule of differentiation of composite functions.</p>
-<p>In Neural networks each function is composed of vector functions.</p>
-<p>What is a derivative of a vector function? This is something hard to explain in a simple way. It is a matrix of gradients.</p>
-<p>This paper - The Simple Essence of Automatic Differentiation Extended version Conal Elliott explains this in detail. Quoting from it below.</p>
-<hr>
-<section id="jacobian-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="jacobian-matrix">Jacobian Matrix</h3>
-<p>The derivative <span class="math inline">\(f'(x)\)</span> of a function <span class="math inline">\(f: \mathbb{R} \to \mathbb{R}\)</span> at a point <span class="math inline">\(x\)</span> (in the domain of <span class="math inline">\(f\)</span>) is a number, defined as follows:</p>
-<p><span class="math display">\[
-f'(x) = \lim_{\epsilon \to 0} \frac{f(x + \epsilon) - f(x)}{\epsilon}
-\]</span></p>
-<p>That is, <span class="math inline">\(f'(x)\)</span> tells us how fast <span class="math inline">\(f\)</span> is scaling input changes at <span class="math inline">\(x\)</span>.</p>
-<p>Note here that <span class="math inline">\(\mathbb{R}\)</span> is the set of real numbers and <span class="math inline">\(\epsilon\)</span> is also a real number.</p>
-<p>How well does this definition hold up beyond functions of type <span class="math inline">\(\mathbb{R} \to \mathbb{R}\)</span>?</p>
-<p>When we extend to <span class="math inline">\(\mathbb{R}^m \to \mathbb{R}^n\)</span>, this definition no longer makes sense, as it would rely on dividing by a vector <span class="math inline">\(\epsilon \in \mathbb{R}^m\)</span>.</p>
-<p>This difficulty of differentiation with non-scalar domains is usually addressed with the notion of “partial derivatives” with respect to the <span class="math inline">\(m\)</span> scalar components of the domain <span class="math inline">\(\mathbb{R}^m\)</span>.</p>
-<p>When the codomain <span class="math inline">\(\mathbb{R}^n\)</span> is also non-scalar (i.e., <span class="math inline">\(n &gt; 1\)</span>), we have a matrix <span class="math inline">\(J\)</span> (the Jacobian), with <span class="math inline">\(J_{ij} = \partial f_i / \partial x_j\)</span> for <span class="math inline">\(i \in \{1, \dots, n\}\)</span>, where each <span class="math inline">\(f_i\)</span> projects out the <span class="math inline">\(i\)</span>-th scalar value from the result of <span class="math inline">\(f\)</span>.</p>
-<p>Moreover, each of these situations has an accompanying chain rule, which says how to differentiate the composition of two functions. Where the scalar chain rule involves multiplying two scalar derivatives, the vector chain rule involves “multiplying” two matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> (the Jacobians), defined as follows:</p>
-<p><span class="math display">\[
-(A \cdot B)_{ij} = \sum_{k=1}^m A_{ik} \cdot B_{kj}
-\]</span></p>
-<p>Since one can think of scalars as a special case of vectors, and scalar multiplication as a special case of matrix multiplication, perhaps we’ve reached the needed generality.</p>
-<p>The derivative of a function <span class="math inline">\(f: a \to b\)</span> at some value in <span class="math inline">\(a\)</span> is thus not a number, vector, matrix, or higher-dimensional variant, but rather a linear map (also called “linear transformation”) from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, which we will write as <span class="math inline">\(a \multimap b\)</span>.</p>
-<p>The numbers, vectors, matrices, etc. mentioned above are all different representations of linear maps; and the various forms of “multiplication” appearing in their associated chain rules are all implementations of linear map composition for those representations.</p>
-<hr>
-<p>This above passage is taken from the paper on auto differentiation by Conal Elliott. Why I put it here is that it applies to our case of gradient descent as well.</p>
-<p>So the Loss function is a function of weight vectors <span class="math inline">\(w\)</span> and bias vectors <span class="math inline">\(b\)</span>.</p>
-<p><span class="math display">\[
-C(w, b)
-\]</span></p>
-<p>To minimize this, we need the derivative. But since our input is a vector (the weights) and our output is a scalar (the loss), what does the derivative look like?</p>
-<p>Following Conal Elliott’s definition, the derivative is not just a number, but a Linear Map. It is a function that tells us: ‘If we nudge the weights by a tiny vector <span class="math inline">\(\vec{v}\)</span>, how much will the Loss change?’</p>
-<p>We represent this abstract linear map using a concrete list of numbers called the Gradient Vector <span class="math inline">\(\nabla C\)</span>.</p>
-<p><span class="math display">\[
-\nabla C = \begin{bmatrix}
-\frac{\partial C}{\partial w} \\
-\frac{\partial C}{\partial b}
-\end{bmatrix}
-\]</span></p>
-<p>This linear map tells us how any small change in the parameters will change the loss. Gradient descent exploits this first-order approximation by choosing the parameter update that most rapidly decreases the loss.</p>
-<p>Mathematically this is more rigorous than the usual explanation of rolling down the gradient/slope which does not make sense in the context of a vector space.</p>
-<p><strong>So what is Gradient Descent?</strong></p>
-<p>Gradient Descent takes the Gradient Vector found by Backprop and performs a vector subtraction in the weight space:</p>
-<p><span class="math display">\[w_{new} = w_{old} - \eta \cdot \nabla C\]</span></p>
-<p>where <span class="math inline">\(\eta\)</span> is the learning rate.</p>
-<p><strong>And how do we find the gradient vector <span class="math inline">\(\nabla C\)</span>?</strong> via Backpropagation</p>
+<p>Also we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent that acts as form of sampling.</p>
+<p>In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset.</p>
+<p>The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.</p>
 <p>Next: <a href="./4_backpropogation_chainrule.html">Backpropagation</a></p>
 
 
 
-</section>
 </section>
 </section>
 
