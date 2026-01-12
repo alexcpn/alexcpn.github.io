@@ -40,7 +40,7 @@ $$
 }
 $$
 
- $Y$ is the target vector or the Truth vector. This is a one hot encoded vector, example  $Y=[0,1,0]$, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Loss algorithm.
+ $Y$ is the target vector or the Truth vector. This is a one hot encoded vector, example  $Y=[0,1,0]$, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Descent algorithm.
 
 $P$ is the Softmax output and is the activation of the last layer $a^l$. This is a vector. All elements of the Softmax output add to 1; hence this is a probability distribution unlike a Sigmoid output.The Cross Entropy Loss $L$ is a Scalar.
 
@@ -97,19 +97,19 @@ $$ \color{red}
   {
   \begin{aligned}
 
-    \frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_j y_k \log {p_k})}}{\partial z_i}
+    \frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_k y_k \log {p_k})}}{\partial z_i}
    \\ \\ \text {taking the summation outside} \\ \\
-   = -\sum_j y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
+   = -\sum_k y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
   \\ \\ \color{grey}{\text {since }
   \frac{d}{dx} (f(g(x))) = f'(g(x))g'(x) }
   \\ \\
-  = -\sum_k y_k * \frac {1}{p_k} *\frac {\partial { p_k}}{\partial z_i}
+  = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
   
 \end{aligned}
 }
 $$
 
-The last term $\frac {\partial { p_k}}{\partial z_i}$ is the derivative  of Softmax with respect to it's inputs also called logits. This is easy to derive and there are many sites that describe it. Example [Derivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here [The Softmax function and its derivative-Eli Bendersky]
+The last term $\frac {\partial { p_k}}{\partial z_i}$ is the derivative  of Softmax with respect to its inputs also called logits. This is easy to derive and there are many sites that describe it. Example [Derivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here [The Softmax function and its derivative-Eli Bendersky]
 
 $$
  \color{red}
@@ -130,21 +130,21 @@ $$ \color{red}
   {
   \begin{aligned}
 
- \frac {\partial L}{\partial z_i} = -\sum_k y_k * \frac {1}{p_k} *\frac {\partial { p_k}}{\partial z_i}
+ \frac {\partial L}{\partial z_i} = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
  \\ \\
-  =-\sum_k y_k * \frac {1}{p_k} * p_i(\delta_{ij} -p_j) 
+  =-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_i(\delta_{ij} -p_j) 
  \\ \\ \text{these i and j are dummy indices and we can rewrite  this as} 
 \\ \\
-=-\sum_k y_k * \frac {1}{p_k} * p_k(\delta_{ik} -p_i) 
+=-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_k(\delta_{ik} -p_i) 
 \\ \\ \text{taking the two cases and adding in above equation } \\ \\
- \delta_{ij} = 1 \text{ when i =k} \text{ and } 
-   \delta_{ij} = 0 \text{ when i} \ne \text{k}
+ \delta_{ik} = 1 \text{ when i =k} \text{ and } 
+   \delta_{ik} = 0 \text{ when i} \ne \text{k}
    \\ \\
-   = [- \sum_i y_i * \frac {1}{p_i} * p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k * \frac {1}{p_k} * p_k(0 -p_i) ]
+   = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
     \\ \\
-     = [- y_i * \frac {1}{p_i} * p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k * \frac {1}{p_k} * p_k(0 -p_i) ]
+     = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
   \\ \\
-     = [- y_i(1 -p_i)]+[-\sum_{k \ne i}  y_k *(0 -p_i) ]
+     = [- y_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot (0 -p_i) ]
       \\ \\
      = -y_i + y_i.p_i + \sum_{k \ne i}  y_k.p_i 
      \\ \\
@@ -263,7 +263,7 @@ $$
 
 ## Some Implementation details
 
-Feel free to skip this section. These are some doubts that can come during implementation,and can be refereed to if needed.
+Feel free to skip this section. These are some doubts that can come during implementation,and can be referred to if needed.
 
 **From Index Notation to Matrix Notation**
 
@@ -274,68 +274,51 @@ $$
 \frac{\partial z^2}{\partial W^2} = (a^{1})^T 
 $$
 
+### The Jacobian Matrix (and why Hadamard appears)
 
-**The Jacobian Matrix**
-
-For an input vector $\textbf{x} = \{x_1, x_2, \dots, x_n\}$ on which an element wise function is applied; say the activation function sigmoid $\sigma$; and it give the output vector $\textbf{a} = \{a_1, a_2, \dots, a_n\}$ 
-
-$a_i= f(x_i); \text{ what is } \frac { \partial a}{ \partial x} $
-
-In scalar case this becomes   $\frac { \partial f(x)}{ \partial x} = f'(x)$
-
-In Vector case, that is when we take the derivative of a vector with respect to another vector to get the following (square) Jacobian matrix
-
-Example from [ref 2]
+Let $x \in \mathbb{R}^n$ be an input vector and let an elementwise function $f$ (e.g., sigmoid) produce an output vector $a \in \mathbb{R}^n$:
 
 $$
-\begin{aligned}
-\\ \\
-\text{The Jacobain, J } = \frac {\partial a}{\partial x} = 
-\begin{bmatrix}
-                \frac{\partial a_{1}}{\partial x_{1}}  & \frac{\partial a_{2}}{\partial x_{1}}     & \dots     & \frac{\partial a_{n}}{\partial x_{1}}    \\
-                \frac{\partial a_{1}}{\partial x_{2}}  & \frac{\partial a_{2}}{\partial x_{2}}     & \dots     & \frac{\partial a_{n}}{\partial x_{2}}    \\
-                \vdots  & \vdots    & \ddots    & \vdots    \\
-                \frac{\partial a_{1}}{\partial x_{n}}  & \frac{\partial a_{2}}{\partial x_{n}}    & \dots     & \frac{\partial a_{n}}{\partial x_{n}}    \\ 
-\end{bmatrix}
-\end{aligned}
+a = f(x), \quad a_i = f(x_i)
 $$
 
-The diagonal of J are the only terms that can be nonzero:
+In the scalar case, the derivative is just:
 
 $$
-\begin{aligned}
-J = \begin{bmatrix}
-                \frac{\partial a_{1}}{\partial x_{1}}  & 0     & \dots     & 0    \\
-                0  & \frac{\partial a_{2}}{\partial x_{2}}     & \dots     & 0    \\
-                \vdots  & \vdots    & \ddots    & \vdots    \\
-                0  & 0    & \dots     & \frac{\partial a_{n}}{\partial x_{n}}    \\ 
-        \end{bmatrix}
-\end{aligned}
+\frac{d}{dx} f(x) = f'(x)
 $$
 
+In the vector case, the derivative of a vector-valued function with respect to a vector input is the Jacobian matrix:
+
 $$
-\text{ As } 
-(\frac{\partial a}{\partial x})_{ij} = \frac{\partial a_i}{\partial x_j} = \frac { \partial f(x_i)}{ \partial x_j} = 
-\begin{cases}
-f'(x_i)  & \text{if $i=j$} \\
-0 & \text{otherwise}
+J = \frac{\partial a}{\partial x} \in \mathbb{R}^{n \times n}, \quad J_{ij} = \frac{\partial a_i}{\partial x_j}
+$$
+
+For an elementwise function $a_i = f(x_i)$, each output component depends only on the corresponding input component, so:
+
+$$
+\frac{\partial a_i}{\partial x_j} = 
+\begin{cases} 
+f'(x_i) & \text{if } i = j \\
+0 & \text{if } i \neq j 
 \end{cases}
 $$
-And the authors go on to explain that $\frac{\partial a}{\partial x}$ can be written as $\text{diag}(f'(x))$ and the Hadamard or element-wise multiplication ($\odot$ or $\circ$)  can be applied instead of matrix multiplication to this Jacobian matrix like $\odot f'(x)$ when applying the Chain Rule and converting from index notation to matrix notation.
 
-However,while implementing the neural network practically the input is not a **Vector** but an $M*N$ dimensional **Matrix** ; $M, N > 1$.
-
-Taking a simple $2*2$ input matrix on which the sigmoid activation function is done; the Jacobian of the same is a $4*4$ matrix.
-
-Does it make sense to say the derivative of Matrix $a_{i,j}$ - where an element-wise function is applied; over the input matrix $x_{i,j}$ as a Jacobian ?
+and therefore the Jacobian is diagonal:
 
 $$
-\frac{\partial A}{\partial X} = J
+\frac{\partial a}{\partial x} = \text{diag}(f'(x))
 $$
 
- There is no certainty that this will be a square matrix and we can generalize to the diagonal ? 
+**Why this becomes a Hadamard product in backprop**
 
- However, all articles treat this matrix case as a generalization of the Vector case and write $\frac{\partial a}{\partial x}$ as the $\text{diag}(f'(x))$, and then use the element-wise/Hadamard product for the Chain Rule. This way also in implementation. But there is no meaning of diagonal in a non-square matrix. 
+Suppose we have a vector $v$ coming from later in the chain rule (e.g., $v = \frac{\partial C}{\partial a}$). Then:
+
+$$
+\frac{\partial C}{\partial x} = \left( \frac{\partial a}{\partial x} \right)^T \frac{\partial C}{\partial a} = \text{diag}(f'(x)) \cdot v = f'(x) \odot v
+$$
+
+So the Hadamard product appears because the Jacobian of an elementwise function is diagonal, and multiplying by a diagonal matrix is the same as elementwise multiplication.
 
  [ref 1]:https://web.stanford.edu/class/cs224n/readings/gradient-notes.pdf
  [ref 2]:https://aew61.github.io/blog/artificial_neural_networks/1_background/1.b_activation_functions_and_derivatives.html
@@ -411,8 +394,9 @@ Hence  $\frac{\partial a_{ {i}{j}}}{\partial X}$ can be written as $\text{ diag}
 
 Note that Multiplication of a vector by a diagonal matrix is element-wise multiplication or the Hadamard product; *And matrices in Deep Learning implementation can be seen as stacked vectors for simplification.*
 
-More details about this here [Jacobian Matrix for Element wise Opeation on a Matrix (not Vector)](https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix)
+More details about this here [Jacobian Matrix for Element wise Operation on a Matrix (not Vector)](https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix)
 
+Note that another way of interpreting this as treating weights as Tensor and then certain Jacobian operation can be treated as between Tensors and Vectors. 
 
 
 
@@ -445,7 +429,7 @@ More difficult to follow with proper index notations (I could not) and probably 
   
   [The Softmax function and its derivative-Eli Bendersky]: https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/
 
-  [Python Impmementation of Jacobian of Softmax with respect to Logits Aerin Kim]: https://stackoverflow.com/a/46028029/429476
+  [Python Implementation of Jacobian of Softmax with respect to Logits Aerin Kim]: https://stackoverflow.com/a/46028029/429476
   
   [Derivative of Softmax Activation -Alijah Ahmed]: https://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function
   
