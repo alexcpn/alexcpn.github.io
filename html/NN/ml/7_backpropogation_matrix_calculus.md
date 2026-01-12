@@ -37,14 +37,14 @@ $$
 
 Where the activation $a^l$ is
 $$
-  a^{l} = \sigma(w^l a^{l-1}+b^l).
+  a^{l} = \sigma(W^l a^{l-1}+b^l).
 $$
 
 and
 
 $$
 a^{l} = \sigma(z^l) \quad where \quad
-z^l =w^l a^{l-1} +b^l
+z^l =W^l a^{l-1} +b^l
 $$
 
 Our two layer neural network can be written as
@@ -170,210 +170,197 @@ We **never** explicitly compute or store the full Jacobian matrix. We only compu
 This is the secret sauce of efficient Backpropagation! 
 
 
+### Hadamard Product
+
+Another important operation we use is the **Hadamard Product** (denoted by $\odot$ or sometimes $\circ$). This is simply **element-wise multiplication** of two vectors or matrices of the same size.
+
+$$
+\begin{bmatrix} a_1 \\ a_2 \end{bmatrix} \odot \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 \cdot b_1 \\ a_2 \cdot b_2 \end{bmatrix}
+$$
+
+It is different from the dot product (which sums the results to a scalar) and matrix multiplication. In backpropagation, it often appears when we apply the chain rule through an activation function that operates element-wise (like sigmoid or ReLU).
+
 ---
+## Backpropagation Derivation
 
+### The 2-Layer Neural Network Model
 
-## Gradient Vector/2D-Tensor of Loss function in last layer
-
-$$
-C = \frac{1}{2} \sum_j (y_j-a^L_j)^2
-$$
-
-Assuming a neural net with 2 layers, we have the final Loss as 
+For this derivation, we use a simple 2-layer network (one hidden layer, one output layer):
 
 $$
-C = \frac{1}{2} \sum_j (y_j-a^2_j)^2
+x \xrightarrow{W^1, b^1} a^1 \xrightarrow{W^2, b^2} a^2
 $$
 
-Where
+**Forward Pass Equations:**
+1.  **Hidden Layer:**
+    $$ z^1 = W^1 x + b^1 $$
+    $$ a^1 = \sigma(z^1) $$
+2.  **Output Layer:**
+    $$ z^2 = W^2 a^1 + b^2 $$
+    $$ a^2 = \sigma(z^2) $$
+
+We use the **Mean Squared Error (MSE)** loss function:
+$$ C = \frac{1}{2} \|y - a^2\|^2 $$
+
+### Gradient Vector/2D-Tensor of Loss function in last layer
 
 $$
-a^2 = \sigma(w^2.a^1)
+C = \frac{1}{2} \|y - a^2\|^2 = \frac{1}{2} \sum_j (y_j-a^2_j)^2
 $$
 
-We can then write
-
+Where:
 $$
-C = \frac{1}{2} \sum_j v^2 \quad \rightarrow (Eq \;A)
-$$
-
-Where
-
-$$
-v= y-a^2
+a^2 = \sigma(z^2) \quad \text{and} \quad z^2 = W^2 a^1 + b^2
 $$
 
-## Partial Derivative of Loss function with respect to Weight
-
-For the last layer, lets use Chain Rule to split like below
+We want to find $\frac{\partial C}{\partial W^2}$. Using the Chain Rule:
 
 $$
-\frac {\partial C}{\partial w^2} = \frac{\partial v^2}{\partial v} \cdot \frac{\partial v}{\partial w^2} \quad \rightarrow (Eq \;B)
+\frac{\partial C}{\partial W^2} = \frac{\partial C}{\partial z^2} \cdot \frac{\partial z^2}{\partial W^2}
 $$
 
-$$
- \frac{\partial v^2}{\partial v} =2v \quad \rightarrow (Eq \;B.1)
-$$
+Let's define the **error term** $\delta^2$ as the derivative of the cost with respect to the pre-activation $z^2$:
 
 $$
-\frac{\partial v}{\partial w^2}=  \frac{\partial (y-a^2)}{\partial w^2} = 
-0-\frac{\partial a^2}{\partial w^2} \quad \rightarrow (Eq \;B.2)
+\delta^2 \equiv \frac{\partial C}{\partial z^2} = \frac{\partial C}{\partial a^2} \odot \frac{\partial a^2}{\partial z^2}
 $$
 
-$$
-\frac {\partial C}{\partial w^2} = \frac{1}{2} \cdot 2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
-$$
-&nbsp;
+1.  $\frac{\partial C}{\partial a^2} = (a^2 - y)$
+2.  $\frac{\partial a^2}{\partial z^2} = \sigma'(z^2)$
 
-### Now we need to find $$\frac{\partial a^2}{\partial w^2}$$
-
-Let
-
-$$
-\begin{aligned}
-a^2= \sigma(\sum(w^2 \otimes a^1 )) = \sigma(z^2) 
-\\\\
-z^2 =  \sum(w^2 \otimes a^1)
-\\\\
-z^2 = \sum(k^2) \; \text {, where} \; k^2=w^2 \odot a^1 
-\end{aligned}
-$$
-
-We now need to derive an intermediate term which we will use later
-
-$$
-\begin{aligned}
-\frac{\partial z^2}{\partial w^2} =\frac{\partial z^2}{\partial k^2}*\frac{\partial k^2}{\partial w^2}
-\\\\
-=\frac {\partial \sum(k^2)}{\partial k^2} \cdot \frac {\partial (w^2 \odot a^1 )} {\partial w^2}
-\\ \\
-\frac{\partial z^2}{\partial w^2} = (\vec{1})^T \cdot \text{diag}(a^1) =(a^{1})^T \quad \rightarrow (Eq \;B.3)
-\end{aligned}
-$$
-
-Though these are written like scalar here; actually all these are partial differentiation of Vector by Vector, or Vector by Scalar. A set of vectors can be represented as the matrix here.More details here https://explained.ai/matrix-calculus/#sec6.2
-
-
-The Vector dot product $w.a$ when applied on matrices becomes the sum of elementwise multiplication (also called Hadamard product) $\sum w^2 \otimes a^1$ 
-
-Going back to  $Eq \;(B.2)$
-
-$$
-\frac {\partial a^2}{\partial w^2} = \frac{\partial a^2}{\partial z^2} \cdot \frac{\partial z^2}{\partial w^2}
-$$
-
-Using $Eq \;(B.3)$ for the term in left
-
-$$
-=  \frac{\partial a^2}{\partial z^2} \cdot (a^{1})^T
-$$
-
-$$
-=  \frac{\partial \sigma(z^2)}{\partial z^2} \cdot (a^{1})^T
-$$
-
-$$
-\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) \cdot (a^{1})^T \quad \rightarrow (Eq \;B.4)
-$$
-
-Now lets got back to partial derivative of Loss function wrto to weight
-
-$$
-\frac {\partial C}{\partial w^2} = \frac {1}{2} \cdot 2v(0-\frac{\partial a^2}{\partial w^2}) \quad \rightarrow (Eq \;B)
-$$
-
-Using $Eq \;(B.4)$ to substitute in the last term
-
-$$
-\begin{aligned}
-= v(0- \sigma^{'}(z^2) * (a^{1})^T) 
-\\\\
-= v*-1*\sigma^{'}(z^2) * (a^{1})^T
-\\\\
-= (y-a^2)*-1*\sigma^{'}(z^2) * (a^{1})^T
-\\\\
-\frac {\partial C}{\partial w^2}= (a^2-y) \cdot \sigma^{'}(z^2) \cdot (a^{1})^T \quad \rightarrow Eq \; (3)
-\end{aligned}
-$$
-&nbsp;
-
-## Gradient Vector of Loss function in Inner Layer
+So, using the Hadamard product ($\odot$) for element-wise multiplication:
 
 ---
 
+Note that none of these terms are exponents but super scripts.!
+
+**Hadamard product or Element-wise multiplication**
+
+The confusion usually lies in this term:$$\frac{\partial a}{\partial z}$$
+
+Since $a$ is a vector and $z$ is a vector, the derivative of one with respect to the other is technically a Jacobian Matrix, not a vector.However, because the activation function $\sigma$ is applied element-wise (i.e., $a_i$ depends only on $z_i$, not on $z_j$ - That is - activation function in one layer is just dependent of the output of only the previous layer and no other layers), all off-diagonal elements of this Jacobian are zero.
+
+$$
+J = \frac{\partial a}{\partial z} = \begin{bmatrix}
+\sigma'(z_1) & 0 & \dots \\
+0 & \sigma'(z_2) & \dots \\
+\vdots & \vdots & \ddots
+\end{bmatrix}$$
+
+When you apply the chain rule, you are multiplying the gradient vector $\nabla_a C$ by this diagonal matrix $J$ - VJP (Vector-Jacobian Product).
+
+Key Identity: Multiplying a vector by a diagonal matrix is mathematically identical to taking the Hadamard product of the vector and the diagonal elements and this is why we use Hadamard product in backpropogation.
+
+$$
+\delta^2 = (a^2 - y) \odot \sigma'(z^2)
+$$
+
+---
+
+Now for the second part, we need to find how the Cost changes with respect to the weights $W^2$.
+
+We know that $z^2 = W^2 a^1$. In index notation, for a single element $z^2_i$:
+$$ z^2_i = \sum_k W^2_{ik} a^1_k $$
+
+We want to find $\frac{\partial C}{\partial W^2_{ik}}$. Using the chain rule:
+$$ \frac{\partial C}{\partial W^2_{ik}} = \frac{\partial C}{\partial z^2_i} \cdot \frac{\partial z^2_i}{\partial W^2_{ik}} $$
+
+1.  We already defined $\frac{\partial C}{\partial z^2_i} = \delta^2_i$.
+2.  From the linear equation $z^2_i = \dots + W^2_{ik} a^1_k + \dots$, the derivative with respect to $W^2_{ik}$ is simply $a^1_k$.
+
+So:
+$$ \frac{\partial C}{\partial W^2_{ik}} = \delta^2_i \cdot a^1_k $$
+
+If we organize these gradients into a matrix, the element at row $i$ and column $k$ is the product of the $i$-th element of $\delta^2$ and the $k$-th element of $a^1$.
+
+
+Let's visualize the matrix of gradients $\nabla W$:$$\nabla W =
+\begin{bmatrix}
+\frac{\partial C}{\partial W_{11}} & \frac{\partial C}{\partial W_{12}} \\
+\frac{\partial C}{\partial W_{21}} & \frac{\partial C}{\partial W_{22}}
+\end{bmatrix}$$Substitute the result from step 3 ($\delta_i \cdot a_k$):$$\nabla W =
+\begin{bmatrix}
+\delta_1 a_1 & \delta_1 a_2 \\
+\delta_2 a_1 & \delta_2 a_2
+\end{bmatrix}$$
+
+
+ This is exactly the definition of the **Outer Product**  $\otimes$ of two vectors:
+
+$$
+\frac{\partial C}{\partial W^2} =  \delta^2 \otimes a^1 = \delta^2  (a^1)^T \quad \rightarrow (Eq \; 3)
+$$
+
+This gives us the gradient matrix for the last layer weights.
+
 &nbsp;
 
-Now let's do the same for the inner layer. This is bit more tricky and we use the Chain rule to derive this
+## Jacobian of Loss function in Inner Layer
+
+Now let's do the same for the inner layer ($W^1$).
+
+$$
+\frac{\partial C}{\partial W^1} = \frac{\partial C}{\partial z^1} \cdot \frac{\partial z^1}{\partial W^1} = \delta^1 (a^0)^T
+$$
+
+We need to find $\delta^1 = \frac{\partial C}{\partial z^1}$. We can backpropagate the error $\delta^2$ from the next layer:
+
+$$
+\delta^1 = \frac{\partial C}{\partial z^1} = \left( (W^2)^T \delta^2 \right) \odot \sigma'(z^1)
+$$
+
+**Explanation:**
+1.  We propagate $\delta^2$ backwards through the weights $(W^2)^T$.
+2.  We multiply element-wise by the derivative of the activation function $\sigma'(z^1)$.
+
+Putting it all together:
+
+$$
+\frac{\partial C}{\partial W^1} = \left( (W^2)^T \delta^2 \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
+$$
+
+### Summary of Backpropagation Equations
+
+1.  **Compute Output Error:**
+    $$ \delta^L = (a^L - y) \odot \sigma'(z^L) $$
+2.  **Backpropagate Error:**
+    $$ \delta^l = ((W^{l+1})^T \delta^{l+1}) \odot \sigma'(z^l) $$
+3.  **Compute Gradients:**
+    $$ \frac{\partial C}{\partial W^l} = \delta^l (a^{l-1})^T $$
 
 &nbsp;
 
-$$
-\frac {\partial C}{\partial w^1} = \frac {\partial a^1}{\partial w^1} \cdot \frac {\partial C}{\partial a^1}  \quad \rightarrow (4.0)
-$$
+### Summary of Backpropagation Equations in terms of say Numpy
 
-&nbsp;
+Here is how these equations translate to Python code using NumPy, assuming standard column vectors (shape `(N, 1)`).
 
-We can calculate the first part of this from $Eq\; (B.4)$ that we derived above
+```python
+# Forward pass context:
+# x, a1, a2 are column vectors
+# W1, W2 are weight matrices
+# sigmoid_prime(z) is the derivative of activation
 
-$$
-\begin{aligned}
-\frac {\partial a^2}{\partial w^2} =   \sigma^{'}(z^2) \cdot (a^{1})^T \quad \rightarrow (Eq \;B.4)
-\\\\
-\frac {\partial a^1}{\partial w^1}  = \sigma'(z^1) \cdot (a^{0})^T \quad \rightarrow (4.1)
-\end{aligned}
-$$
+# 1. Compute Output Error (Hadamard Product)
+# '*' operator in numpy is element-wise multiplication (Hadamard)
+delta2 = (a2 - y) * sigmoid_prime(z2) 
+
+# 2. Gradient for W2 (Outer Product)
+# We need shape (n_out, 1) @ (1, n_hidden) -> (n_out, n_hidden)
+dC_dW2 = np.matmul(delta2, a1.T)
+
+# Alternative using einsum for outer product:
+# dC_dW2 = np.einsum('i,j->ij', delta2.flatten(), a1.flatten())
+
+# 3. Backpropagate Error to Hidden Layer
+# Matrix multiplication (W2.T @ delta2) followed by Hadamard product
+delta1 = np.matmul(W2.T, delta2) * sigmoid_prime(z1)
+
+# 4. Gradient for W1 (Outer Product)
+dC_dW1 = np.matmul(delta1, x.T)
+```
 
 
-For the second part, we use Chain Rule to split like below, the first part of which we calculated in the earlier step.
 
-$$
-\begin{aligned}
-\frac{\partial C}{\partial(a^1)} =  \frac{\partial C}{\partial(a^2)}.\frac{\partial(a^2)}{\partial(a^1)}
-\\\\
-{
-\frac{\partial C}{\partial(a^2)} = \frac {\partial({\frac{1}{2} \|y-a^2\|^2)}}{\partial(a^2)} = \frac{1}{2} \cdot 2 \cdot (a^2-y) =(a^2-y) = \delta^{2}  }
-\\\\
-\frac {\partial C}{\partial(a^2)}  =\delta^{2}  \rightarrow (4.2)\\ \\
-
-\text {Now to calculate} \quad
-
- \frac{\partial(a^2)}{\partial(a^1)} \quad where \quad
-
-a^{2} = \sigma(w^2 a^{1}+b^2) \\ \\
-
-\frac{\partial(a^2)}{\partial(a^1)} = \frac{\partial(\sigma(w^2 a^{1}+b^2))}{\partial(a^1)} =  w^2 \cdot \sigma'(w^2 a^{1}+b^2) = w^2 \cdot \sigma'(z^2)\rightarrow (4.3)*
-
-\end{aligned}
-$$
-
-*<https://math.stackexchange.com/a/4065766/284422>
-
-Putting (4.1) (4.2) and (4.3) together
-
-## Final Equations
-
-$$  \mathbf{
-\frac {\partial C}{\partial w^1} = \sigma'(z^1) \cdot (a^{0})^T \cdot \delta^{2} \cdot w^2 \cdot \sigma'(z^2) \quad \rightarrow Eq \; (5)
-}$$
-
-$$
-\delta^2 = (a^2-y)
-$$
-
-Adding also the partial derivate of loss funciton with respect to weight in the final layer
-
-$$ \mathbf{
-\frac {\partial C}{\partial w^2}= \delta^{2} \cdot \sigma^{'}(z^2) \cdot (a^{1})^T \quad \rightarrow Eq \; (3)
-}
-$$
-
-You can see that the inner layer derivative have terms from the outer layer. So if we store and use the result; this is like dynamic program; maybe the back-propagation algorithm is the most elegant dynamic programming till date.
-
-$$  \mathbf{
-\frac {\partial C}{\partial w^1} = \delta^{2} \cdot \sigma'(z^2) \cdot (a^{0})^T \cdot w^2 \cdot \sigma'(z^1) \quad \rightarrow Eq \; (5)
-}$$
-
-&nbsp;
 
 ## Using Gradient Descent to find the optimal weights to reduce the Loss function
 
@@ -381,7 +368,7 @@ $$  \mathbf{
 
 With equations (3) and (5) we can calculate the gradient of the Loss function with respect to weights in any layer - in this example 
 
-$$\frac {\partial C}{\partial w^1},\frac {\partial C}{\partial w^2}$$
+$$\frac {\partial C}{\partial W^1},\frac {\partial C}{\partial W^2}$$
 
 &nbsp;
 
@@ -394,7 +381,7 @@ So using the above gradients we get the new weights iteratively like below. If y
 &nbsp;
 
 $$\mathbf {
-  W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C}{\partial w^{l-1}}
+  W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C}{\partial W^{l-1}}
 }$$
 
 
