@@ -173,19 +173,19 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Neural Network Implementation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./7_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+  <a href="./6_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Backprop (Matrix Calculus)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./8_backpropogation_full.html" class="sidebar-item-text sidebar-link">
+  <a href="./7_backpropogation_full.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
   </div>
 </li>
@@ -229,11 +229,8 @@ window.Quarto = {
 <h1>The Mathematical Intuition Behind Deep Learning</h1>
 <p>Alex Punnen<br>
 © All Rights Reserved</p>
-<hr>
-<p><a href="./index.html">Contents</a></p>
 <p>Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.</p>
 <p>Have you ever held an integrated circuit or chip in your hand or seen one? It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex, we need to understand the simpler constituents.</p>
-<hr>
 <section id="the-magic-of-representation---vector-space-and-hyperplane" class="level2">
 <h2 class="anchored" data-anchor-id="the-magic-of-representation---vector-space-and-hyperplane">The Magic of Representation - Vector Space and Hyperplane</h2>
 <p>Most people are familiar with neural networks, cost functions, gradient descent, and backpropagation. However, beyond these building blocks is the magic of representations.</p>
@@ -324,7 +321,7 @@ a_{1}\\a_{2}\\a_{3}\
 <p>Or in a better way, which shows the vectors properly</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://i.imgur.com/7MsJuS1.png" class="img-fluid figure-img"></p>
+<p><img src="images/weightvector.png" class="img-fluid figure-img"></p>
 <figcaption>weightvector</figcaption>
 </figure>
 </div>
@@ -356,7 +353,7 @@ a_{1}\\a_{2}\\a_{3}\
 <p>The fact that Perceptron could not be used for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first <em>AI winter</em>, as much of the hype generated intially by Frank Rosenblatt’s discovery became a disillusionment.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://i.imgur.com/anmAM48.png" class="img-fluid figure-img"></p>
+<p><img src="images/linearseperable.png" class="img-fluid figure-img"></p>
 <figcaption>linearseperable</figcaption>
 </figure>
 </div>

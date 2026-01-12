@@ -173,19 +173,19 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Neural Network Implementation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./7_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+  <a href="./6_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Backprop (Matrix Calculus)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./8_backpropogation_full.html" class="sidebar-item-text sidebar-link">
+  <a href="./7_backpropogation_full.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
   </div>
 </li>
@@ -195,8 +195,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a></li>
-  <li><a href="#chapter-4" id="toc-chapter-4" class="nav-link" data-scroll-target="#chapter-4">Chapter 4</a>
+  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a>
   <ul class="collapse">
   <li><a href="#how-backpropagation-works" id="toc-how-backpropagation-works" class="nav-link" data-scroll-target="#how-backpropagation-works">How Backpropagation works</a></li>
   <li><a href="#writing-this-out-as-chain-rule" id="toc-writing-this-out-as-chain-rule" class="nav-link" data-scroll-target="#writing-this-out-as-chain-rule">Writing this out as Chain Rule</a></li>
@@ -224,11 +223,6 @@ window.Quarto = {
 <h1>The Mathematical Intuition Behind Deep Learning</h1>
 <p>Alex Punnen<br>
 © All Rights Reserved</p>
-<hr>
-<p><a href="./index.html">Contents</a></p>
-</section>
-<section id="chapter-4" class="level1">
-<h1>Chapter 4</h1>
 <p>In this chapter lets deep dive a bit more into the technique of Back Propagation</p>
 <section id="how-backpropagation-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-backpropagation-works">How Backpropagation works</h2>
@@ -236,7 +230,7 @@ window.Quarto = {
 <p>The best way to understand backpropagation is visually and by the way it is done by the tree representation of 3Blue1Brown video linked <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">here</a>.</p>
 <p>The below GIF is a representation of a single path in the last layer(<span class="math inline">\(l\)</span> of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.</p>
 <p>The central idea is how a <strong>small change</strong> in weight in the previous layer affects the final output of the network.</p>
-<p><img src="https://i.imgur.com/jQOLUG3.gif" class="img-fluid" alt="backpropogationgif"> Source : Author</p>
+<p><img src="images/backprop1.gif" class="img-fluid" alt="backpropogationgif"> Source : Author</p>
 </section>
 <section id="writing-this-out-as-chain-rule" class="level2">
 <h2 class="anchored" data-anchor-id="writing-this-out-as-chain-rule">Writing this out as Chain Rule</h2>
@@ -245,7 +239,7 @@ window.Quarto = {
 <p><span class="math display">\[
 \frac{\partial C_0}{\partial W^l} = \frac{\partial C_0}{\partial a^l} \cdot \frac{\partial a^l}{\partial z^l} \cdot \frac{\partial z^l}{\partial W^l}
 \]</span></p>
-<p><img src="https://i.imgur.com/AgyuOr2.gif" class="img-fluid" alt="backpropogationgif2"> Source : Author</p>
+<p><img src="images/backprop2.gif" class="img-fluid" alt="backpropogationgif2"> Source : Author</p>
 <p>Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost. We have already seen this in the previous chapter.</p>
 <p>The weights in each layer are adjusted in proportion to how each layers weights affected the Cost function.</p>
 <p>This is by calculating the new weight by following the negative of the gradient of the Cost function - basically by gradient descent.</p>
@@ -268,7 +262,7 @@ window.Quarto = {
 <p>Imagine a simple neural network with 3 layers. It is essentially a composition of three functions:</p>
 <p>A neural network is a composition of vector-valued functions, followed by a scalar-valued cost function:</p>
 <p><span class="math display">\[
-C = \text{Cost}(a_3) \\
+C = \text{Cost}(a_3)
 a_3 = L_3(L_2(L_1(x)))
 \]</span></p>
 <p>Where <span class="math inline">\(L_1\)</span>, <span class="math inline">\(L_2\)</span> and <span class="math inline">\(L_3\)</span> are the three layers of the network and</p>
@@ -348,7 +342,7 @@ z_i = W_i a_{i-1} + b_i, \quad a_i = \sigma(z_i)
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
 <p>So, Backpropagation is the efficient execution of the Chain Rule by utilizing the linear maps of each layer in reverse order. * It computes the local linear map (Jacobian) of a layer. * It takes the incoming gradient vector from the future layer. * It performs a Vector-Jacobian Product to pass the gradient to the past layer.</p>
 <ul>
-<li>Next <a href="./6_neuralnetworkimpementation.html">A Simple NeuralNet with Back Propagation</a></li>
+<li>Next <a href="./5_neuralnetworkimpementation.html">A Simple NeuralNet with Back Propagation</a></li>
 </ul>
 <hr>
 </section>
