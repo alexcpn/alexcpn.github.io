@@ -3,13 +3,12 @@
 Alex Punnen \
 &copy; All Rights Reserved 
 
----
 
 Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.
 
 Have you ever held an integrated circuit or chip in your hand or seen one? It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex, we need to understand the simpler constituents.
 
----
+
 
 ##  The Magic of Representation - Vector Space and Hyperplane
 

@@ -4,11 +4,6 @@
 Alex Punnen \
 &copy; All Rights Reserved 
 
----
-
-
-# Chapter 3
-
 
 ## Neural Network as a Chain of Functions
 

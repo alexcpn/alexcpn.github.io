@@ -3,11 +3,6 @@
 Alex Punnen \
 &copy; All Rights Reserved
 
----
-
-
-# Chapter 6
-
 ## Back Propagation -Matrix Calculus
 
 The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.

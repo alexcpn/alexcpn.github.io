@@ -4,9 +4,6 @@
 Alex Punnen \
 &copy; All Rights Reserved 
 
----
-
-# Chapter 4
 
 In this chapter lets deep dive a bit more into the technique of Back Propagation
 

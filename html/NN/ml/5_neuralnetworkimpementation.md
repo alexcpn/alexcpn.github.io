@@ -3,9 +3,6 @@
 Alex Punnen \
 &copy; All Rights Reserved
 
----
-
-# Chapter 5
 
 ## A Simple NeuralNet with  Back Propagation
 

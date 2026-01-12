@@ -3,9 +3,6 @@
 Alex Punnen \
 &copy; All Rights Reserved
 
----
-
-# Chapter 7
 
 ## Back Propagation in Full - With Softmax & CrossEntropy Loss
 
