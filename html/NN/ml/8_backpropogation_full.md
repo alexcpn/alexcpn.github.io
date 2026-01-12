@@ -27,11 +27,11 @@ $$
  a^0 \rightarrow
       \underbrace{\text{hidden layers}}_{a^{l-2}} 
       \,\rightarrow
-      \underbrace{w^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
+      \underbrace{W^{l-1} a^{l-2}+b^{l-1}}_{z^{l-1} }
       \,\rightarrow
       \underbrace{\sigma(z^{l-1})}_{a^{l-1}}
     \,\rightarrow
-     \underbrace{w^l a^{l-1}+b^l}_{z^{l}/logits }
+     \underbrace{W^l a^{l-1}+b^l}_{z^{l}/logits }
     \,\rightarrow
     \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
     \,\rightarrow
@@ -77,8 +77,8 @@ There are too many articles related to Back propagation, many of which are very 
 
 $$
 \mathbf {
-\frac {\partial L}{\partial w^l} 
-=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}} \rightarrow \quad EqA1
+\frac {\partial L}{\partial W^l} 
+=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}} \rightarrow \quad EqA1
 }
 $$
 
@@ -165,14 +165,14 @@ We need to put this back in $EqA1$. We now need to calculate the second term, to
 
 $$
 \begin{aligned}
-\frac {\partial L}{\partial w^l} 
-=  \color{red}{\frac {\partial L}{\partial z^l}}.\color{green}{\frac {\partial z^l}{\partial w^l}}
+\frac {\partial L}{\partial W^l} 
+=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}}
 \\ \\
-z^{l} = (w^l a^{l-1}+b^l) 
+z^{l} = (W^l a^{l-1}+b^l) 
 \\
- \color{green}{\frac {\partial z^l}{\partial w^l} = a^{l-1}}
+ \color{green}{\frac {\partial z^l}{\partial W^l} = (a^{l-1})^T}
  \\ \\ \text{Putting all together} \\ \\
- \frac {\partial L}{\partial w^l} = (p_i - y_i) *a^{l-1} \quad  \rightarrow \quad \mathbf  {EqA1}
+ \frac {\partial L}{\partial W^l} = (p - y) \cdot (a^{l-1})^T \quad  \rightarrow \quad \mathbf  {EqA1}
 \end{aligned}
 $$
 
@@ -181,7 +181,7 @@ $$
 Using Gradient descent we can keep adjusting the last layer like
 
 $$
-     w{^l}{_i} = w{^l}{_i} -\alpha *  \frac {\partial L}{\partial w^l} 
+     W{^l} = W{^l} -\alpha \cdot \frac {\partial L}{\partial W^l} 
 $$
 
 Now let's do the derivation for the inner layers
@@ -195,9 +195,9 @@ The trick here is to find the derivative of the Loss with respect to the inner l
 
 $$
 \begin{aligned}
-\frac {\partial L}{\partial w^{l-1}} 
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} \rightarrow \text{EqA2}
+\frac {\partial L}{\partial W^{l-1}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+     \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} \rightarrow \text{EqA2}
 \end{aligned}
 $$
 
@@ -224,15 +224,15 @@ $$
 
 \\ \\ \text{ Putting together we get the first part of Eq A2 }
 \\\\
-\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =\color{blue}{(p_i- y_i).w^l.\sigma }\color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
+\color{blue}{\frac {\partial L}{\partial z^{l-1}}} = \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
 \\ \\
- z^{l-1} = w^{l-1} a^{l-2}+b^{l-1}
+ z^{l-1} = W^{l-1} a^{l-2}+b^{l-1}
     \text{ which makes }
-    \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}=a^{l-2}}
+    \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}=(a^{l-2})^T}
 \\ \\
-\frac {\partial L}{\partial w^{l-1}} 
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}}.
-     \color{green}{\frac {\partial z^{l-1}}{\partial w^{l-1}}} = \color{blue}{(p_i- y_i).w^l.\sigma '(z^{l-1} )}.\color{green}{a^{l-2}}
+\frac {\partial L}{\partial W^{l-1}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+     \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} = \left( \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma '(z^{l-1} ) \right) \cdot \color{green}{(a^{l-2})^T}
 \end{aligned}
 $$
 
@@ -240,10 +240,9 @@ $$
 
 $$
 \begin{aligned}
-\frac {\partial L}{\partial w^{l-2}} 
-=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}}.
-     \color{green}{\frac {\partial z^{l-2}}{\partial w^{l-2}}}
-      \  \color{red}{ \ne (p_i- y_i)}.\color{blue}{w^{l-1}.\sigma '(z^{l-2} )}.\color{green}{a^{l-3}}
+\frac {\partial L}{\partial W^{l-2}} 
+=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}} \cdot
+     \color{green}{\frac {\partial z^{l-2}}{\partial W^{l-2}}}
 \end{aligned}
 $$
 
@@ -258,7 +257,7 @@ Here is an implementation of a relatively simple Convolutional Neural Network to
 Using Gradient descent we can keep adjusting the inner layers like
 
 $$
-     w{^{l-1}}{_i} = w{^{l-1}}{_i} -\alpha *  \frac {\partial L}{\partial w^{l-1}} 
+     W{^{l-1}} = W{^{l-1}} -\alpha \cdot \frac {\partial L}{\partial W^{l-1}} 
 $$
 
 
@@ -272,7 +271,7 @@ The above equations are correct only as far as the index notation is concerned. 
 
 Example 
 $$
-\frac{\partial z^2}{\partial w^2} = (a^{1})^T 
+\frac{\partial z^2}{\partial W^2} = (a^{1})^T 
 $$
 
 
