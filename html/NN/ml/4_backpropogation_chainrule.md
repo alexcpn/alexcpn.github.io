@@ -6,12 +6,9 @@ Alex Punnen \
 
 ---
 
-[Contents](index.md)
-
 # Chapter 4
 
 In this chapter lets deep dive a bit more into the technique of Back Propagation
-
 
 
 ## How Backpropagation works
@@ -73,7 +70,7 @@ Imagine a simple neural network with 3 layers. It is essentially a composition o
 A neural network is a composition of vector-valued functions, followed by a scalar-valued cost function:
 
 $$
-C = \text{Cost}(a_3) \\
+C = \text{Cost}(a_3) 
 a_3 = L_3(L_2(L_1(x)))
 $$
 
@@ -238,7 +235,7 @@ So, Backpropagation is the efficient execution of the Chain Rule by utilizing th
 *   It performs a Vector-Jacobian Product to pass the gradient to the past layer.
 
 
-- Next [A Simple NeuralNet with  Back Propagation](6_neuralnetworkimpementation.md)
+- Next [A Simple NeuralNet with  Back Propagation](5_neuralnetworkimpementation.md)
 
 ---
 
@@ -248,8 +245,8 @@ http://neuralnetworksanddeeplearning.com/chap2.html
 
 https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 
-[neuralnetwork]: https://i.imgur.com/gE3QKCf.png
-[backpropogation]: https://i.imgur.com/1s89fsX.png
-[backpropogationgif]: https://i.imgur.com/jQOLUG3.gif
-[backpropogationgif2]: https://i.imgur.com/AgyuOr2.gif
-[weightnotation]: https://i.imgur.com/XZT17pu.png
+[neuralnetwork]: images/neuralnet2.png
+[backpropogation]: images/backprop1.png
+[backpropogationgif]: images/backprop1.gif
+[backpropogationgif2]: images/backprop2.gif
+

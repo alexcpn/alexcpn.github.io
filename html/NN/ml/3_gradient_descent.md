@@ -6,7 +6,6 @@ Alex Punnen \
 
 ---
 
-[Contents](index.md)
 
 # Chapter 3
 
@@ -556,5 +555,5 @@ The resulting gradient is an average over the batch and serves as a noisy approx
 Next: [Backpropagation](4_backpropogation_chainrule.md)
 
 
-[neuralnetwork]: https://i.imgur.com/gE3QKCf.png
+[neuralnetwork]:  images/neuralnet2.png
 [costfunction]: images/costfunction.png

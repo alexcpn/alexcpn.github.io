@@ -20,11 +20,11 @@ website:
         text: Gradient Descent
       - href: 4_backpropogation_chainrule.md
         text: Backprop (Chain Rule)
-      - href: 6_neuralnetworkimpementation.md
+      - href: 5_neuralnetworkimpementation.md
         text: Neural Network Implementation
-      - href: 7_backpropogation_matrix_calculus.md
+      - href: 6_backpropogation_matrix_calculus.md
         text: Backprop (Matrix Calculus)
-      - href: 8_backpropogation_full.md
+      - href: 7_backpropogation_full.md
         text: Backprop With Softmax and Cross Entropy
 
   # Keep the top navbar minimal (no long page list)

@@ -5,8 +5,6 @@ Alex Punnen \
 
 ---
 
-[Contents](index.md)
-
 Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.
 
 Have you ever held an integrated circuit or chip in your hand or seen one? It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex, we need to understand the simpler constituents.
@@ -205,5 +203,5 @@ Next [Perceptron Training](2_perceptron_training.md)
 
   [indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
   [matrix decomposition]: https://en.wikipedia.org/wiki/Matrix_decomposition
-  [weightvector]: https://i.imgur.com/7MsJuS1.png
-  [linearseperable]: https://i.imgur.com/anmAM48.png
+  [weightvector]: images/weightvector.png
+  [linearseperable]: images/linearseperable.png

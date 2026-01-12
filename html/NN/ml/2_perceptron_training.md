@@ -6,7 +6,6 @@ Alex Punnen \
 
 ---
 
-[Contents](index.md)
 
 # Chapter 2
 
@@ -17,8 +16,6 @@ Alex Punnen \
 Let's follow from the previous chapter of the Perceptron neural network.
 
 We have seen how the concept of splitting the hyper-plane of feature set separates one type of feature vectors from other.
-
-![cornellperceptron][6]
 
 ## How are the weights learned?
 
@@ -79,13 +76,12 @@ A more rigorous explanation of the proof can be found in the book [Neural Networ
 
 Next: [Gradient Descent and Optimization](3_gradient_descent.md)
 
-  [1]: https://i.stack.imgur.com/kO3ym.png
-
+  [dotproduct]: images/dotproduct.png
   [Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
    [perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
   [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
   [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
-  [linearseperable]: https://i.imgur.com/anmAM48.png
+  [linearseperable]: images/linearseperable.png
 
 
 

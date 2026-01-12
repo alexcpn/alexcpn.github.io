@@ -1,0 +1,23 @@
+project:
+  type: book
+  output-dir: ../ml2/epub
+
+book:
+  title: "The Mathematical Intuition Behind Deep Learning"
+  author: "Alex Punnen"
+  chapters:
+    - index.md
+    - 1_vectors_dot_product_and_perceptron.md
+    - 2_perceptron_training.md
+    - 3_gradient_descent.md
+    - 4_backpropogation_chainrule.md
+    - 5_neuralnetworkimpementation.md
+    - 6_backpropogation_matrix_calculus.md
+    - 7_backpropogation_full.md
+
+format:
+  epub:
+    toc: true
+    epub-cover-image: images/cover.png
+    epub-title-page: true
+#quarto render --config _quarto-epub.yml
