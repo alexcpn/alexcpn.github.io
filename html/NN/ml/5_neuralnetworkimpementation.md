@@ -117,7 +117,7 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 
 \end{aligned}$$
 
-Let's update the weights as per the formula (3) and (5) from last chapter
+Let's update the weights as per the formula derived in the previous chapter:
 
 
 $$  \mathbf{

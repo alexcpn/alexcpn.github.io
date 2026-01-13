@@ -230,21 +230,21 @@ $$
 \end{aligned}
 $$
 
-**Note** All the other layers should use the previously calculated value of  $\color{blue}{\frac {\partial L}{\partial z^{l-i}}}$ where  $i= current layer-1$
-
-$$
-\begin{aligned}
-\frac {\partial L}{\partial W^{l-2}} 
-=  \color{blue}{\frac {\partial L}{\partial z^{l-2}}} \cdot
-     \color{green}{\frac {\partial z^{l-2}}{\partial W^{l-2}}}
-\end{aligned}
-$$
 
 
 
-## Implementation in Python
 
-Here is an implementation of a relatively simple Convolutional Neural Network to test out the forward and back-propagation algorithms given above [https://github.com/alexcpn/cnn_in_python](https://github.com/alexcpn/cnn_in_python). The code is well commented and you will be able to follow the forward and backward propagation with the equations above. Note that the full learning cycle is not completed; but rather a few Convolutional layers, forward propagation and backward propogation for last few layers.
+## Some Implementation details
+
+For a detailed explanation of the Matrix Calculus, Jacobian, and Hadamard product used here, please refer to **Chapter 6: Back Propagation - Matrix Calculus**.
+
+**From Index Notation to Matrix Notation**
+
+The equations above use index notation for clarity. In practice, we use Matrix Notation which involves Transposes and Hadamard products as explained in the previous chapter.
+
+### Implementation in Python
+
+Here is an implementation of a relatively simple Convolutional Neural Network to test out the forward and back-propagation algorithms given above [https://github.com/alexcpn/cnn_in_python](https://github.com/alexcpn/cnn_in_python). The code is well commented and you will be able to follow the forward and backward propagation with the equations above.
 
 ## Gradient descent
 
@@ -252,145 +252,7 @@ Using Gradient descent we can keep adjusting the inner layers like
 
 $$
      W{^{l-1}} = W{^{l-1}} -\alpha \cdot \frac {\partial L}{\partial W^{l-1}} 
-$$
-
-
-## Some Implementation details
-
-Feel free to skip this section. These are some doubts that can come during implementation,and can be referred to if needed.
-
-**From Index Notation to Matrix Notation**
-
-The above equations are correct only as far as the index notation is concerned. But practically we work with Weight matrices, and for that we need to write this Equation in *Matrix Notation*. For that some of the terms becomes Transposes, some matrix multiplication (dot product style) and some Hadamard product. ($\odot$). This is illustrated and commented in the code and deviates from the equations as is,
-
-Example 
-$$
-\frac{\partial z^2}{\partial W^2} = (a^{1})^T 
-$$
-
-### The Jacobian Matrix (and why Hadamard appears)
-
-Let $x \in \mathbb{R}^n$ be an input vector and let an elementwise function $f$ (e.g., sigmoid) produce an output vector $a \in \mathbb{R}^n$:
-
-$$
-a = f(x), \quad a_i = f(x_i)
-$$
-
-In the scalar case, the derivative is just:
-
-$$
-\frac{d}{dx} f(x) = f'(x)
-$$
-
-In the vector case, the derivative of a vector-valued function with respect to a vector input is the Jacobian matrix:
-
-$$
-J = \frac{\partial a}{\partial x} \in \mathbb{R}^{n \times n}, \quad J_{ij} = \frac{\partial a_i}{\partial x_j}
-$$
-
-For an elementwise function $a_i = f(x_i)$, each output component depends only on the corresponding input component, so:
-
-$$
-\frac{\partial a_i}{\partial x_j} = 
-\begin{cases} 
-f'(x_i) & \text{if } i = j \\
-0 & \text{if } i \neq j 
-\end{cases}
-$$
-
-and therefore the Jacobian is diagonal:
-
-$$
-\frac{\partial a}{\partial x} = \text{diag}(f'(x))
-$$
-
-**Why this becomes a Hadamard product in backprop**
-
-Suppose we have a vector $v$ coming from later in the chain rule (e.g., $v = \frac{\partial C}{\partial a}$). Then:
-
-$$
-\frac{\partial C}{\partial x} = \left( \frac{\partial a}{\partial x} \right)^T \frac{\partial C}{\partial a} = \text{diag}(f'(x)) \cdot v = f'(x) \odot v
-$$
-
-So the Hadamard product appears because the Jacobian of an elementwise function is diagonal, and multiplying by a diagonal matrix is the same as elementwise multiplication.
-
- [ref 1]:https://web.stanford.edu/class/cs224n/readings/gradient-notes.pdf
- [ref 2]:https://aew61.github.io/blog/artificial_neural_networks/1_background/1.b_activation_functions_and_derivatives.html
-
-
-----
-
-What is basically done is to flatten the Matrix out
-
-$$
-\begin{aligned}
-\text{Let's take a 2x2 matrix , X } =
-\begin{bmatrix}
-                x_{ {1}{1} }  & x_{ {1}{2} } \\
-                x_{ {2}{1} }  & x_{ {2}{2} }
-\end{bmatrix}
-\end{aligned}
-$$
-On which an element wise operation is done  $a_{ {i}{j} } = \sigma ({x_{ {i}{j} }})$
-Writing that out as matrix $A$
-$$
-\begin{aligned}
-A =
-\begin{bmatrix}
-                a_{ {1}{1} }  & a_{ {1}{2} }   \\
-                a_{ {2}{1} }  & a_{ {2}{2} }   \\
-\end{bmatrix}
-\end{aligned}
-$$
-
-The partial derivative of the elements of A with its inputs is $\frac {\partial A }{\partial x_{ {i}{j} }}$
-
-$$
-\begin{aligned}
-\frac {\partial \vec A }{\partial X} =
-\begin{bmatrix}
-                a_{ {1}{1} }  & a_{ {1}{2} }  &  a_{ {2}{1} }  & a_{ {2}{2} }   \\
-\end{bmatrix}
-\end{aligned}
-$$
-We vectorized the matrix; Now we need to take the partial derivative of the vector with each element of the matrix $X$
-
-$$
-\begin{aligned}
-\frac {\partial \vec A }{\partial X} =
-\begin{bmatrix}
-\frac{\partial  a_{ {1}{1} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {1}{2} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {2}{1} } }{\partial x_{ {1}{1} }} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {1}{1}}}  \\ \\
- \frac{\partial  a_{ {1}{1}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {1}{2}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {1}{2}}}  \\ \\
-\frac{\partial  a_{ {1}{1}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {2}{1}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {2}{1}}}  \\ \\
-\frac{\partial  a_{ {1}{1}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {1}{2}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {2}{1}} }{\partial x_{ {2}{2}}} &   \frac{\partial  a_{ {2}{2}} }{\partial x_{ {2}{2}}}  \\ \\
-\end{bmatrix}
-\end{aligned}
-$$
-The non diagonal terms are of the form  $\frac{\partial  a_{ {i}{j}} }{\partial x_{ {k}{k}}}$ and reduce to 0 and we get the resultant Jacobian Matrix as
-
-
-$$
-\begin{aligned}
-\frac {\partial \vec A }{\partial X} =
-\begin{bmatrix}
-\frac{\partial  a_{ {i}{j}} }{\partial x_{ {i}{i}}} & \cdot \cdot \cdot & 0 \\
- 0 & \frac{\partial  a_{ {i}{j}} }{\partial x_{ {i}{i}}} & \cdot \cdot \cdot  \\
- \cdot \cdot \cdot  \\
- \cdot \cdot \cdot  & \cdot \cdot \cdot & \frac{\partial  a_{ {N}{N}} }{\partial x_{ {N}{N}}} 
-\end{bmatrix}
-\end{aligned}
-$$
-
-
-
-Hence  $\frac{\partial a_{ {i}{j}}}{\partial X}$ can be written as $\text{ diag}(f'(X))$ ; $(A =f(X))$
-
-
-Note that Multiplication of a vector by a diagonal matrix is element-wise multiplication or the Hadamard product; *And matrices in Deep Learning implementation can be seen as stacked vectors for simplification.*
-
-More details about this here [Jacobian Matrix for Element wise Operation on a Matrix (not Vector)](https://math.stackexchange.com/questions/4397390/jacobian-matrix-of-an-element-wise-operation-on-a-matrix)
-
-Note that another way of interpreting this as treating weights as Tensor and then certain Jacobian operation can be treated as between Tensors and Vectors. 
+$$ 
 
 
 
@@ -435,3 +297,6 @@ More difficult to follow with proper index notations (I could not) and probably 
 
   [Vector Derivatives]: http://cs231n.stanford.edu/vecDerivs.pdf
  
+
+
+[Index](index.md)
