@@ -131,39 +131,25 @@ Let’s take it one layer at a time.
 
 ## Gradient Descent for Scalar Functions
 
-
 Consider this simple system that composes two functions:
-
 
 $$L = g(f(x, w_1), w_2)$$
 
 Where:
-
 - $x$ is your input (fixed, given by your data)
-
 - $w_1$ and $w_2$ are **parameters you can adjust** (like weights in a neural network)
-
 - $f$ is the first function (think: first layer)
-
 - $g$ is the second function (think: second layer)
-
 - $L$ is the final output
 
   
 
 Let's make this concrete with simple linear functions:
 
-  
-
 $$f(x, w_1) = x \cdot w_1 + b_1$$
-
 $$g(z, w_2) = z \cdot w_2 + b_2$$
 
-  
-
 So the full composition is:
-
-  
 
 $$L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2$$
 
@@ -171,39 +157,21 @@ $$L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2$$
 
 ### Running the Numbers: A Real Example
 
-  
-
 Let's pick actual values and see what happens:
 
-  
-
 **Fixed values:**
-
 - Input: $x = 2.0$
-
 - Bias terms: $b_1 = 1.0$, $b_2 = 0.5$
 
-  
-
 **Current parameter values:**
-
 - $w_1 = 0.5$
-
 - $w_2 = 1.5$
-
-  
 
 **Step 1**: Compute intermediate result from first function:
 
-  
-
 $$z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0$$
 
-  
-
 **Step 2**: Compute final output from second function:
-
-  
 
 $$L = g(z, w_2) = 2.0  \times  1.5 + 0.5 = 3.5$$
 
@@ -227,16 +195,10 @@ $$E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}
 
 ### The Adjustment Problem: Which Direction? How Much?
 
-  
-
 Here's what we need to know:
 
-  
-
 1.  **Should we increase or decrease $w_1$?** (Which direction?)
-
 2.  **How sensitive is $L$ to changes in $w_1$?** (How much?)
-
 3.  **Same questions for $w_2$.**
 
   
@@ -255,8 +217,6 @@ These tell us:
 
 -  **Magnitude**: Larger absolute value means $L$ is more sensitive to changes in $w$
 
-  
-
 But there's a complication: $w_1$ doesn't directly affect $L$. It affects $f$, which then affects $g$, which then affects $L$. This is a **composition**, and we need to trace the effect through multiple steps.
 
 This is where the "Chain Rule" of Calculus comes into play.
@@ -265,31 +225,18 @@ This is where the "Chain Rule" of Calculus comes into play.
 
 Let's visualize how changes propagate:
 
-
 ```
-
 Change w₁ → Affects f → Changes z → Affects g → Changes L
-
-↓ ↓ ↓ ↓ ↓
-
-Δw₁ ∂f/∂w₁ Δz ∂g/∂z ΔL
-
+      ↓            ↓         ↓               ↓
+      Δw₁        ∂f/∂w₁     Δz     ∂g/∂z     ΔL
 ```
-
-  
 
 Similarly for $w_2$ (but $w_2$ directly affects $g$):
 
-  
-
 ```
-
 Change w₂ → Affects g → Changes L
-
 ↓ ↓ ↓
-
 Δw₂ ∂g/∂w₂ ΔL
-
 ```
 
   
@@ -318,63 +265,33 @@ $$L = g(z, w_2)$$
 
 **Computing $\frac{\partial L}{\partial w_1}$:**
 
-  
-
 By the chain rule of calculus:
-
-  
 
 $$\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot  \frac{\partial z}{\partial w_1}$$
 
-  
-
 Let's compute each piece:
-
-  
 
 **Part 1**: How does $L$ change with $z$?
 
-  
-
 $$\frac{\partial L}{\partial z} = \frac{\partial}{\partial z}(z \cdot w_2 + b_2) = w_2 = 1.5$$
-
-  
 
 **Part 2**: How does $z$ change with $w_1$?
 
-  
-
 $$\frac{\partial z}{\partial w_1} = \frac{\partial}{\partial w_1}(x \cdot w_1 + b_1) = x = 2.0$$
-
-  
 
 **Putting it together**:
 
-  
-
 $$\frac{\partial L}{\partial w_1} = 1.5  \times  2.0 = 3.0$$
-
-  
 
 **Interpretation**: If we increase $w_1$ by 0.1, then $L$ increases by approximately $3.0  \times  0.1 = 0.3$.
 
-  
-
 **Computing $\frac{\partial L}{\partial w_2}$:**
-
-  
 
 This is simpler because $w_2$ directly affects $g$:
 
-  
-
 $$\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + b_2) = z = 2.0$$
 
-  
-
 **Interpretation**: If we increase $w_2$ by 0.1, then $L$ increases by approximately $2.0  \times  0.1 = 0.2$.
-
-  
 
 ### Making the Update: Gradient Descent
 
@@ -382,19 +299,11 @@ $$\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + 
 
 Now we can adjust our parameters! Since we want to **increase** $L$ from 3.5 to 5.0, and both gradients are positive, we should increase both $w_1$ and $w_2$.
 
-  
-
 Using gradient descent with learning rate $\alpha = 0.2$:
-
-  
 
 $$w_1^{\text{new}} = w_1 + \alpha  \cdot  \frac{\partial L}{\partial w_1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1$$
 
-  
-
 $$w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9$$
-
-  
 
 **Note**: We're adding (not subtracting) because we want to increase $L$. Normally in machine learning, we minimize error, so we'd use $w - \alpha  \cdot  \frac{\partial E}{\partial w}$.
 
@@ -406,40 +315,22 @@ $$w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 
 
 Let's recompute with the new weights:
 
-  
-
 **Step 1**: New intermediate value:
-
-  
 
 $$z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2$$
 
-  
-
 **Step 2**: New output:
-
-  
 
 $$L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58$$
 
-  
-
 **Progress check**:
-
 - Before: $L = 3.5$ (error from target = 1.5)
-
 - After: $L = 6.58$ (error from target = -1.58)
-
 - We overshot! But that's okay - we moved in the right direction
 
-  
-
 With a smaller learning rate (say $\alpha = 0.1$), we'd get:
-
 - $w_1^{\text{new}} = 0.8$, $w_2^{\text{new}} = 1.7$
-
 - $z^{\text{new}} = 2.6$, $L^{\text{new}} = 4.92$
-
 - Much closer to our target of 5.0!
 
     
