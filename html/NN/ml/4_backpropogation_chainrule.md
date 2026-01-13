@@ -68,6 +68,7 @@ A neural network is a composition of vector-valued functions, followed by a scal
 
 $$
 C = \text{Cost}(a_3) 
+
 a_3 = L_3(L_2(L_1(x)))
 $$
 
