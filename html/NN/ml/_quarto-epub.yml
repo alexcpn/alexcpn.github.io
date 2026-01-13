@@ -3,7 +3,7 @@ project:
   output-dir: ../ml2/epub
 
 book:
-  title: "The Mathematical Intuition Behind Deep Learning"
+  title: "The Maths of Deep Learning"
   author: "Alex Punnen"
   chapters:
     - index.md
@@ -11,9 +11,9 @@ book:
     - 2_perceptron_training.md
     - 3_gradient_descent.md
     - 4_backpropogation_chainrule.md
-    - 5_neuralnetworkimpementation.md
-    - 6_backpropogation_matrix_calculus.md
-    - 7_backpropogation_full.md
+    - 5_backpropogation_matrix_calculus.md
+    - 6_backpropogation_softmax.md
+    - 7_neuralnetworkimpementation.md
 
 format:
   epub:

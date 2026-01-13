@@ -1,10 +1,10 @@
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved
 
 
-## A Simple NeuralNet with  Back Propagation
+## Neural Network Implementation
 
 
 With the derivative of the Cost function derived from the last chapter, we can code the network
@@ -259,4 +259,4 @@ We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
 - [A Neural Network in 11 lines of Python - I Am Trask](http://iamtrask.github.io/2015/07/12/basic-python-network/)
 - [Colab Notebook](https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing)
 
-Next: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)
+[Index](index.md)

@@ -1,9 +1,9 @@
-# The Mathematical Intuition Behind Deep Learning
+# # The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved
 
-## Back Propagation -Matrix Calculus
+## Backpropagation with Matrix Calculus
 
 The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.
 
@@ -383,6 +383,8 @@ $$\mathbf {
 
 Where $\eta$ is the learning rate.
 
+Next: [Backpropagation with Softmax and Cross Entropy](6_backpropogation_softmax.md)
+
 ## References
 
 - [Back Propagation - Srihari (SUNY Buffalo)](https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf)
@@ -391,4 +393,3 @@ Where $\eta$ is the learning rate.
 
 [7_1]: https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing
 
-Next: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)

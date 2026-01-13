@@ -1,5 +1,5 @@
 
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 

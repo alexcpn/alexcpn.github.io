@@ -1,5 +1,4 @@
-
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 
@@ -432,7 +431,7 @@ In these methods, gradients are computed using a single training example or a sm
 The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.
 
 
-Next: [Backpropagation](4_backpropogation_chainrule.md)
+Next: [Backpropagation with Scalar Calculus](4_backpropogation_chainrule.md)
 
 
 

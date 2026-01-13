@@ -1,9 +1,11 @@
 
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 
 
+
+## Backpropagation with Scalar Calculus
 
 In this chapter lets deep dive a bit more into the technique of Back Propagation
 
@@ -233,7 +235,7 @@ So, Backpropagation is the efficient execution of the Chain Rule by utilizing th
 *   It performs a Vector-Jacobian Product to pass the gradient to the past layer.
 
 
-- Next [A Simple NeuralNet with  Back Propagation](5_neuralnetworkimpementation.md)
+Next [Backpropagation with Matrix Calculus](5_backpropogation_matrix_calculus.md)
 
 ---
 

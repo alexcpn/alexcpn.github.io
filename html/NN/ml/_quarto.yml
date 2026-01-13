@@ -3,7 +3,7 @@ project:
   output-dir: ../ml2
 
 website:
-  title: "The Mathematical Intuition Behind Deep Learning"
+  title: "# The Maths of Deep Learning"
 
   # Put site navigation + search in a left sidebar (docs-style)
   sidebar:
@@ -19,13 +19,13 @@ website:
       - href: 3_gradient_descent.md
         text: Gradient Descent
       - href: 4_backpropogation_chainrule.md
-        text: Backprop (Chain Rule)
-      - href: 5_neuralnetworkimpementation.md
+        text: Backpropagation with Scalar Calculus
+      - href: 5_backpropogation_matrix_calculus.md
+        text: Backpropagation with Matrix Calculus
+      - href: 6_backpropogation_softmax.md
+        text: Backpropagation with Softmax and Cross Entropy
+      - href: 7_neuralnetworkimpementation.md
         text: Neural Network Implementation
-      - href: 6_backpropogation_matrix_calculus.md
-        text: Backprop (Matrix Calculus)
-      - href: 7_backpropogation_full.md
-        text: Backprop With Softmax and Cross Entropy
 
   # Keep the top navbar minimal (no long page list)
   navbar:

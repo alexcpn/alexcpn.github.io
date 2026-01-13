@@ -1,4 +1,4 @@
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved 
@@ -118,7 +118,7 @@ Or in a better way, which shows the vectors properly
 
  Here is a Colab notebook to play around with this.[14]
 
- # Summary
+ #Summary
 
  What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space. 
 

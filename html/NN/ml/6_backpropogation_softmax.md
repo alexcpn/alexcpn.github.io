@@ -1,10 +1,10 @@
-# The Mathematical Intuition Behind Deep Learning
+# The Maths of Deep Learning
 
 Alex Punnen \
 &copy; All Rights Reserved
 
 
-## Back Propagation in Full - With Softmax & CrossEntropy Loss
+## Backpropagation with Softmax and Cross Entropy
 
 
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
@@ -254,7 +254,7 @@ $$
      W{^{l-1}} = W{^{l-1}} -\alpha \cdot \frac {\partial L}{\partial W^{l-1}} 
 $$ 
 
-
+Next: [Neural Network Implementation](7_neuralnetworkimpementation.md)
 
 ## References
  
@@ -299,4 +299,4 @@ $$
  
 
 
-[Index](index.md)
+
