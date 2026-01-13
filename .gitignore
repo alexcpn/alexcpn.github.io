@@ -2,3 +2,7 @@
 html/NN/ml2/epub/images/*
 html/NN/ml2/epub/site_libs/*
 html/NN/ml2/epub/*.html
+html/NN/ml/_extensions/*
+*.aux
+*.log
+*.tex
