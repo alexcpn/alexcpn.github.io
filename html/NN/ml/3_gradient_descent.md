@@ -134,11 +134,8 @@ Let’s take it one layer at a time.
 
 Consider this simple system that composes two functions:
 
-  
 
 $$L = g(f(x, w_1), w_2)$$
-
-  
 
 Where:
 
@@ -266,11 +263,8 @@ This is where the "Chain Rule" of Calculus comes into play.
 
 ### The Chain of Effects
 
-  
-
 Let's visualize how changes propagate:
 
-  
 
 ```
 

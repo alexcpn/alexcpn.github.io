@@ -67,6 +67,7 @@ $$
 
 > **Note**: This is distinct from Gradient Descent. Gradient Descent requires a differentiable activation function to compute gradients (slope). The Perceptron uses a "step function" (hard 0 or 1) which is not differentiable. However, this simple rule is guaranteed to converge if the data is linearly separable.
 
+
 A more rigorous explanation of the proof can be found in the book [Neural Networks by R.Rojas] or this [article][perceptron-learning-algorithm].
 
 
