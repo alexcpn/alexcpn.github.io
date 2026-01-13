@@ -239,6 +239,6 @@ Next [Backpropagation with Matrix Calculus](5_backpropogation_matrix_calculus.md
 
 [neuralnetwork]: images/neuralnet2.png
 [backpropogation]: images/backprop1.png
-[backpropogationgif]: images/backprop1.gif
-[backpropogationgif2]: images/backprop2.gif
+[backpropogationgif]: images/backprop_1.png
+[backpropogationgif2]: images/backprop_2.png
 
