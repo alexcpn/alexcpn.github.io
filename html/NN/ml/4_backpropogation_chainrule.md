@@ -237,11 +237,10 @@ So, Backpropagation is the efficient execution of the Chain Rule by utilizing th
 
 ---
 
-### References
+## References
 
-http://neuralnetworksanddeeplearning.com/chap2.html
-
-https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
+- [Neural Networks and Deep Learning - Michael Nielsen](http://neuralnetworksanddeeplearning.com/chap2.html)
+- [A Step by Step Backpropagation Example - Matt Mazur](https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/)
 
 [neuralnetwork]: images/neuralnet2.png
 [backpropogation]: images/backprop1.png

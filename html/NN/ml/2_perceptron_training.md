@@ -73,12 +73,17 @@ A more rigorous explanation of the proof can be found in the book [Neural Networ
 
 Next: [Gradient Descent and Optimization](3_gradient_descent.md)
 
-  [dotproduct]: images/dotproduct.png
-  [Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
-   [perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
-  [5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
-  [quora_cost]:(https://www.quora.com/Why-is-sin-90-taken-to-be-1)
-  [linearseperable]: images/linearseperable.png
+
+## References
+
+- [Neural Networks - R. Rojas (Chapter 4)](https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf)
+- [Perceptron Learning Algorithm - Towards Data Science](https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975)
+- [Gradient Search - Alvarez](http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf)
+
+[Neural Networks by R.Rojas]: https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf
+[perceptron-learning-algorithm]: https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975
+[5]: http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf
+[dotproduct]: images/dotproduct.png
 
 
 

@@ -435,5 +435,11 @@ The resulting gradient is an average over the batch and serves as a noisy approx
 Next: [Backpropagation](4_backpropogation_chainrule.md)
 
 
+
+## References
+
+- [Neural Networks and Deep Learning - Michael Nielsen](http://neuralnetworksanddeeplearning.com/chap2.html)
+- [Gradient Descent - Wikipedia](https://en.wikipedia.org/wiki/Gradient_descent)
+
 [neuralnetwork]:  images/neuralnet2.png
 [costfunction]: images/costfunction.png

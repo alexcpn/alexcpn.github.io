@@ -254,6 +254,9 @@ Output after Training is
 
 We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
 
-The code in [Colab](https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing)
+## References
+
+- [A Neural Network in 11 lines of Python - I Am Trask](http://iamtrask.github.io/2015/07/12/basic-python-network/)
+- [Colab Notebook](https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing)
 
 Next: [Back Propagation Pass 3 (Matrix Calculus)](6_backpropogation_matrix_calculus.md)

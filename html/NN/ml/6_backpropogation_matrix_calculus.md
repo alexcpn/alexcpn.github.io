@@ -383,11 +383,12 @@ $$\mathbf {
 
 Where $\eta$ is the learning rate.
 
-Reference  
+## References
 
-- <https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf>
-- <http://neuralnetworksanddeeplearning.com/chap2.html>
+- [Back Propagation - Srihari (SUNY Buffalo)](https://cedar.buffalo.edu/~srihari/CSE574/Chap5/Chap5.3-BackProp.pdf)
+- [Neural Networks and Deep Learning - Michael Nielsen](http://neuralnetworksanddeeplearning.com/chap2.html)
+- [Colab Visualization](https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing)
 
- [7_1]: https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing
+[7_1]: https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing
 
 Next: [Back Propagation in Full - With Softmax & CrossEntropy Loss](7_backpropogation_full.md)

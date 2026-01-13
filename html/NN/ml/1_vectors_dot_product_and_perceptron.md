@@ -127,18 +127,32 @@ Or in a better way, which shows the vectors properly
 Next [Perceptron Training](2_perceptron_training.md)
 
 
-  [1]: https://en.wikipedia.org/wiki/Vector_space
-  [2]: http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf
-  [Euclidean_vector]: https://en.wikipedia.org/wiki/Euclidean_vector
-  [8]: http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx
-  [9]: https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff
-  [10]: https://alan.do/minskys-and-or-theorem-a-single-perceptron-s-limitations-490c63a02e9f
-  [11]: https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model
-  [12]: https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
-  [13]: https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
-  [14]: https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing
 
-  [indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
-  [matrix decomposition]: https://en.wikipedia.org/wiki/Matrix_decomposition
-  [weightvector]: images/weightvector.png
-  [linearseperable]: images/linearseperable.png
+## References
+
+- [Vector Space - Wikipedia](https://en.wikipedia.org/wiki/Vector_space)
+- [Introduction to Vectors - MathCentre](http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf)
+- [Euclidean Vector - Wikipedia](https://en.wikipedia.org/wiki/Euclidean_vector)
+- [Dot Product - Paul's Online Math Notes](http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx)
+- [Vector Math - MathOfNeuralNetworks](https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff)
+- [Minsky's And-Or Theorem](https://alan.do/minskys-and-or-theorem-a-single-perceptron-s-limitations-490c63a02e9f)
+- [The Perceptron - Mael Fabien](https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model)
+- [Rosenblatt's Perceptron Article](https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html)
+- [Colab Notebook](https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing)
+- [A Primer on Index Notation - John Crimaldi](https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf)
+
+[1]: https://en.wikipedia.org/wiki/Vector_space
+[2]: http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf
+[Euclidean_vector]: https://en.wikipedia.org/wiki/Euclidean_vector
+[8]: http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx
+[9]: https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff
+[10]: https://alan.do/minskys-and-or-theorem-a-single-perceptron-s-limitations-490c63a02e9f
+[11]: https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model
+[12]: https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
+[13]: https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html
+[14]: https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing
+
+[indexnotation]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
+[matrix decomposition]: https://en.wikipedia.org/wiki/Matrix_decomposition
+[weightvector]: images/weightvector.png
+[linearseperable]: images/linearseperable.png

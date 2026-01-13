@@ -258,14 +258,14 @@ $$
 
 ## References
  
- Easier to follow (without explicit Matrix Calculus) though not really correct
- - [Supervised Deep Learning Marc'Aurelio Ranzato DeepMind]  
-Easy to follow but lacking in some aspects
-- [Notes on Backpropagation-Peter Sadowski]
-Slightly hard to follow using the Jacobian 
- - [The Softmax function and its derivative-Eli Bendersky]
-More difficult to follow with proper index notations (I could not) and probably correct
- - [Backpropagation In Convolutional Neural Networks Jefkine]
+- [Supervised Deep Learning - Marc'Aurelio Ranzato (DeepMind)](https://bfeba431-a-62cb3a1a-s-sites.googlegroups.com/site/deeplearningcvpr2014/ranzato_cvpr2014_DLtutorial.pdf?attachauth=ANoY7cqPhkgQyNhJ9E7rmSk-RTdMYSYqpfJU2gPlb9cWH_4a1MbiYPq_0ihyuolPiYDkImyr9PmA-QwSuS8F3OMChiF97XTDD_luJqam70GvAC4X6G6KlU2r7Pv1rqkHaMbmXpdtXJHAveR_jWf1my_IojxFact87u2-1YXtfJIwYkhBwhMsYagICk-P6X9ktA0Pyjd601tboSlX_UGftX1vB57-tS6bdAkukhmSRLU-ZiF4RdJ_sI3YAGaaPYj1KLWFpkFa_-XG&attredirects=1) - Easier to follow (without explicit Matrix Calculus) though not really correct
+- [Notes on Backpropagation - Peter Sadowski](https://www.ics.uci.edu/~pjsadows/notes.pdf) - Easy to follow but lacking in some aspects
+- [The Softmax function and its derivative - Eli Bendersky](https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/) - Slightly hard to follow using the Jacobian
+- [Backpropagation In Convolutional Neural Networks - Jefkine](https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/]) - More difficult to follow with proper index notations (I could not) and probably correct
+- [A Primer on Index Notation - John Crimaldi](https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf)
+- [The Matrix Calculus You Need For Deep Learning - Terence Parr & Jeremy Howard](https://arxiv.org/pdf/1802.01528.pdf)
+- [Neural Networks and Deep Learning - Michael Nielsen](http://neuralnetworksanddeeplearning.com/chap2.html)
+- [Derivative of Softmax Activation - Alijah Ahmed](https://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function)
 
 
   [A Primer on Index Notation John Crimaldi]: https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf
