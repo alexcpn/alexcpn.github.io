@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>perceptron_training – The Mathematical Intuition Behind Deep Learning</title>
+<title>perceptron_training – The Maths of Deep Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,7 +109,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    <span class="navbar-title">The Maths of Deep Learning</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -168,25 +168,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Chain Rule)</span></a>
+ <span class="menu-text">Backpropagation with Scalar Calculus</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Matrix Calculus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_backpropogation_softmax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Neural Network Implementation</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./6_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Matrix Calculus)</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./7_backpropogation_full.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
   </div>
 </li>
     </ul>
@@ -195,15 +195,15 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a>
+  <li><a href="#perceptron-training-via-feature-vectors-hyperplane-split" id="toc-perceptron-training-via-feature-vectors-hyperplane-split" class="nav-link active" data-scroll-target="#perceptron-training-via-feature-vectors-hyperplane-split">Perceptron Training via Feature Vectors &amp; HyperPlane split</a>
   <ul class="collapse">
-  <li><a href="#perceptron-training-via-feature-vectors-hyperplane-split" id="toc-perceptron-training-via-feature-vectors-hyperplane-split" class="nav-link" data-scroll-target="#perceptron-training-via-feature-vectors-hyperplane-split">Perceptron Training via Feature Vectors &amp; HyperPlane split</a></li>
   <li><a href="#how-are-the-weights-learned" id="toc-how-are-the-weights-learned" class="nav-link" data-scroll-target="#how-are-the-weights-learned">How are the weights learned?</a>
   <ul class="collapse">
   <li><a href="#the-intuition-nudging-the-vector" id="toc-the-intuition-nudging-the-vector" class="nav-link" data-scroll-target="#the-intuition-nudging-the-vector">The Intuition: Nudging the Vector</a></li>
   <li><a href="#the-update-rules" id="toc-the-update-rules" class="nav-link" data-scroll-target="#the-update-rules">The Update Rules</a></li>
   <li><a href="#the-formal-algorithm" id="toc-the-formal-algorithm" class="nav-link" data-scroll-target="#the-formal-algorithm">The Formal Algorithm</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -218,12 +218,8 @@ window.Quarto = {
 
 
 
-<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
-<h1>The Mathematical Intuition Behind Deep Learning</h1>
-<p>Alex Punnen<br>
-© All Rights Reserved</p>
-<section id="perceptron-training-via-feature-vectors-hyperplane-split" class="level2">
-<h2 class="anchored" data-anchor-id="perceptron-training-via-feature-vectors-hyperplane-split">Perceptron Training via Feature Vectors &amp; HyperPlane split</h2>
+<section id="perceptron-training-via-feature-vectors-hyperplane-split" class="level1">
+<h1>Perceptron Training via Feature Vectors &amp; HyperPlane split</h1>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/perceptron.png" class="img-fluid figure-img"></p>
@@ -232,7 +228,6 @@ window.Quarto = {
 </div>
 <p>Let’s follow from the previous chapter of the Perceptron neural network.</p>
 <p>We have seen how the concept of splitting the hyper-plane of feature set separates one type of feature vectors from other.</p>
-</section>
 <section id="how-are-the-weights-learned" class="level2">
 <h2 class="anchored" data-anchor-id="how-are-the-weights-learned">How are the weights learned?</h2>
 <p>You may have heard about <strong>Gradient Descent</strong>, which is the backbone of training modern neural networks. However, for the classic Perceptron, the learning algorithm is much simpler and relies on a geometric intuition.</p>
@@ -266,10 +261,18 @@ window.Quarto = {
 </blockquote>
 <p>A more rigorous explanation of the proof can be found in the book <a href="https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf">Neural Networks by R.Rojas</a> or this <a href="https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975">article</a>.</p>
 <p>Next: <a href="./3_gradient_descent.html">Gradient Descent and Optimization</a></p>
-
-
-
 </section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><a href="https://page.mi.fu-berlin.de/rojas/neural/chapter/K4.pdf">Neural Networks - R. Rojas (Chapter 4)</a></li>
+<li><a href="https://towardsdatascience.com/perceptron-learning-algorithm-d5db0deab975">Perceptron Learning Algorithm - Towards Data Science</a></li>
+<li><a href="http://www.cs.bc.edu/~alvarez/ML/gradientSearch.pdf">Gradient Search - Alvarez</a></li>
+</ul>
+
+
+
 </section>
 </section>
 

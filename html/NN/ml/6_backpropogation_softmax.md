@@ -1,10 +1,4 @@
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved
-
-
-## Backpropagation with Softmax and Cross Entropy
+# Backpropagation with Softmax and Cross Entropy
 
 
 Let's think of a $l$ layered neural network whose input is $x=a^0$ and output is $a^l$.In this network we will be using the **sigmoid ($\sigma$ )** function as the activation function for all layers except the last layer $l$. For the last layer we use the **Softmax activation function**. We will use the **Cross Entropy Loss** as the loss function.
@@ -68,7 +62,7 @@ $$
 
 There are too many articles related to Back propagation, many of which are very good.However many explain in terms of index notation and though it is illuminating, to really use this with code, you need to understand how it translates to Matrix notation via Matrix Calculus and with help form StackOverflow related sites.
 
-### CrossEntropy Loss with respect to Weight in last layer
+### CrossEntropy Loss with Respect to Weights in Last Layer
 
 $$
 \mathbf {
@@ -170,7 +164,7 @@ z^{l} = (W^l a^{l-1}+b^l)
 \end{aligned}
 $$
 
-## Gradient descent
+## Gradient Descent
 
 Using Gradient descent we can keep adjusting the last layer like
 
@@ -180,7 +174,7 @@ $$
 
 Now let's do the derivation for the inner layers
 
-## Derivative of Loss with respect to Weight in Inner Layers
+## Derivative of Loss with Respect to Weights in Inner Layers
 
 
 
@@ -234,7 +228,7 @@ $$
 
 
 
-## Some Implementation details
+## Some Implementation Details
 
 For a detailed explanation of the Matrix Calculus, Jacobian, and Hadamard product used here, please refer to **Chapter 6: Back Propagation - Matrix Calculus**.
 
@@ -246,7 +240,7 @@ The equations above use index notation for clarity. In practice, we use Matrix N
 
 Here is an implementation of a relatively simple Convolutional Neural Network to test out the forward and back-propagation algorithms given above [https://github.com/alexcpn/cnn_in_python](https://github.com/alexcpn/cnn_in_python). The code is well commented and you will be able to follow the forward and backward propagation with the equations above.
 
-## Gradient descent
+## Gradient Descent
 
 Using Gradient descent we can keep adjusting the inner layers like
 

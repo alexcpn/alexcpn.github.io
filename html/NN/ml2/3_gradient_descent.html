@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>gradient_descent – The Mathematical Intuition Behind Deep Learning</title>
+<title>gradient_descent – The Maths of Deep Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,7 +109,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    <span class="navbar-title">The Maths of Deep Learning</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -168,25 +168,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Chain Rule)</span></a>
+ <span class="menu-text">Backpropagation with Scalar Calculus</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Matrix Calculus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_backpropogation_softmax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Neural Network Implementation</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./6_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Matrix Calculus)</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./7_backpropogation_full.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
   </div>
 </li>
     </ul>
@@ -195,7 +195,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link active" data-scroll-target="#gradient-descent">Gradient Descent</a>
   <ul class="collapse">
   <li><a href="#neural-network-as-a-chain-of-functions" id="toc-neural-network-as-a-chain-of-functions" class="nav-link" data-scroll-target="#neural-network-as-a-chain-of-functions">Neural Network as a Chain of Functions</a>
   <ul class="collapse">
@@ -215,6 +215,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#gradient-descent-for-a-two-layer-neural-network-scalar-form" id="toc-gradient-descent-for-a-two-layer-neural-network-scalar-form" class="nav-link" data-scroll-target="#gradient-descent-for-a-two-layer-neural-network-scalar-form">Gradient Descent for a Two-Layer Neural Network (Scalar Form)</a></li>
   <li><a href="#some-other-notes-related-to-gradient-descent" id="toc-some-other-notes-related-to-gradient-descent" class="nav-link" data-scroll-target="#some-other-notes-related-to-gradient-descent">Some other notes related to Gradient Descent</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -229,10 +230,8 @@ window.Quarto = {
 
 
 
-<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
-<h1>The Mathematical Intuition Behind Deep Learning</h1>
-<p>Alex Punnen<br>
-© All Rights Reserved</p>
+<section id="gradient-descent" class="level1">
+<h1>Gradient Descent</h1>
 <section id="neural-network-as-a-chain-of-functions" class="level2">
 <h2 class="anchored" data-anchor-id="neural-network-as-a-chain-of-functions">Neural Network as a Chain of Functions</h2>
 <p>To understand deep learning, we need to understand the concept of a neural network as a chain of functions.</p>
@@ -327,32 +326,16 @@ x \leftarrow x - \eta \frac{df}{dx}
 <h2 class="anchored" data-anchor-id="gradient-descent-for-scalar-functions">Gradient Descent for Scalar Functions</h2>
 <p>Consider this simple system that composes two functions:</p>
 <p><span class="math display">\[L = g(f(x, w_1), w_2)\]</span></p>
-<p>Where:</p>
-<ul>
-<li><p><span class="math inline">\(x\)</span> is your input (fixed, given by your data)</p></li>
-<li><p><span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> are <strong>parameters you can adjust</strong> (like weights in a neural network)</p></li>
-<li><p><span class="math inline">\(f\)</span> is the first function (think: first layer)</p></li>
-<li><p><span class="math inline">\(g\)</span> is the second function (think: second layer)</p></li>
-<li><p><span class="math inline">\(L\)</span> is the final output</p></li>
-</ul>
+<p>Where: - <span class="math inline">\(x\)</span> is your input (fixed, given by your data) - <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> are <strong>parameters you can adjust</strong> (like weights in a neural network) - <span class="math inline">\(f\)</span> is the first function (think: first layer) - <span class="math inline">\(g\)</span> is the second function (think: second layer) - <span class="math inline">\(L\)</span> is the final output</p>
 <p>Let’s make this concrete with simple linear functions:</p>
-<p><span class="math display">\[f(x, w_1) = x \cdot w_1 + b_1\]</span></p>
-<p><span class="math display">\[g(z, w_2) = z \cdot w_2 + b_2\]</span></p>
+<p><span class="math display">\[f(x, w_1) = x \cdot w_1 + b_1\]</span> <span class="math display">\[g(z, w_2) = z \cdot w_2 + b_2\]</span></p>
 <p>So the full composition is:</p>
 <p><span class="math display">\[L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2\]</span></p>
 <section id="running-the-numbers-a-real-example" class="level3">
 <h3 class="anchored" data-anchor-id="running-the-numbers-a-real-example">Running the Numbers: A Real Example</h3>
 <p>Let’s pick actual values and see what happens:</p>
-<p><strong>Fixed values:</strong></p>
-<ul>
-<li><p>Input: <span class="math inline">\(x = 2.0\)</span></p></li>
-<li><p>Bias terms: <span class="math inline">\(b_1 = 1.0\)</span>, <span class="math inline">\(b_2 = 0.5\)</span></p></li>
-</ul>
-<p><strong>Current parameter values:</strong></p>
-<ul>
-<li><p><span class="math inline">\(w_1 = 0.5\)</span></p></li>
-<li><p><span class="math inline">\(w_2 = 1.5\)</span></p></li>
-</ul>
+<p><strong>Fixed values:</strong> - Input: <span class="math inline">\(x = 2.0\)</span> - Bias terms: <span class="math inline">\(b_1 = 1.0\)</span>, <span class="math inline">\(b_2 = 0.5\)</span></p>
+<p><strong>Current parameter values:</strong> - <span class="math inline">\(w_1 = 0.5\)</span> - <span class="math inline">\(w_2 = 1.5\)</span></p>
 <p><strong>Step 1</strong>: Compute intermediate result from first function:</p>
 <p><span class="math display">\[z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0\]</span></p>
 <p><strong>Step 2</strong>: Compute final output from second function:</p>
@@ -366,9 +349,9 @@ x \leftarrow x - \eta \frac{df}{dx}
 <h3 class="anchored" data-anchor-id="the-adjustment-problem-which-direction-how-much">The Adjustment Problem: Which Direction? How Much?</h3>
 <p>Here’s what we need to know:</p>
 <ol type="1">
-<li><p><strong>Should we increase or decrease <span class="math inline">\(w_1\)</span>?</strong> (Which direction?)</p></li>
-<li><p><strong>How sensitive is <span class="math inline">\(L\)</span> to changes in <span class="math inline">\(w_1\)</span>?</strong> (How much?)</p></li>
-<li><p><strong>Same questions for <span class="math inline">\(w_2\)</span>.</strong></p></li>
+<li><strong>Should we increase or decrease <span class="math inline">\(w_1\)</span>?</strong> (Which direction?)</li>
+<li><strong>How sensitive is <span class="math inline">\(L\)</span> to changes in <span class="math inline">\(w_1\)</span>?</strong> (How much?)</li>
+<li><strong>Same questions for <span class="math inline">\(w_2\)</span>.</strong></li>
 </ol>
 <p>This is where derivatives come in! Specifically, we need:</p>
 <p><span class="math display">\[\frac{\partial L}{\partial w_1} \quad  \text{and} \quad  \frac{\partial L}{\partial w_2}\]</span></p>
@@ -383,21 +366,13 @@ x \leftarrow x - \eta \frac{df}{dx}
 <section id="the-chain-of-effects" class="level3">
 <h3 class="anchored" data-anchor-id="the-chain-of-effects">The Chain of Effects</h3>
 <p>Let’s visualize how changes propagate:</p>
-<pre><code>
-Change w₁ → Affects f → Changes z → Affects g → Changes L
-
-↓ ↓ ↓ ↓ ↓
-
-Δw₁ ∂f/∂w₁ Δz ∂g/∂z ΔL
-</code></pre>
+<pre><code>Change w₁ → Affects f → Changes z → Affects g → Changes L
+      ↓            ↓         ↓               ↓
+      Δw₁        ∂f/∂w₁     Δz     ∂g/∂z     ΔL</code></pre>
 <p>Similarly for <span class="math inline">\(w_2\)</span> (but <span class="math inline">\(w_2\)</span> directly affects <span class="math inline">\(g\)</span>):</p>
-<pre><code>
-Change w₂ → Affects g → Changes L
-
+<pre><code>Change w₂ → Affects g → Changes L
 ↓ ↓ ↓
-
-Δw₂ ∂g/∂w₂ ΔL
-</code></pre>
+Δw₂ ∂g/∂w₂ ΔL</code></pre>
 <p>The key insight: <strong>To find how <span class="math inline">\(w_1\)</span> affects <span class="math inline">\(L\)</span>, we need to multiply the effects at each step.</strong></p>
 <p>This is the <strong>chain rule</strong> in action!</p>
 </section>
@@ -437,18 +412,8 @@ Change w₂ → Affects g → Changes L
 <p><span class="math display">\[z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2\]</span></p>
 <p><strong>Step 2</strong>: New output:</p>
 <p><span class="math display">\[L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58\]</span></p>
-<p><strong>Progress check</strong>:</p>
-<ul>
-<li><p>Before: <span class="math inline">\(L = 3.5\)</span> (error from target = 1.5)</p></li>
-<li><p>After: <span class="math inline">\(L = 6.58\)</span> (error from target = -1.58)</p></li>
-<li><p>We overshot! But that’s okay - we moved in the right direction</p></li>
-</ul>
-<p>With a smaller learning rate (say <span class="math inline">\(\alpha = 0.1\)</span>), we’d get:</p>
-<ul>
-<li><p><span class="math inline">\(w_1^{\text{new}} = 0.8\)</span>, <span class="math inline">\(w_2^{\text{new}} = 1.7\)</span></p></li>
-<li><p><span class="math inline">\(z^{\text{new}} = 2.6\)</span>, <span class="math inline">\(L^{\text{new}} = 4.92\)</span></p></li>
-<li><p>Much closer to our target of 5.0!</p></li>
-</ul>
+<p><strong>Progress check</strong>: - Before: <span class="math inline">\(L = 3.5\)</span> (error from target = 1.5) - After: <span class="math inline">\(L = 6.58\)</span> (error from target = -1.58) - We overshot! But that’s okay - we moved in the right direction</p>
+<p>With a smaller learning rate (say <span class="math inline">\(\alpha = 0.1\)</span>), we’d get: - <span class="math inline">\(w_1^{\text{new}} = 0.8\)</span>, <span class="math inline">\(w_2^{\text{new}} = 1.7\)</span> - <span class="math inline">\(z^{\text{new}} = 2.6\)</span>, <span class="math inline">\(L^{\text{new}} = 4.92\)</span> - Much closer to our target of 5.0!</p>
 <p>This is how Gradient Descent works in a nutshell. The same concepts carry over in deep learning with some added complexity.</p>
 </section>
 </section>
@@ -500,7 +465,14 @@ Change w₂ → Affects g → Changes L
 <p>Also we rarely use full-batch gradient descent. Instead, we use variants such as Stochastic Gradient Descent (SGD) or mini-batch gradient descent that acts as form of sampling.</p>
 <p>In these methods, gradients are computed using a single training example or a small batch of examples rather than the entire dataset.</p>
 <p>The resulting gradient is an average over the batch and serves as a noisy approximation of the true gradient. This stochasticity helps the optimizer escape saddle points and sharp minima, enabling effective training in practice.</p>
-<p>Next: <a href="./4_backpropogation_chainrule.html">Backpropagation</a></p>
+<p>Next: <a href="./4_backpropogation_chainrule.html">Backpropagation with Scalar Calculus</a></p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><a href="http://neuralnetworksanddeeplearning.com/chap2.html">Neural Networks and Deep Learning - Michael Nielsen</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent - Wikipedia</a></li>
+</ul>
 
 
 

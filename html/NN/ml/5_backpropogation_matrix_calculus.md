@@ -1,9 +1,4 @@
-# # The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved
-
-## Backpropagation with Matrix Calculus
+# Backpropagation with Matrix Calculus
 
 The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.
 
@@ -133,7 +128,7 @@ $$ \Delta y \approx J \cdot \Delta x $$
 
 It tells us: "If I nudge the input vector by a tiny vector $\Delta x$, the output vector will change by roughly the matrix-vector product $J \cdot \Delta x$."
 
-### BackPropogation Trick - VJP (Vector Jacobian Product) and JVP (Jacobian Vector Product) 
+### Backpropagation Trick - VJP (Vector Jacobian Product) and JVP (Jacobian Vector Product) 
 
 There is one more trick that we can use to make backpropogation more efficient. 
 
@@ -196,7 +191,7 @@ $$
 We use the **Mean Squared Error (MSE)** loss function:
 $$ C = \frac{1}{2} \|y - a^2\|^2 $$
 
-### Gradient Vector/2D-Tensor of Loss function in last layer
+### Gradient Vector/2D-Tensor of Loss Function in Last Layer
 
 $$
 C = \frac{1}{2} \|y - a^2\|^2 = \frac{1}{2} \sum_j (y_j-a^2_j)^2
@@ -289,7 +284,7 @@ This gives us the gradient matrix for the last layer weights.
 
 &nbsp;
 
-## Jacobian of Loss function in Inner Layer
+## Jacobian of Loss Function in Inner Layer
 
 Now let's do the same for the inner layer ($W^1$).
 
@@ -324,7 +319,7 @@ $$
 
 &nbsp;
 
-### Summary of Backpropagation Equations in terms of say Numpy
+### Summary of Backpropagation Equations in Terms of Numpy
 
 Here is how these equations translate to Python code using NumPy, assuming standard column vectors (shape `(N, 1)`).
 
@@ -356,7 +351,7 @@ dC_dW1 = np.matmul(delta1, x.T)
 
 
 
-## Using Gradient Descent to find the optimal weights to reduce the Loss function
+## Using Gradient Descent to Find the Optimal Weights to Reduce the Loss Function
 
 &nbsp;
 

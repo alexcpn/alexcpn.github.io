@@ -1,16 +1,9 @@
-
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved 
-
-
-## Backpropagation with Scalar Calculus
+# Backpropagation with Scalar Calculus
 
 In this chapter lets deep dive a bit more into the technique of Back Propagation
 
 
-## How Backpropagation works
+## How Backpropagation Works
 
 Consider a neural network with multiple layers. The weight of layer $l$ is $W^l$.  And for the previous layer it is $W^{(l-1)}$.
 
@@ -23,7 +16,7 @@ The central idea is how a **small change** in weight in the previous layer affec
 ![backpropogationgif]
 Source : Author
 
-## Writing this out as Chain Rule
+## Writing This Out as Chain Rule
 
 Here is a more detailed depiction of how the small change in weight adds through the chain to affect the final cost, and **how much** the small change of weight in an inner layer affect the final cost.
 
@@ -60,7 +53,7 @@ $$
   W^{l-1}_{new} = W^{l-1}_{old} - \eta \cdot \frac{\partial C_0}{\partial W^{l-1}}
 $$
 
-## Nerual Net as a Composition of Vector Functions
+## Neural Net as a Composition of Vector Functions
 
 Lets first look at a neural network as a  composition of vector functions.
 

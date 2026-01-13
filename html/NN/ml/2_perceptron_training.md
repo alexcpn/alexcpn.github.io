@@ -1,11 +1,4 @@
-
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved 
-
-
-## Perceptron Training via Feature Vectors & HyperPlane split
+# Perceptron Training via Feature Vectors & HyperPlane split
 
 ![perceptron](images/perceptron.png)
 

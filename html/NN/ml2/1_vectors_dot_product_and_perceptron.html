@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>vectors_dot_product_and_perceptron – The Mathematical Intuition Behind Deep Learning</title>
+<title>vectors_dot_product_and_perceptron – The Maths of Deep Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,7 +109,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">The Mathematical Intuition Behind Deep Learning</span>
+    <span class="navbar-title">The Maths of Deep Learning</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -168,25 +168,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./4_backpropogation_chainrule.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Chain Rule)</span></a>
+ <span class="menu-text">Backpropagation with Scalar Calculus</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Matrix Calculus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./6_backpropogation_softmax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backpropagation with Softmax and Cross Entropy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./7_neuralnetworkimpementation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Neural Network Implementation</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./6_backpropogation_matrix_calculus.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop (Matrix Calculus)</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./7_backpropogation_full.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Backprop With Softmax and Cross Entropy</span></a>
   </div>
 </li>
     </ul>
@@ -195,22 +195,16 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-mathematical-intuition-behind-deep-learning" id="toc-the-mathematical-intuition-behind-deep-learning" class="nav-link active" data-scroll-target="#the-mathematical-intuition-behind-deep-learning">The Mathematical Intuition Behind Deep Learning</a>
+  <li><a href="#the-simplest-neural-network---perceptron-using-vectors-and-dot-products" id="toc-the-simplest-neural-network---perceptron-using-vectors-and-dot-products" class="nav-link active" data-scroll-target="#the-simplest-neural-network---perceptron-using-vectors-and-dot-products">The simplest Neural Network - Perceptron using Vectors and Dot Products</a>
   <ul class="collapse">
   <li><a href="#the-magic-of-representation---vector-space-and-hyperplane" id="toc-the-magic-of-representation---vector-space-and-hyperplane" class="nav-link" data-scroll-target="#the-magic-of-representation---vector-space-and-hyperplane">The Magic of Representation - Vector Space and Hyperplane</a>
   <ul class="collapse">
   <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors">Vectors</a></li>
   <li><a href="#matrices---a-way-to-represent-vectors-and-tensors" id="toc-matrices---a-way-to-represent-vectors-and-tensors" class="nav-link" data-scroll-target="#matrices---a-way-to-represent-vectors-and-tensors">Matrices - A way to represent Vectors (and Tensors)</a></li>
   <li><a href="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." id="toc-two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other." class="nav-link" data-scroll-target="#two-dimensional-matrices-can-be-thought-of-as-one-dimensional-vectors-stacked-on-top-of-each-other.">Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other.</a></li>
-  <li><a href="#dot-product" id="toc-dot-product" class="nav-link" data-scroll-target="#dot-product">Dot product</a></li>
-  <li><a href="#transpose" id="toc-transpose" class="nav-link" data-scroll-target="#transpose">Transpose</a></li>
+  <li><a href="#dot-product" id="toc-dot-product" class="nav-link" data-scroll-target="#dot-product">Dot Product</a></li>
   </ul></li>
-  <li><a href="#dot-product-for-checking-vector-alignment" id="toc-dot-product-for-checking-vector-alignment" class="nav-link" data-scroll-target="#dot-product-for-checking-vector-alignment">Dot Product for checking Vector Alignment</a>
-  <ul class="collapse">
-  <li><a href="#perceptron-learning-rule--intuition-nudging-the-vector" id="toc-perceptron-learning-rule--intuition-nudging-the-vector" class="nav-link" data-scroll-target="#perceptron-learning-rule--intuition-nudging-the-vector">Perceptron Learning Rule- Intuition: Nudging the Vector</a></li>
-  <li><a href="#the-update-rules" id="toc-the-update-rules" class="nav-link" data-scroll-target="#the-update-rules">The Update Rules</a></li>
-  </ul></li>
-  <li><a href="#simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." id="toc-simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." class="nav-link" data-scroll-target="#simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set.">Simple Hyperplane split is not possible for Non linearly seperable feature set).</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -225,10 +219,8 @@ window.Quarto = {
 
 
 
-<section id="the-mathematical-intuition-behind-deep-learning" class="level1">
-<h1>The Mathematical Intuition Behind Deep Learning</h1>
-<p>Alex Punnen<br>
-© All Rights Reserved</p>
+<section id="the-simplest-neural-network---perceptron-using-vectors-and-dot-products" class="level1">
+<h1>The simplest Neural Network - Perceptron using Vectors and Dot Products</h1>
 <p>Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.</p>
 <p>Have you ever held an integrated circuit or chip in your hand or seen one? It looks overwhelmingly complex. But its base is the humble transistor and Boolean logic. To understand something complex, we need to understand the simpler constituents.</p>
 <section id="the-magic-of-representation---vector-space-and-hyperplane" class="level2">
@@ -273,7 +265,7 @@ a_{1}\\a_{2}\\a_{3}\
 <p>This intuition is especially helpful when we use dot products on neural network weight matrices.</p>
 </section>
 <section id="dot-product" class="level3">
-<h3 class="anchored" data-anchor-id="dot-product">Dot product</h3>
+<h3 class="anchored" data-anchor-id="dot-product">Dot Product</h3>
 <p>This is a very important concept in linear algebra and is used in many places in machine learning.</p>
 <p><strong>Algebraically</strong>, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.</p>
 <p>if <span class="math inline">\(\vec a = \left\langle {a_1,a_2,a_3} \right\rangle\)</span> and <span class="math inline">\(\vec b = \left\langle {b_1,b_2,b_3} \right\rangle\)</span>, then</p>
@@ -293,15 +285,6 @@ a_{1}\\a_{2}\\a_{3}\
 </figure>
 </div>
 <p>Note- These definitions are equivalent when using Cartesian coordinates (Ref <a href="http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx">8</a>, <a href="https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff">9</a>)</p>
-</section>
-<section id="transpose" class="level3">
-<h3 class="anchored" data-anchor-id="transpose">Transpose</h3>
-<p>The transpose of a matrix is an operator which flips a matrix over its diagonal; that is, it switches the row and column indices of the matrix A by producing another matrix, often denoted by <span class="math inline">\(A^T\)</span>.</p>
-<p><strong>This is important because the dot product of two vectors can be written as the matrix product of a row vector and a column vector: <span class="math inline">\(\vec a \cdot \vec b = a^T b\)</span></strong></p>
-</section>
-</section>
-<section id="dot-product-for-checking-vector-alignment" class="level2">
-<h2 class="anchored" data-anchor-id="dot-product-for-checking-vector-alignment">Dot Product for checking Vector Alignment</h2>
 <p>If two vectors point in roughly the same direction, their dot product is positive. If they point in opposite directions, the dot product is negative.</p>
 <p>This simple geometric fact becomes a powerful computational tool.</p>
 <p>Imagine a problem where we want to classify whether a leaf is healthy or diseased based on certain features. Each leaf is represented as a feature vector in a two-dimensional space (for simplicity).</p>
@@ -309,7 +292,7 @@ a_{1}\\a_{2}\\a_{3}\
 <p>Its dot product with healthy leaf vectors is positive</p>
 <p>Its dot product with diseased leaf vectors is negative</p>
 <p>then that weight vector defines a hyperplane that splits the feature space into two regions.</p>
-<p>This is exactly how the Perceptron performs classification.</p>
+<p>This is exactly how first artificial neuron-the Perceptron performs classification.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/hyperplane1.png" class="img-fluid figure-img"></p>
@@ -328,40 +311,26 @@ a_{1}\\a_{2}\\a_{3}\
 <p><strong>In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.</strong></p>
 <p>For any new leaf, if we only extract the same features into a feature vector; we can <em>dot product</em> it with the <em>trained</em> weight vector and find out if it falls in healthy or deceased class.</p>
 <p>Here is a Colab notebook to play around with this.<a href="https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing">14</a></p>
-<section id="perceptron-learning-rule--intuition-nudging-the-vector" class="level3">
-<h3 class="anchored" data-anchor-id="perceptron-learning-rule--intuition-nudging-the-vector">Perceptron Learning Rule- Intuition: Nudging the Vector</h3>
-<p>Imagine the weight vector <span class="math inline">\(w\)</span> as a pointer. We want this pointer to be oriented such that: 1. It points generally in the same direction as <strong>Positive</strong> examples. 2. It points away from <strong>Negative</strong> examples.</p>
-<p>We start with a random weight vector. Then, we iterate through our training data and check how the current <span class="math inline">\(w\)</span> classifies each point.</p>
-<ul>
-<li><strong>If the classification is correct</strong>: We do nothing. The weight vector is already doing its job for this point.</li>
-<li><strong>If the classification is wrong</strong>: We need to “nudge” or rotate the weight vector to correct the error.</li>
-</ul>
-</section>
-<section id="the-update-rules" class="level3">
-<h3 class="anchored" data-anchor-id="the-update-rules">The Update Rules</h3>
-<p>Let’s say we have an input vector <span class="math inline">\(x\)</span>.</p>
-<p><strong>Case 1: False Negative</strong> The input <span class="math inline">\(x\)</span> is a <strong>Positive</strong> example (<span class="math inline">\(y=1\)</span>), but our current <span class="math inline">\(w\)</span> classified it as negative (dot product <span class="math inline">\(w \cdot x &lt; 0\)</span>). * <strong>Action</strong>: We need to rotate <span class="math inline">\(w\)</span> <em>towards</em> <span class="math inline">\(x\)</span>. * <strong>Update</strong>: <span class="math inline">\(w_{new} = w_{old} + x\)</span> * <strong>Result</strong>: Adding <span class="math inline">\(x\)</span> to <span class="math inline">\(w\)</span> makes the new vector more aligned with <span class="math inline">\(x\)</span>, increasing the dot product for the next time.</p>
-<p><strong>Case 2: False Positive</strong> The input <span class="math inline">\(x\)</span> is a <strong>Negative</strong> example (<span class="math inline">\(y=0\)</span> or <span class="math inline">\(-1\)</span>), but our current <span class="math inline">\(w\)</span> classified it as positive (dot product <span class="math inline">\(w \cdot x &gt; 0\)</span>). * <strong>Action</strong>: We need to rotate <span class="math inline">\(w\)</span> <em>away</em> from <span class="math inline">\(x\)</span>. * <strong>Update</strong>: <span class="math inline">\(w_{new} = w_{old} - x\)</span> * <strong>Result</strong>: Subtracting <span class="math inline">\(x\)</span> from <span class="math inline">\(w\)</span> pushes it in the opposite direction, decreasing the dot product.</p>
-<p>We can combine these rules into a single update equation. We often introduce a <strong>learning rate</strong> <span class="math inline">\(\eta\)</span> (a small number like 0.1) to make the updates smoother, preventing the weight vector from jumping around too wildly.</p>
-<p>For each training example <span class="math inline">\((x, y_{target})\)</span>: 1. Compute prediction: <span class="math inline">\(\hat{y} = \text{step\_function}(w \cdot x)\)</span> 2. Calculate error: <span class="math inline">\(error = y_{target} - \hat{y}\)</span> 3. Update weights: <span class="math display">\[ w = w + \eta \cdot error \cdot x \]</span></p>
-<p>This is known as the <strong>Perceptron Learning Rule</strong>.</p>
-<p>Not all problems have their feature set which is <em>linearly seperable</em>. So this is a constraint of this system. For example XOR problem.</p>
-</section>
-</section>
-<section id="simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set." class="level2">
-<h2 class="anchored" data-anchor-id="simple-hyperplane-split-is-not-possible-for-non-linearly-seperable-feature-set.">Simple Hyperplane split is not possible for Non linearly seperable feature set).</h2>
-<p>The fact that Perceptron could not be used for XOR or XNOR; which was demonstrated in 1969, by by Marvin Minsky and Seymour Papert led to the first <em>AI winter</em>, as much of the hype generated intially by Frank Rosenblatt’s discovery became a disillusionment.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/linearseperable.png" class="img-fluid figure-img"></p>
-<figcaption>linearseperable</figcaption>
-</figure>
-</div>
-<p># Summary</p>
+<p>## Summary</p>
 <p>What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space.</p>
-<p>We can then use the concept of hyperplane to split the feature space into two distinctive sets.</p>
-<p>This is the magic of Representation</p>
+<p>We can then use the concept of hyperplane to split the feature space into two distinctive sets. This is the magic of Representation</p>
 <p>Next <a href="./2_perceptron_training.html">Perceptron Training</a></p>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Vector_space">Vector Space - Wikipedia</a></li>
+<li><a href="http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf">Introduction to Vectors - MathCentre</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Euclidean_vector">Euclidean Vector - Wikipedia</a></li>
+<li><a href="http://tutorial.math.lamar.edu/Classes/CalcII/DotProduct.aspx">Dot Product - Paul’s Online Math Notes</a></li>
+<li><a href="https://sergedesmedt.github.io/MathOfNeuralNetworks/VectorMath.html#learn_vector_math_diff">Vector Math - MathOfNeuralNetworks</a></li>
+<li><a href="https://alan.do/minskys-and-or-theorem-a-single-perceptron-s-limitations-490c63a02e9f">Minsky’s And-Or Theorem</a></li>
+<li><a href="https://maelfabien.github.io/deeplearning/Perceptron/#the-classic-model">The Perceptron - Mael Fabien</a></li>
+<li><a href="https://sergedesmedt.github.io/MathOfNeuralNetworks/RosenblattPerceptronArticle.html">Rosenblatt’s Perceptron Article</a></li>
+<li><a href="https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing">Colab Notebook</a></li>
+<li><a href="https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf">A Primer on Index Notation - John Crimaldi</a></li>
+</ul>
 
 
 

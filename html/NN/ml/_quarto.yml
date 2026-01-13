@@ -3,7 +3,7 @@ project:
   output-dir: ../ml2
 
 website:
-  title: "# The Maths of Deep Learning"
+  title: "The Maths of Deep Learning"
 
   # Put site navigation + search in a left sidebar (docs-style)
   sidebar:

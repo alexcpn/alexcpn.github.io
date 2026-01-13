@@ -1,7 +1,4 @@
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved 
+# The simplest Neural Network - Perceptron using Vectors and Dot Products
 
 
 Even the most complex Neural network is based on vectors and matrices, and it uses the concept of a cost function and algorithms like gradient descent to find a reduced cost. Then, it propagates the cost back to all constituents of the network proportionally via a method called back-propagation.
@@ -56,7 +53,7 @@ $a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represe
 This intuition is especially helpful when we use dot products on neural network weight matrices.
 
 
-### Dot product
+### Dot Product
 
 This is a very important concept in linear algebra and is used in many places in machine learning.
 
@@ -118,7 +115,7 @@ Or in a better way, which shows the vectors properly
 
  Here is a Colab notebook to play around with this.[14]
 
- #Summary
+ ## Summary
 
  What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space. 
 

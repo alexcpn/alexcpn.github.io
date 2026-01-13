@@ -1,15 +1,20 @@
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved
-
-
-## Neural Network Implementation
+# Neural Network Implementation
 
 
 With the derivative of the Cost function derived from the last chapter, we can code the network
 
 We will use matrices to represent input and weight matrices.
+ 
+ > [!NOTE]
+ > **Important Note on Matrix Conventions:**
+ > In the previous chapters (Matrix Calculus), we derived equations assuming **Column Vectors** (where input $x$ is $N \times 1$).
+ > However, in standard Python/NumPy implementations (like the one below), we typically use **Batch Processing** where inputs are **Row Vectors** (where input $X$ is $BatchSize \times Features$).
+ >
+ > This means:
+ > *   Input $X$ has shape `(BatchSize, InputFeatures)`
+ > *   Weight $W$ has shape `(InputFeatures, OutputFeatures)`
+ > *   Forward pass is $Z = X \cdot W$ (instead of $W \cdot x$)
+ > *   This effectively transposes the standard mathematical notation. The code below follows this "Row Vector/Batch" convention.
 
 ```python
 x = np.array(

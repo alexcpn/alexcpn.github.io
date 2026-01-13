@@ -1,8 +1,4 @@
-# The Maths of Deep Learning
-
-Alex Punnen \
-&copy; All Rights Reserved 
-
+# Gradient Descent
 
 ## Neural Network as a Chain of Functions
 
@@ -44,7 +40,7 @@ defines a hyperplane (decision boundary) in the feature space.
 
 The activation function then introduces *non-linearity*, allowing the network to combine **multiple such hyperplanes into complex decision boundaries.**
 
-####  Why Non-Linearity Is Non-Negotiable
+#### Why Non-Linearity Is Non-Negotiable
 
 Without activation:
 
