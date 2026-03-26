@@ -6,3 +6,5 @@ html/NN/ml/_extensions/*
 *.aux
 *.log
 *.tex
+_site/*
+papers/pathloss_transformer/model1.png
