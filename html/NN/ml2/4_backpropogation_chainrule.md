@@ -13,7 +13,17 @@ The best way to understand backpropagation is visually and by the way it is done
 
 The central idea is how a **small change** in weight in the previous layer affects the final output of the network.
 
-![backpropogationgif]
+::: {layout-ncol=2}
+![(a) Nudge the weight. Make a small change Δw to the weight wˡ.](../ml2/images/bp_step1.png)
+
+![(b) It changes the weighted input. zˡ shifts by Δz.](../ml2/images/bp_step2.png)
+
+![(c) It changes the activation. aˡ shifts by Δa.](../ml2/images/bp_step3.png)
+
+![(d) It changes the cost. C₀ shifts by ΔC₀; the three local rates form the chain rule.](../ml2/images/bp_step4.png)
+
+:::
+
 Source : Author
 
 ## Writing This Out as Chain Rule
@@ -25,9 +35,6 @@ This is the **Chain Rule** of Calculus and the diagram is trying to illustrate t
 $$
 \frac{\partial C_0}{\partial W^l} = \frac{\partial C_0}{\partial a^l} \cdot \frac{\partial a^l}{\partial z^l} \cdot \frac{\partial z^l}{\partial W^l}
 $$
-
-![backpropogationgif2]
-Source : Author
 
 Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost. We have already seen this in the previous chapter.
 

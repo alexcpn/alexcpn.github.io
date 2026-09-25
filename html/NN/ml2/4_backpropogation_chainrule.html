@@ -228,7 +228,7 @@ window.Quarto = {
 <p>The best way to understand backpropagation is visually and by the way it is done by the tree representation of 3Blue1Brown video linked <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">here</a>.</p>
 <p>The below GIF is a representation of a single path in the last layer(<span class="math inline">\(l\)</span> of a neural network; and it shows how the connection from previous layer - that is the activation of the previous layer and the weight of the current layer is affecting the output; and thereby the final Cost.</p>
 <p>The central idea is how a <strong>small change</strong> in weight in the previous layer affects the final output of the network.</p>
-<p><img src="images/backprop_1.png" class="img-fluid" alt="backpropogationgif"> Source : Author</p>
+<p><img src="images/backprop2.gif" class="img-fluid" alt="backpropogationgif"> Source : Author</p>
 </section>
 <section id="writing-this-out-as-chain-rule" class="level2">
 <h2 class="anchored" data-anchor-id="writing-this-out-as-chain-rule">Writing This Out as Chain Rule</h2>
@@ -237,7 +237,6 @@ window.Quarto = {
 <p><span class="math display">\[
 \frac{\partial C_0}{\partial W^l} = \frac{\partial C_0}{\partial a^l} \cdot \frac{\partial a^l}{\partial z^l} \cdot \frac{\partial z^l}{\partial W^l}
 \]</span></p>
-<p><img src="images/backprop_2.png" class="img-fluid" alt="backpropogationgif2"> Source : Author</p>
 <p>Next part of the recipe is adjusting the weights of each layers, depending on how they contribute to the Cost. We have already seen this in the previous chapter.</p>
 <p>The weights in each layer are adjusted in proportion to how each layers weights affected the Cost function.</p>
 <p>This is by calculating the new weight by following the negative of the gradient of the Cost function - basically by gradient descent.</p>
