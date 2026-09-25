@@ -9,9 +9,9 @@ Have you ever held an integrated circuit or chip in your hand or seen one? It lo
 
 ##  The Magic of Representation - Vector Space and Hyperplane
 
-Most people are familiar with neural networks, cost functions, gradient descent, and backpropagation. However, beyond these building blocks is the magic of representations. 
+Most people are familiar with neural networks, cost functions, gradient descent, and backpropagation. However, beyond these building blocks is the magic of representations.
 
-Features live in a multidimensional universe where the concept of a **hyperplane** classifies or clusters similar features together. 
+Features live in a multidimensional universe where the concept of a **hyperplane** classifies or clusters similar features together.
 
 This idea applies equally to the simplest neural networks and to modern architectures such as Transformers.
 
@@ -25,30 +25,29 @@ A vector is an object that has both a magnitude and a direction. Example Force a
 
 However we need to specify also a context where this vector lives -[Vector Space][1]. For example when we are thinking about something like [Force vector][2], the context is usually 2D or 3D Euclidean world.
 
-![2Dvector](images/2dvector.jpeg)
+![A vector in 2D: $\vec{v} = [-2,\ 3]^T$, drawn from the origin](images/vector2d.png){width=62%}
 
-![3Dvector](images/3dvector.jpeg)
+![A vector in 3D: $\vec{v} = [2,\ 1,\ 3]^T$, one component per axis](images/vector3d.png){width=52%}
 
-(Source: 3Blue1Brown)
 
 The easiest way to understand the Vector is in such a geometric context, say 2D or 3D cartesian coordinates, and then extrapolate it for other Vector spaces which we encounter but cannot really imagine.
 
 ### Matrices - A way to represent Vectors (and Tensors)
 
  Vectors are represented as matrices. A Vector is a one dimensional matrix.A matrix is defined to be a rectangular array of numbers. Example here is a [Euclidean Vector][Euclidean_vector]  in three-dimensional Euclidean space (or $R^{3}$) with some magnitude and direction (from (0,0,0) origin in this case).
- 
+
  A vector is represented either as column matrix (m*1)or as a row matrix (1*m).
 
 $$
 a = \begin{bmatrix}
-a_{1}\\a_{2}\\a_{3}\ 
+a_{1}\\a_{2}\\a_{3}\
 \end{bmatrix} = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix}
 $$
 
-$a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represented as $\vec a$ in the **Vector notation** and as $a_{i}$ in the **Index Notation**. 
+$a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represented as $\vec a$ in the **Vector notation** and as $a_{i}$ in the **Index Notation**.
 
 
-### Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other. 
+### Two dimensional matrices can be thought of as one dimensional vectors stacked on top of each other.
 
 This intuition is especially helpful when we use dot products on neural network weight matrices.
 
@@ -60,14 +59,14 @@ This is a very important concept in linear algebra and is used in many places in
 
 **Algebraically**, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers.
 
-if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, then 
+if $\vec a = \left\langle {a_1,a_2,a_3} \right\rangle$ and $\vec b = \left\langle {b_1,b_2,b_3} \right\rangle$, then
 
 $\vec a \cdot \vec b = {a_1}{b_1} + {a_2}{b_2} + {a_3}{b_3} = a_ib_i \quad\text {in index notation}$
 
-In Matrix notation, 
+In Matrix notation,
 
 $$
-\vec a \cdot \vec b = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix} \begin{bmatrix} b_{1}\\b_{2}\\b_{3}\end{bmatrix} = a_ib_i 
+\vec a \cdot \vec b = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix} \begin{bmatrix} b_{1}\\b_{2}\\b_{3}\end{bmatrix} = a_ib_i
 $$
 
 
@@ -75,7 +74,7 @@ $$
 **Geometrically**, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them
 
 $$
- \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta 
+ \vec a \cdot \vec b = \left\| {\vec a} \right\|\,\,\left\| {\vec b} \right\|\cos \theta
 $$
 
  ![dotproduct](images/dotproduct.png)
@@ -106,9 +105,9 @@ Imagine we have a problem of  classifying if a leaf is healthy or not based on c
  For any  **input feature vector** in that vector space, if we have a **weight vector**, whose dot product with one feature vector of the set of input vectors of a certain class (say leaf is healthy) is positive, and with the other set is negative, then that weight vector is splitting the feature vector hyper-plane into two.
 
 Or in a better way, which shows the vectors properly
- 
+
  ![weightvector][weightvector]
- 
+
  **In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.**
 
  For any new leaf, if we only extract the same features into a feature vector; we can *dot product* it with the *trained* weight vector and find out if it falls in healthy or deceased class.
@@ -117,7 +116,7 @@ Or in a better way, which shows the vectors properly
 
  ## Summary
 
- What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space. 
+ What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space.
 
  We can then use the concept of hyperplane to split the feature space into two distinctive sets. This is the magic of Representation
 
