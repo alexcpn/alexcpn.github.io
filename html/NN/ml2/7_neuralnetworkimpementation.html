@@ -253,8 +253,15 @@ window.Quarto = {
 <p>With the derivative of the Cost function derived from the last chapter, we can code the network</p>
 <p>We will use matrices to represent input and weight matrices.</p>
 <blockquote class="blockquote">
-<p>[!NOTE] <strong>Important Note on Matrix Conventions:</strong> In the previous chapters (Matrix Calculus), we derived equations assuming <strong>Column Vectors</strong> (where input <span class="math inline">\(x\)</span> is <span class="math inline">\(N \times 1\)</span>). However, in standard Python/NumPy implementations (like the one below), we typically use <strong>Batch Processing</strong> where inputs are <strong>Row Vectors</strong> (where input <span class="math inline">\(X\)</span> is <span class="math inline">\(BatchSize \times Features\)</span>).</p>
-<p>This means: * Input <span class="math inline">\(X\)</span> has shape <code>(BatchSize, InputFeatures)</code> * Weight <span class="math inline">\(W\)</span> has shape <code>(InputFeatures, OutputFeatures)</code> * Forward pass is <span class="math inline">\(Z = X \cdot W\)</span> (instead of <span class="math inline">\(W \cdot x\)</span>) * This effectively transposes the standard mathematical notation. The code below follows this “Row Vector/Batch” convention.</p>
+<p><strong>Important Note on Matrix Conventions</strong></p>
+<p>In the previous chapters (Matrix Calculus), we derived equations assuming <strong>Column Vectors</strong> (where input <span class="math inline">\(x\)</span> is <span class="math inline">\(N \times 1\)</span>). However, in standard Python/NumPy implementations (like the one below), we typically use <strong>Batch Processing</strong> where inputs are <strong>Row Vectors</strong> (where input <span class="math inline">\(X\)</span> is <span class="math inline">\(BatchSize \times Features\)</span>).</p>
+<p>This means:</p>
+<ul>
+<li>Input <span class="math inline">\(X\)</span> has shape <code>(BatchSize, InputFeatures)</code>.</li>
+<li>Weight <span class="math inline">\(W\)</span> has shape <code>(InputFeatures, OutputFeatures)</code>.</li>
+<li>Forward pass is <span class="math inline">\(Z = X \cdot W\)</span> (instead of <span class="math inline">\(W \cdot x\)</span>).</li>
+<li>This effectively transposes the standard mathematical notation. The code below follows this “Row Vector/Batch” convention.</li>
+</ul>
 </blockquote>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    [</span>
@@ -311,23 +318,23 @@ C = \frac{1}{2} \|y-a^l\|^2
 <p>Now we need to use the back-propagation algorithm to calculate how each weight has influenced the error and reduce it proportionally.</p>
 <hr>
 <p>We use this to update weights in all the layers and do forward pass again, re-calculate the error and loss, then re-calculate the error gradient <span class="math inline">\(\frac{\partial C}{\partial w}\)</span> and repeat</p>
-$$
-<span class="math display">\[\begin{aligned}
-
+<p><span class="math display">\[
+\begin{aligned}
 w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
-
 w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
-
-\end{aligned}\]</span>
-<p>$$</p>
+\end{aligned}
+\]</span></p>
 <p>Let’s update the weights as per the formula derived in the previous chapter:</p>
-<p><span class="math display">\[  \mathbf{
+<p><span class="math display">\[
+\mathbf{
 \frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
-}\]</span></p>
+}
+\]</span></p>
 <p><span class="math display">\[
 \delta^2 = (a^2-y)
 \]</span></p>
-<p><span class="math display">\[ \mathbf{
+<p><span class="math display">\[
+\mathbf{
 \frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
 }
 \]</span></p>
