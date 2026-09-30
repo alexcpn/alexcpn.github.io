@@ -1,0 +1,37 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "The Mathematical Intuition Behind Deep Learning"
+  navbar:
+    search: false
+  search:
+    type: overlay
+    show-item-context: false
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - text: Home
+        href: index.md
+      - text: Vectors & Perceptron
+        href: 1_vectors_dot_product_and_perceptron.md
+      - text: Perceptron Training
+        href: 2_perceptron_training.md
+      - text: Gradient Descent
+        href: 3_gradient_descent.md
+      - text: Backpropagation with Scalar Calculus
+        href: 4_backpropogation_chainrule.md
+      - text: Backpropagation with Matrix Calculus
+        href: 5_backpropogation_matrix_calculus.md
+      - text: Backpropagation with Softmax and Cross Entropy
+        href: 6_backpropogation_softmax.md
+      - text: Neural Network Implementation
+        href: 7_neuralnetworkimpementation.md
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    html-math-method: mathjax

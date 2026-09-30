@@ -1,6 +1,6 @@
 # Backpropagation with Matrix Calculus
 
-The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.
+The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is to use Hadamard product and matrix transposes with scalar derivation alignment.
 
 But we have not really explained why we use Hadamard product and matrix transposes with scalar derivation alignment.
 
@@ -31,8 +31,7 @@ $$
 and
 
 $$
-a^{l} = \sigma(z^l) \quad where \quad
-z^l =W^l a^{l-1} +b^l
+a^{l} = \sigma(z^l) \quad \text{where} \quad z^l = W^l a^{l-1} + b^l
 $$
 
 Our two layer neural network can be written as
@@ -141,17 +140,20 @@ $$ J_{total} = J_f \cdot J_g \cdot J_h $$
 If $x, h, g, f$ are all vectors of size 1000, then each Jacobian is a $1000 \times 1000$ matrix. Multiplying them is expensive ($O(N^3)$).
 
 **However, in Backpropagation, we always start with a scalar Loss function.**
-The final derivative $\frac{\partial C}{\partial y}$ is a row vector (size $1 \times N$).
+Because the loss is a scalar, $\frac{\partial C}{\partial y}$ is a **column vector** (size $N \times 1$) — the gradient vector defined above.
 
-So we are computing:
-$$ \nabla C = \underbrace{\frac{\partial C}{\partial y}}_{1 \times N} \cdot \underbrace{J_f}_{N \times N} \cdot \underbrace{J_g}_{N \times N} \cdot \underbrace{J_h}_{N \times N} $$
+For the composition $y = f(g(h(x)))$, the chain rule in column form is:
+
+$$ \frac{\partial C}{\partial x} = J_h^{T} \cdot J_g^{T} \cdot J_f^{T} \cdot \frac{\partial C}{\partial y} $$
 
 Notice the order of operations matters!
-1.  **Jacobian-Matrix Product**: If we multiply the matrices first ($J_f \cdot J_g$), we do expensive matrix-matrix multiplication.
-2.  **Vector-Jacobian Product (VJP)**: If we multiply from left to right:
-    *   $v_1 = \frac{\partial C}{\partial y} \cdot J_f$ (Vector $\times$ Matrix $\to$ Vector)
-    *   $v_2 = v_1 \cdot J_g$ (Vector $\times$ Matrix $\to$ Vector)
-    *   $v_3 = v_2 \cdot J_h$ (Vector $\times$ Matrix $\to$ Vector)
+1.  **Jacobian-Matrix Product**: If we multiply the Jacobians together first ($J_h^{T} J_g^{T} J_f^{T}$), we do expensive matrix-matrix multiplication ($O(N^3)$) and hold an $N \times N$ matrix.
+2.  **Vector-Jacobian Product (VJP)**: If we instead apply one Jacobian at a time to the incoming gradient:
+    *   $v_f = J_f^{T} \, \frac{\partial C}{\partial y}$ (Matrix $\times$ Vector $\to$ Vector)
+    *   $v_g = J_g^{T} \, v_f$ (Matrix $\times$ Vector $\to$ Vector)
+    *   $v_h = J_h^{T} \, v_g = \frac{\partial C}{\partial x}$ (Matrix $\times$ Vector $\to$ Vector)
+
+    Each step is a matrix-vector product, so $O(N^2)$ per layer. Each product $J^{T} v$ is precisely the **Vector-Jacobian Product** — the transpose of $v^{T} J$ — which is why backprop multiplies the *transposed* Jacobians, travelling from the output layer backwards.
 
 We **never** explicitly compute or store the full Jacobian matrix. We only compute the product of a vector with the Jacobian. This is much faster ($O(N^2)$) and uses less memory.
 
@@ -267,7 +269,7 @@ Let's visualize the matrix of gradients $\nabla W$:$$\nabla W =
 \begin{bmatrix}
 \frac{\partial C}{\partial W_{11}} & \frac{\partial C}{\partial W_{12}} \\
 \frac{\partial C}{\partial W_{21}} & \frac{\partial C}{\partial W_{22}}
-\end{bmatrix}$$Substitute the result from step 3 ($\delta_i \cdot a_k$):$$\nabla W =
+\end{bmatrix}$$Substitute the result above ($\delta_i \cdot a_k$):$$\nabla W =
 \begin{bmatrix}
 \delta_1 a_1 & \delta_1 a_2 \\
 \delta_2 a_1 & \delta_2 a_2
@@ -305,7 +307,7 @@ $$
 Putting it all together:
 
 $$
-\frac{\partial C}{\partial W^1} = \left( (W^2)^T \delta^2 \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
+\frac{\partial C}{\partial W^1} = \left( ((W^2)^T \delta^2) \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
 $$
 
 ### Summary of Backpropagation Equations

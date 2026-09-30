@@ -191,7 +191,11 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -208,10 +212,6 @@ window.Quarto = {
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -236,14 +236,14 @@ window.Quarto = {
 <p>However we need to specify also a context where this vector lives -<a href="https://en.wikipedia.org/wiki/Vector_space">Vector Space</a>. For example when we are thinking about something like <a href="http://www.mathcentre.ac.uk/resources/uploaded/mc-web-mech1-5-2009.pdf">Force vector</a>, the context is usually 2D or 3D Euclidean world.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/vector2d.png" class="img-fluid figure-img"></p>
-<figcaption>A vector in 2D: drawn from the origin</figcaption>
+<p><img src="images/vector2d.png" class="img-fluid figure-img" style="width:62.0%"></p>
+<figcaption>A vector in 2D: <span class="math inline">\(\vec{v} = [-2,\ 3]^T\)</span>, drawn from the origin</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/vector3d.png" class="img-fluid figure-img"></p>
-<figcaption>A vector in 3D: one component per axis</figcaption>
+<p><img src="images/vector3d.png" class="img-fluid figure-img" style="width:52.0%"></p>
+<figcaption>A vector in 3D: <span class="math inline">\(\vec{v} = [2,\ 1,\ 3]^T\)</span>, one component per axis</figcaption>
 </figure>
 </div>
 <p>The easiest way to understand the Vector is in such a geometric context, say 2D or 3D cartesian coordinates, and then extrapolate it for other Vector spaces which we encounter but cannot really imagine.</p>
@@ -251,11 +251,11 @@ window.Quarto = {
 <section id="matrices---a-way-to-represent-vectors-and-tensors" class="level3">
 <h3 class="anchored" data-anchor-id="matrices---a-way-to-represent-vectors-and-tensors">Matrices - A way to represent Vectors (and Tensors)</h3>
 <p>Vectors are represented as matrices. A Vector is a one dimensional matrix.A matrix is defined to be a rectangular array of numbers. Example here is a <a href="https://en.wikipedia.org/wiki/Euclidean_vector">Euclidean Vector</a> in three-dimensional Euclidean space (or <span class="math inline">\(R^{3}\)</span>) with some magnitude and direction (from (0,0,0) origin in this case).</p>
-<p>A vector is represented either as column matrix (m<em>1)or as a row matrix (1</em>m).</p>
+<p>A vector is written either as a column matrix (m<em>1) or, after taking the transpose, as a row matrix (1</em>m).</p>
 <p><span class="math display">\[
-a = \begin{bmatrix}
-a_{1}\\a_{2}\\a_{3}\
-\end{bmatrix} = \begin{bmatrix} a_{1} &amp; a_{2} &amp;a_{3}\end{bmatrix}
+a = \begin{bmatrix} a_{1} \\ a_{2} \\ a_{3} \end{bmatrix},
+\qquad
+a^{T} = \begin{bmatrix} a_{1} &amp; a_{2} &amp; a_{3}\end{bmatrix}
 \]</span></p>
 <p><span class="math inline">\(a_{1},a_{2},a_{3}\)</span> are the component scalars of the vector. A vector is represented as <span class="math inline">\(\vec a\)</span> in the <strong>Vector notation</strong> and as <span class="math inline">\(a_{i}\)</span> in the <strong>Index Notation</strong>.</p>
 </section>
@@ -308,7 +308,7 @@ a_{1}\\a_{2}\\a_{3}\
 </figure>
 </div>
 <p><strong>In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.</strong></p>
-<p>For any new leaf, if we only extract the same features into a feature vector; we can <em>dot product</em> it with the <em>trained</em> weight vector and find out if it falls in healthy or deceased class.</p>
+<p>For any new leaf, if we only extract the same features into a feature vector; we can <em>dot product</em> it with the <em>trained</em> weight vector and find out if it falls in healthy or diseased class.</p>
 <p>Here is a Colab notebook to play around with this.<a href="https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing">14</a></p>
 <p>## Summary</p>
 <p>What we have seen so far is that we can represent real world features as vectors residing in some N dimensional space.</p>
@@ -330,7 +330,6 @@ a_{1}\\a_{2}\\a_{3}\
 <li><a href="https://colab.research.google.com/drive/1_pXIMvSCzqkIOG26i6TaRxXZawezrAK-?usp=sharing">Colab Notebook</a></li>
 <li><a href="https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf">A Primer on Index Notation - John Crimaldi</a></li>
 </ul>
-
 
 
 </section>

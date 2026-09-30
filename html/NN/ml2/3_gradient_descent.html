@@ -191,7 +191,11 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -219,10 +223,6 @@ window.Quarto = {
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -258,7 +258,7 @@ x \rightarrow a^{1} \rightarrow \dots \rightarrow a^{L} \rightarrow y
 \]</span></p>
 <p>For any layer <span class="math inline">\(l\)</span>, the activation <span class="math inline">\(a^l\)</span> is calculated as:</p>
 <p><span class="math display">\[
-  a^{l} = \sigma(w^l a^{l-1} + b^l)
+  a^{l} = \sigma(W^l a^{l-1} + b^l)
 \]</span></p>
 <p>where <span class="math inline">\(a^0 = x\)</span> (the input).</p>
 <p>The linear transformation:</p>
@@ -269,7 +269,7 @@ x \rightarrow a^{1} \rightarrow \dots \rightarrow a^{L} \rightarrow y
 <h4 class="anchored" data-anchor-id="why-non-linearity-is-non-negotiable">Why Non-Linearity Is Non-Negotiable</h4>
 <p>Without activation:</p>
 <p><span class="math display">\[
-f(x) = W_L W_{L-1} \dots W_1 x
+f(x) = W^{L} W^{L-1} \dots W^{1} x
 \]</span></p>
 <p>This collapses to:</p>
 <p><span class="math display">\[
@@ -277,7 +277,7 @@ f(x) = Wx
 \]</span></p>
 <p>Still one big linear transformation and hence one hyperplane; the problems of not able to separate features will come. Only because of non-linearity, we can get multiple hyperplanes and hence a composable complex decision boundaries that can separate features.</p>
 <p>So the concept of Vectors, Matrices and Hyperplanes remain the same as before. Let us explore the chain of functions part here</p>
-<p>A neural network with <span class="math inline">\(L\)</span> layers can be represented as a nested function:<span class="math display">\[f(x) = f_L(...f_2(f_1(x))...)\]</span></p>
+<p>A neural network with <span class="math inline">\(L\)</span> layers can be represented as a nested function:<span class="math display">\[f(x) = f^{L}(...f^{2}(f^{1}(x))...)\]</span></p>
 <p>Each “link” in the chain is a layer performing a linear transformation followed by a non-linear activation and cascading to the final output.</p>
 </section>
 </section>
@@ -305,7 +305,7 @@ C = \frac{1}{2n} \sum_{x} \|y(x) - a^L(x)\|^2
 <p>However neural network is a composition of vector spaces and linear transformations. Hence gradient descent acts on a very complex space.</p>
 <p>There are two or three facts to understand about gradient descent:</p>
 <ol type="1">
-<li><p>It does not attempt to find the <strong>global minimum</strong>, but rather follows the <strong>local slope</strong> of the cost function and converges to a local minimum or a flat region. <strong>Saddle point</strong> is a good optimisation point.</p></li>
+<li><p>It does not attempt to find the <strong>global minimum</strong>, but rather follows the <strong>local slope</strong> of the cost function and converges to a critical point: a local minimum, a saddle point, or a flat region. A <strong>saddle point</strong> is a critical point where the gradient is zero but the point is not a minimum; in high dimensions such points are common, and an optimizer must escape them rather than settle on them.</p></li>
 <li><p>Gradients can <strong>vanish or explode</strong>, leading to slow or unstable convergence. The practical solution to control this is to use <strong>learning rate</strong> and using <strong>adaptive learning rate</strong> methods like <strong>Adam</strong> or <strong>RMSprop</strong>.</p></li>
 <li><p><strong>Batch Size matters</strong>: Calculating the gradient over the entire dataset (Batch Gradient Descent) is computationally expensive and memory-intensive. In practice, we use <strong>Stochastic Gradient Descent (SGD)</strong> (one example at a time) or, more commonly, <strong>Mini-batch Gradient Descent</strong> (a small batch of examples). This introduces noise into the gradient estimate, which paradoxically helps the optimization process escape shallow local minima and saddle points.</p></li>
 </ol>
@@ -325,123 +325,123 @@ x \leftarrow x - \eta \frac{df}{dx}
 <section id="gradient-descent-for-scalar-functions" class="level2">
 <h2 class="anchored" data-anchor-id="gradient-descent-for-scalar-functions">Gradient Descent for Scalar Functions</h2>
 <p>Consider this simple system that composes two functions:</p>
-<p><span class="math display">\[L = g(f(x, w_1), w_2)\]</span></p>
-<p>Where: - <span class="math inline">\(x\)</span> is your input (fixed, given by your data) - <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> are <strong>parameters you can adjust</strong> (like weights in a neural network) - <span class="math inline">\(f\)</span> is the first function (think: first layer) - <span class="math inline">\(g\)</span> is the second function (think: second layer) - <span class="math inline">\(L\)</span> is the final output</p>
+<p><span class="math display">\[o = g(f(x, w^1), w^2)\]</span></p>
+<p>Where: - <span class="math inline">\(x\)</span> is your input (fixed, given by your data) - <span class="math inline">\(w^1\)</span> and <span class="math inline">\(w^2\)</span> are <strong>parameters you can adjust</strong> (like weights in a neural network) - <span class="math inline">\(f\)</span> is the first function (think: first layer) - <span class="math inline">\(g\)</span> is the second function (think: second layer) - <span class="math inline">\(o\)</span> is the final output</p>
 <p>Let’s make this concrete with simple linear functions:</p>
-<p><span class="math display">\[f(x, w_1) = x \cdot w_1 + b_1\]</span> <span class="math display">\[g(z, w_2) = z \cdot w_2 + b_2\]</span></p>
+<p><span class="math display">\[f(x, w^1) = x \cdot w^1 + b^1\]</span> <span class="math display">\[g(z, w^2) = z \cdot w^2 + b^2\]</span></p>
 <p>So the full composition is:</p>
-<p><span class="math display">\[L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2\]</span></p>
+<p><span class="math display">\[o = g(f(x, w^1), w^2) = (x \cdot w^1 + b^1) \cdot w^2 + b^2\]</span></p>
 <section id="running-the-numbers-a-real-example" class="level3">
 <h3 class="anchored" data-anchor-id="running-the-numbers-a-real-example">Running the Numbers: A Real Example</h3>
 <p>Let’s pick actual values and see what happens:</p>
-<p><strong>Fixed values:</strong> - Input: <span class="math inline">\(x = 2.0\)</span> - Bias terms: <span class="math inline">\(b_1 = 1.0\)</span>, <span class="math inline">\(b_2 = 0.5\)</span></p>
-<p><strong>Current parameter values:</strong> - <span class="math inline">\(w_1 = 0.5\)</span> - <span class="math inline">\(w_2 = 1.5\)</span></p>
+<p><strong>Fixed values:</strong> - Input: <span class="math inline">\(x = 2.0\)</span> - Bias terms: <span class="math inline">\(b^1 = 1.0\)</span>, <span class="math inline">\(b^2 = 0.5\)</span></p>
+<p><strong>Current parameter values:</strong> - <span class="math inline">\(w^1 = 0.5\)</span> - <span class="math inline">\(w^2 = 1.5\)</span></p>
 <p><strong>Step 1</strong>: Compute intermediate result from first function:</p>
-<p><span class="math display">\[z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0\]</span></p>
+<p><span class="math display">\[z = f(x, w^1) = 2.0  \times  0.5 + 1.0 = 2.0\]</span></p>
 <p><strong>Step 2</strong>: Compute final output from second function:</p>
-<p><span class="math display">\[L = g(z, w_2) = 2.0  \times  1.5 + 0.5 = 3.5\]</span></p>
-<p><strong>The problem</strong>: Suppose we want <span class="math inline">\(L_{\text{target}} = 5.0\)</span> instead!</p>
+<p><span class="math display">\[o = g(z, w^2) = 2.0  \times  1.5 + 0.5 = 3.5\]</span></p>
+<p><strong>The problem</strong>: Suppose we want <span class="math inline">\(o_{\text{target}} = 5.0\)</span> instead!</p>
 <p>Our current error is:</p>
-<p><span class="math display">\[E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125\]</span></p>
-<p><strong>The million-dollar question</strong>: How should we change <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span> to reduce this error?</p>
+<p><span class="math display">\[C = \frac{1}{2}(o - o_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125\]</span></p>
+<p><strong>The million-dollar question</strong>: How should we change <span class="math inline">\(w^1\)</span> and <span class="math inline">\(w^2\)</span> to reduce this error?</p>
 </section>
 <section id="the-adjustment-problem-which-direction-how-much" class="level3">
 <h3 class="anchored" data-anchor-id="the-adjustment-problem-which-direction-how-much">The Adjustment Problem: Which Direction? How Much?</h3>
 <p>Here’s what we need to know:</p>
 <ol type="1">
-<li><strong>Should we increase or decrease <span class="math inline">\(w_1\)</span>?</strong> (Which direction?)</li>
-<li><strong>How sensitive is <span class="math inline">\(L\)</span> to changes in <span class="math inline">\(w_1\)</span>?</strong> (How much?)</li>
-<li><strong>Same questions for <span class="math inline">\(w_2\)</span>.</strong></li>
+<li><strong>Should we increase or decrease <span class="math inline">\(w^1\)</span>?</strong> (Which direction?)</li>
+<li><strong>How sensitive is <span class="math inline">\(o\)</span> to changes in <span class="math inline">\(w^1\)</span>?</strong> (How much?)</li>
+<li><strong>Same questions for <span class="math inline">\(w^2\)</span>.</strong></li>
 </ol>
 <p>This is where derivatives come in! Specifically, we need:</p>
-<p><span class="math display">\[\frac{\partial L}{\partial w_1} \quad  \text{and} \quad  \frac{\partial L}{\partial w_2}\]</span></p>
+<p><span class="math display">\[\frac{\partial o}{\partial w^1} \quad  \text{and} \quad  \frac{\partial o}{\partial w^2}\]</span></p>
 <p>These tell us:</p>
 <ul>
-<li><p><strong>Sign</strong>: Positive means “increase <span class="math inline">\(w\)</span> increases <span class="math inline">\(L\)</span>”, negative means the opposite</p></li>
-<li><p><strong>Magnitude</strong>: Larger absolute value means <span class="math inline">\(L\)</span> is more sensitive to changes in <span class="math inline">\(w\)</span></p></li>
+<li><p><strong>Sign</strong>: Positive means “increase <span class="math inline">\(w\)</span> increases <span class="math inline">\(o\)</span>”, negative means the opposite</p></li>
+<li><p><strong>Magnitude</strong>: Larger absolute value means <span class="math inline">\(o\)</span> is more sensitive to changes in <span class="math inline">\(w\)</span></p></li>
 </ul>
-<p>But there’s a complication: <span class="math inline">\(w_1\)</span> doesn’t directly affect <span class="math inline">\(L\)</span>. It affects <span class="math inline">\(f\)</span>, which then affects <span class="math inline">\(g\)</span>, which then affects <span class="math inline">\(L\)</span>. This is a <strong>composition</strong>, and we need to trace the effect through multiple steps.</p>
+<p>But there’s a complication: <span class="math inline">\(w^1\)</span> doesn’t directly affect <span class="math inline">\(o\)</span>. It affects <span class="math inline">\(f\)</span>, which then affects <span class="math inline">\(g\)</span>, which then affects <span class="math inline">\(o\)</span>. This is a <strong>composition</strong>, and we need to trace the effect through multiple steps.</p>
 <p>This is where the “Chain Rule” of Calculus comes into play.</p>
 </section>
 <section id="the-chain-of-effects" class="level3">
 <h3 class="anchored" data-anchor-id="the-chain-of-effects">The Chain of Effects</h3>
 <p>Let’s visualize how changes propagate:</p>
-<pre><code>Change w₁ → Affects f → Changes z → Affects g → Changes L
+<pre><code>Change w¹ → Affects f → Changes z → Affects g → Changes o
       ↓            ↓         ↓               ↓
-      Δw₁        ∂f/∂w₁     Δz     ∂g/∂z     ΔL</code></pre>
-<p>Similarly for <span class="math inline">\(w_2\)</span> (but <span class="math inline">\(w_2\)</span> directly affects <span class="math inline">\(g\)</span>):</p>
-<pre><code>Change w₂ → Affects g → Changes L
+      Δw¹        ∂f/∂w¹     Δz     ∂g/∂z     Δo</code></pre>
+<p>Similarly for <span class="math inline">\(w^2\)</span> (but <span class="math inline">\(w^2\)</span> directly affects <span class="math inline">\(g\)</span>):</p>
+<pre><code>Change w² → Affects g → Changes o
 ↓ ↓ ↓
-Δw₂ ∂g/∂w₂ ΔL</code></pre>
-<p>The key insight: <strong>To find how <span class="math inline">\(w_1\)</span> affects <span class="math inline">\(L\)</span>, we need to multiply the effects at each step.</strong></p>
+Δw² ∂g/∂w² Δo</code></pre>
+<p>The key insight: <strong>To find how <span class="math inline">\(w^1\)</span> affects <span class="math inline">\(o\)</span>, we need to multiply the effects at each step.</strong></p>
 <p>This is the <strong>chain rule</strong> in action!</p>
 </section>
 <section id="the-solution-applying-the-chain-rule" class="level3">
 <h3 class="anchored" data-anchor-id="the-solution-applying-the-chain-rule">The Solution: Applying the Chain Rule</h3>
-<p>For our composition <span class="math inline">\(L = g(f(x, w_1), w_2)\)</span>, let’s introduce a shorthand: call <span class="math inline">\(z = f(x, w_1)\)</span> the intermediate value.</p>
+<p>For our composition <span class="math inline">\(o = g(f(x, w^1), w^2)\)</span>, let’s introduce a shorthand: call <span class="math inline">\(z = f(x, w^1)\)</span> the intermediate value.</p>
 <p>Then:</p>
-<p><span class="math display">\[L = g(z, w_2)\]</span></p>
-<p><strong>Computing <span class="math inline">\(\frac{\partial L}{\partial w_1}\)</span>:</strong></p>
+<p><span class="math display">\[o = g(z, w^2)\]</span></p>
+<p><strong>Computing <span class="math inline">\(\frac{\partial o}{\partial w^1}\)</span>:</strong></p>
 <p>By the chain rule of calculus:</p>
-<p><span class="math display">\[\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot  \frac{\partial z}{\partial w_1}\]</span></p>
+<p><span class="math display">\[\frac{\partial o}{\partial w^1} = \frac{\partial o}{\partial z} \cdot  \frac{\partial z}{\partial w^1}\]</span></p>
 <p>Let’s compute each piece:</p>
-<p><strong>Part 1</strong>: How does <span class="math inline">\(L\)</span> change with <span class="math inline">\(z\)</span>?</p>
-<p><span class="math display">\[\frac{\partial L}{\partial z} = \frac{\partial}{\partial z}(z \cdot w_2 + b_2) = w_2 = 1.5\]</span></p>
-<p><strong>Part 2</strong>: How does <span class="math inline">\(z\)</span> change with <span class="math inline">\(w_1\)</span>?</p>
-<p><span class="math display">\[\frac{\partial z}{\partial w_1} = \frac{\partial}{\partial w_1}(x \cdot w_1 + b_1) = x = 2.0\]</span></p>
+<p><strong>Part 1</strong>: How does <span class="math inline">\(o\)</span> change with <span class="math inline">\(z\)</span>?</p>
+<p><span class="math display">\[\frac{\partial o}{\partial z} = \frac{\partial}{\partial z}(z \cdot w^2 + b^2) = w^2 = 1.5\]</span></p>
+<p><strong>Part 2</strong>: How does <span class="math inline">\(z\)</span> change with <span class="math inline">\(w^1\)</span>?</p>
+<p><span class="math display">\[\frac{\partial z}{\partial w^1} = \frac{\partial}{\partial w^1}(x \cdot w^1 + b^1) = x = 2.0\]</span></p>
 <p><strong>Putting it together</strong>:</p>
-<p><span class="math display">\[\frac{\partial L}{\partial w_1} = 1.5  \times  2.0 = 3.0\]</span></p>
-<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w_1\)</span> by 0.1, then <span class="math inline">\(L\)</span> increases by approximately <span class="math inline">\(3.0  \times  0.1 = 0.3\)</span>.</p>
-<p><strong>Computing <span class="math inline">\(\frac{\partial L}{\partial w_2}\)</span>:</strong></p>
-<p>This is simpler because <span class="math inline">\(w_2\)</span> directly affects <span class="math inline">\(g\)</span>:</p>
-<p><span class="math display">\[\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + b_2) = z = 2.0\]</span></p>
-<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w_2\)</span> by 0.1, then <span class="math inline">\(L\)</span> increases by approximately <span class="math inline">\(2.0  \times  0.1 = 0.2\)</span>.</p>
+<p><span class="math display">\[\frac{\partial o}{\partial w^1} = 1.5  \times  2.0 = 3.0\]</span></p>
+<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w^1\)</span> by 0.1, then <span class="math inline">\(o\)</span> increases by approximately <span class="math inline">\(3.0  \times  0.1 = 0.3\)</span>.</p>
+<p><strong>Computing <span class="math inline">\(\frac{\partial o}{\partial w^2}\)</span>:</strong></p>
+<p>This is simpler because <span class="math inline">\(w^2\)</span> directly affects <span class="math inline">\(g\)</span>:</p>
+<p><span class="math display">\[\frac{\partial o}{\partial w^2} = \frac{\partial}{\partial w^2}(z \cdot w^2 + b^2) = z = 2.0\]</span></p>
+<p><strong>Interpretation</strong>: If we increase <span class="math inline">\(w^2\)</span> by 0.1, then <span class="math inline">\(o\)</span> increases by approximately <span class="math inline">\(2.0  \times  0.1 = 0.2\)</span>.</p>
 </section>
 <section id="making-the-update-gradient-descent" class="level3">
 <h3 class="anchored" data-anchor-id="making-the-update-gradient-descent">Making the Update: Gradient Descent</h3>
-<p>Now we can adjust our parameters! Since we want to <strong>increase</strong> <span class="math inline">\(L\)</span> from 3.5 to 5.0, and both gradients are positive, we should increase both <span class="math inline">\(w_1\)</span> and <span class="math inline">\(w_2\)</span>.</p>
-<p>Using gradient descent with learning rate <span class="math inline">\(\alpha = 0.2\)</span>:</p>
-<p><span class="math display">\[w_1^{\text{new}} = w_1 + \alpha  \cdot  \frac{\partial L}{\partial w_1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1\]</span></p>
-<p><span class="math display">\[w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9\]</span></p>
-<p><strong>Note</strong>: We’re adding (not subtracting) because we want to increase <span class="math inline">\(L\)</span>. Normally in machine learning, we minimize error, so we’d use <span class="math inline">\(w - \alpha  \cdot  \frac{\partial E}{\partial w}\)</span>.</p>
+<p>Now we can adjust our parameters! Since we want to <strong>increase</strong> <span class="math inline">\(o\)</span> from 3.5 to 5.0, and both gradients are positive, we should increase both <span class="math inline">\(w^1\)</span> and <span class="math inline">\(w^2\)</span>.</p>
+<p>Using gradient descent with learning rate <span class="math inline">\(\eta = 0.2\)</span>:</p>
+<p><span class="math display">\[(w^1)^{\text{new}} = w^1 + \eta  \cdot  \frac{\partial o}{\partial w^1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1\]</span></p>
+<p><span class="math display">\[(w^2)^{\text{new}} = w^2 + \eta  \cdot  \frac{\partial o}{\partial w^2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9\]</span></p>
+<p><strong>Note</strong>: We’re adding (not subtracting) because we want to increase <span class="math inline">\(o\)</span>. Normally in machine learning, we minimize error, so we’d use <span class="math inline">\(w - \eta  \cdot  \frac{\partial C}{\partial w}\)</span>.</p>
 </section>
 <section id="verification-did-it-work" class="level3">
 <h3 class="anchored" data-anchor-id="verification-did-it-work">Verification: Did It Work?</h3>
 <p>Let’s recompute with the new weights:</p>
 <p><strong>Step 1</strong>: New intermediate value:</p>
-<p><span class="math display">\[z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2\]</span></p>
+<p><span class="math display">\[z^{\text{new}} = x \cdot (w^1)^{\text{new}} + b^1 = 2.0  \times  1.1 + 1.0 = 3.2\]</span></p>
 <p><strong>Step 2</strong>: New output:</p>
-<p><span class="math display">\[L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58\]</span></p>
-<p><strong>Progress check</strong>: - Before: <span class="math inline">\(L = 3.5\)</span> (error from target = 1.5) - After: <span class="math inline">\(L = 6.58\)</span> (error from target = -1.58) - We overshot! But that’s okay - we moved in the right direction</p>
-<p>With a smaller learning rate (say <span class="math inline">\(\alpha = 0.1\)</span>), we’d get: - <span class="math inline">\(w_1^{\text{new}} = 0.8\)</span>, <span class="math inline">\(w_2^{\text{new}} = 1.7\)</span> - <span class="math inline">\(z^{\text{new}} = 2.6\)</span>, <span class="math inline">\(L^{\text{new}} = 4.92\)</span> - Much closer to our target of 5.0!</p>
+<p><span class="math display">\[o^{\text{new}} = z^{\text{new}} \cdot (w^2)^{\text{new}} + b^2 = 3.2  \times  1.9 + 0.5 = 6.58\]</span></p>
+<p><strong>Progress check</strong>: - Before: <span class="math inline">\(o = 3.5\)</span> (error from target = 1.5) - After: <span class="math inline">\(o = 6.58\)</span> (error from target = -1.58) - We overshot! But that’s okay - we moved in the right direction</p>
+<p>With a smaller learning rate (say <span class="math inline">\(\eta = 0.1\)</span>), we’d get: - <span class="math inline">\((w^1)^{\text{new}} = 0.8\)</span>, <span class="math inline">\((w^2)^{\text{new}} = 1.7\)</span> - <span class="math inline">\(z^{\text{new}} = 2.6\)</span>, <span class="math inline">\(o^{\text{new}} = 4.92\)</span> - Much closer to our target of 5.0!</p>
 <p>This is how Gradient Descent works in a nutshell. The same concepts carry over in deep learning with some added complexity.</p>
 </section>
 </section>
 <section id="gradient-descent-for-a-two-layer-neural-network-scalar-form" class="level2">
 <h2 class="anchored" data-anchor-id="gradient-descent-for-a-two-layer-neural-network-scalar-form">Gradient Descent for a Two-Layer Neural Network (Scalar Form)</h2>
-<p>Let’s apply this to a simple neural network with one hidden layer. We have: * <strong>Input</strong>: <span class="math inline">\(x\)</span> * <strong>Hidden Layer</strong>: 1 neuron with weight <span class="math inline">\(w_1\)</span>, bias <span class="math inline">\(b_1\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Output Layer</strong>: 1 neuron with weight <span class="math inline">\(w_2\)</span>, bias <span class="math inline">\(b_2\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Target</strong>: <span class="math inline">\(y\)</span></p>
-<p><strong>Forward Pass:</strong> 1. <span class="math inline">\(z_1 = w_1 x + b_1\)</span> 2. <span class="math inline">\(a_1 = \sigma(z_1)\)</span> 3. <span class="math inline">\(z_2 = w_2 a_1 + b_2\)</span> 4. <span class="math inline">\(a_2 = \sigma(z_2)\)</span> (This is our prediction <span class="math inline">\(\hat{y}\)</span>)</p>
-<p><strong>Loss Function:</strong> We use the Mean Squared Error (MSE) for this single example: <span class="math display">\[ C = \frac{1}{2}(y - a_2)^2 \]</span></p>
-<p><strong>Goal:</strong> Find <span class="math inline">\(\frac{\partial C}{\partial w_1}, \frac{\partial C}{\partial b_1}, \frac{\partial C}{\partial w_2}, \frac{\partial C}{\partial b_2}\)</span> to update the weights.</p>
+<p>Let’s apply this to a simple neural network with one hidden layer. We have: * <strong>Input</strong>: <span class="math inline">\(x\)</span> * <strong>Hidden Layer</strong>: 1 neuron with weight <span class="math inline">\(w^1\)</span>, bias <span class="math inline">\(b^1\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Output Layer</strong>: 1 neuron with weight <span class="math inline">\(w^2\)</span>, bias <span class="math inline">\(b^2\)</span>, activation <span class="math inline">\(\sigma\)</span> * <strong>Target</strong>: <span class="math inline">\(y\)</span></p>
+<p><strong>Forward Pass:</strong> 1. <span class="math inline">\(z^1 = w^1 x + b^1\)</span> 2. <span class="math inline">\(a^1 = \sigma(z^1)\)</span> 3. <span class="math inline">\(z^2 = w^2 a^1 + b^2\)</span> 4. <span class="math inline">\(a^2 = \sigma(z^2)\)</span> (This is our prediction <span class="math inline">\(\hat{y}\)</span>)</p>
+<p><strong>Loss Function:</strong> We use the Mean Squared Error (MSE) for this single example: <span class="math display">\[ C = \frac{1}{2}(y - a^2)^2 \]</span></p>
+<p><strong>Goal:</strong> Find <span class="math inline">\(\frac{\partial C}{\partial w^1}, \frac{\partial C}{\partial b^1}, \frac{\partial C}{\partial w^2}, \frac{\partial C}{\partial b^2}\)</span> to update the weights.</p>
 <p><strong>Backward Pass (Deriving Gradients):</strong></p>
-<p><strong>Layer 2 (Output Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w_2\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} \]</span></p>
+<p><strong>Layer 2 (Output Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w^2\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w^2} = \frac{\partial C}{\partial a^2} \cdot \frac{\partial a^2}{\partial z^2} \cdot \frac{\partial z^2}{\partial w^2} \]</span></p>
 <ul>
-<li><span class="math inline">\(\frac{\partial C}{\partial a_2} = -(y - a_2)\)</span> (Derivative of <span class="math inline">\(\frac{1}{2}(y-a)^2\)</span>)</li>
-<li><span class="math inline">\(\frac{\partial a_2}{\partial z_2} = \sigma'(z_2)\)</span> (Derivative of activation)</li>
-<li><span class="math inline">\(\frac{\partial z_2}{\partial w_2} = a_1\)</span></li>
+<li><span class="math inline">\(\frac{\partial C}{\partial a^2} = (a^2 - y)\)</span> (Derivative of <span class="math inline">\(\frac{1}{2}(y-a)^2\)</span>)</li>
+<li><span class="math inline">\(\frac{\partial a^2}{\partial z^2} = \sigma'(z^2)\)</span> (Derivative of activation)</li>
+<li><span class="math inline">\(\frac{\partial z^2}{\partial w^2} = a^1\)</span></li>
 </ul>
-<p>So, <span class="math display">\[ \frac{\partial C}{\partial w_2} = -(y - a_2) \sigma'(z_2) a_1 \]</span></p>
-<p>Let’s define the “error term” for layer 2 as <span class="math inline">\(\delta_2 = -(y - a_2) \sigma'(z_2)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w_2} = \delta_2 a_1 \]</span> <span class="math display">\[ \frac{\partial C}{\partial b_2} = \delta_2 \cdot 1 = \delta_2 \]</span></p>
-<p><strong>Layer 1 (Hidden Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w_1\)</span>. The path is longer: <span class="math inline">\(w_1 \to z_1 \to a_1 \to z_2 \to a_2 \to C\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w_1} = \underbrace{\frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2}}_{\delta_2} \cdot \frac{\partial z_2}{\partial a_1} \cdot \frac{\partial a_1}{\partial z_1} \cdot \frac{\partial z_1}{\partial w_1} \]</span></p>
+<p>So, <span class="math display">\[ \frac{\partial C}{\partial w^2} = (a^2 - y) \sigma'(z^2) a^1 \]</span></p>
+<p>Let’s define the “error term” for layer 2 as <span class="math inline">\(\delta^2 = (a^2 - y) \sigma'(z^2)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w^2} = \delta^2 a^1 \]</span> <span class="math display">\[ \frac{\partial C}{\partial b^2} = \delta^2 \cdot 1 = \delta^2 \]</span></p>
+<p><strong>Layer 1 (Hidden Layer):</strong> We want how <span class="math inline">\(C\)</span> changes with <span class="math inline">\(w^1\)</span>. The path is longer: <span class="math inline">\(w^1 \to z^1 \to a^1 \to z^2 \to a^2 \to C\)</span>. <span class="math display">\[ \frac{\partial C}{\partial w^1} = \underbrace{\frac{\partial C}{\partial a^2} \cdot \frac{\partial a^2}{\partial z^2}}_{\delta^2} \cdot \frac{\partial z^2}{\partial a^1} \cdot \frac{\partial a^1}{\partial z^1} \cdot \frac{\partial z^1}{\partial w^1} \]</span></p>
 <ul>
-<li>We know the first part is <span class="math inline">\(\delta_2\)</span>.</li>
-<li><span class="math inline">\(\frac{\partial z_2}{\partial a_1} = w_2\)</span></li>
-<li><span class="math inline">\(\frac{\partial a_1}{\partial z_1} = \sigma'(z_1)\)</span></li>
-<li><span class="math inline">\(\frac{\partial z_1}{\partial w_1} = x\)</span></li>
+<li>We know the first part is <span class="math inline">\(\delta^2\)</span>.</li>
+<li><span class="math inline">\(\frac{\partial z^2}{\partial a^1} = w^2\)</span></li>
+<li><span class="math inline">\(\frac{\partial a^1}{\partial z^1} = \sigma'(z^1)\)</span></li>
+<li><span class="math inline">\(\frac{\partial z^1}{\partial w^1} = x\)</span></li>
 </ul>
-<p>So, <span class="math display">\[ \frac{\partial C}{\partial w_1} = \delta_2 \cdot w_2 \cdot \sigma'(z_1) \cdot x \]</span></p>
-<p>Let’s define the error term for layer 1 as <span class="math inline">\(\delta_1 = \delta_2 w_2 \sigma'(z_1)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w_1} = \delta_1 x \]</span> <span class="math display">\[ \frac{\partial C}{\partial b_1} = \delta_1 \]</span></p>
-<p><strong>The Update:</strong> <span class="math display">\[ w_1 \leftarrow w_1 - \eta \delta_1 x \]</span> <span class="math display">\[ w_2 \leftarrow w_2 - \eta \delta_2 a_1 \]</span></p>
+<p>So, <span class="math display">\[ \frac{\partial C}{\partial w^1} = \delta^2 \cdot w^2 \cdot \sigma'(z^1) \cdot x \]</span></p>
+<p>Let’s define the error term for layer 1 as <span class="math inline">\(\delta^1 = \delta^2 w^2 \sigma'(z^1)\)</span>. Then: <span class="math display">\[ \frac{\partial C}{\partial w^1} = \delta^1 x \]</span> <span class="math display">\[ \frac{\partial C}{\partial b^1} = \delta^1 \]</span></p>
+<p><strong>The Update:</strong> <span class="math display">\[ w^1 \leftarrow w^1 - \eta \delta^1 x \]</span> <span class="math display">\[ w^2 \leftarrow w^2 - \eta \delta^2 a^1 \]</span></p>
 <p>This pattern—calculating an error term <span class="math inline">\(\delta\)</span> at the output and propagating it back using the weights—is why it’s called <strong>Backpropagation</strong>.</p>
 <p>Note that we are using here scalar form of gradient descent and not directly applicable to real neural networks. But this gives us the intuition of how backpropagation works.</p>
 </section>
@@ -473,7 +473,6 @@ x \leftarrow x - \eta \frac{df}{dx}
 <li><a href="http://neuralnetworksanddeeplearning.com/chap2.html">Neural Networks and Deep Learning - Michael Nielsen</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent - Wikipedia</a></li>
 </ul>
-
 
 
 </section>

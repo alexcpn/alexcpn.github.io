@@ -36,12 +36,12 @@ The easiest way to understand the Vector is in such a geometric context, say 2D 
 
  Vectors are represented as matrices. A Vector is a one dimensional matrix.A matrix is defined to be a rectangular array of numbers. Example here is a [Euclidean Vector][Euclidean_vector]  in three-dimensional Euclidean space (or $R^{3}$) with some magnitude and direction (from (0,0,0) origin in this case).
 
- A vector is represented either as column matrix (m*1)or as a row matrix (1*m).
+ A vector is written either as a column matrix (m*1) or, after taking the transpose, as a row matrix (1*m).
 
 $$
-a = \begin{bmatrix}
-a_{1}\\a_{2}\\a_{3}\
-\end{bmatrix} = \begin{bmatrix} a_{1} & a_{2} &a_{3}\end{bmatrix}
+a = \begin{bmatrix} a_{1} \\ a_{2} \\ a_{3} \end{bmatrix},
+\qquad
+a^{T} = \begin{bmatrix} a_{1} & a_{2} & a_{3}\end{bmatrix}
 $$
 
 $a_{1},a_{2},a_{3}$ are the component scalars of the vector. A vector is represented as $\vec a$ in the **Vector notation** and as $a_{i}$ in the **Index Notation**.
@@ -110,7 +110,7 @@ Or in a better way, which shows the vectors properly
 
  **In essence, we are using the weight vectors to split the hyper-plane into two distinctive sets.**
 
- For any new leaf, if we only extract the same features into a feature vector; we can *dot product* it with the *trained* weight vector and find out if it falls in healthy or deceased class.
+ For any new leaf, if we only extract the same features into a feature vector; we can *dot product* it with the *trained* weight vector and find out if it falls in healthy or diseased class.
 
  Here is a Colab notebook to play around with this.[14]
 

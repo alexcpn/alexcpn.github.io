@@ -226,7 +226,11 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -257,10 +261,6 @@ window.Quarto = {
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -270,7 +270,7 @@ window.Quarto = {
 
 <section id="backpropagation-with-matrix-calculus" class="level1">
 <h1>Backpropagation with Matrix Calculus</h1>
-<p>The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is is to use Hadamard product and matrix transposes with scalar derivation alignment.</p>
+<p>The previous chapters we used a Scalar derivation of the Back Propagation formula to implement it in a simple two layer neural network. What we have done is to use Hadamard product and matrix transposes with scalar derivation alignment.</p>
 <p>But we have not really explained why we use Hadamard product and matrix transposes with scalar derivation alignment.</p>
 <p>This is due to Matrix Calculus which is the real way in which we should be deriving the Back Propagation formula.</p>
 <p>Lets explore this in this chapter. Note that we are still not using a Softmax activation function in the output layer as is usually the case with Deep Neural Networks. Deriving the Back Propagation formula with Softmax activation function is bit more complex and we will do that in a later chapter.</p>
@@ -288,8 +288,7 @@ x \rightarrow a^{l-1} \rightarrow  a^{l} \rightarrow  y
 \]</span></p>
 <p>and</p>
 <p><span class="math display">\[
-a^{l} = \sigma(z^l) \quad where \quad
-z^l =W^l a^{l-1} +b^l
+a^{l} = \sigma(z^l) \quad \text{where} \quad z^l = W^l a^{l-1} + b^l
 \]</span></p>
 <p>Our two layer neural network can be written as</p>
 <p><span class="math display">\[
@@ -364,9 +363,11 @@ J_{ij} = \frac{\partial f_i}{\partial x_j}
 <p>Let me explain with an example.</p>
 <p>Suppose we have a chain of functions: <span class="math inline">\(y = f(g(h(x)))\)</span>. To find the derivative <span class="math inline">\(\frac{\partial y}{\partial x}\)</span>, the chain rule tells us to multiply the Jacobians: <span class="math display">\[ J_{total} = J_f \cdot J_g \cdot J_h \]</span></p>
 <p>If <span class="math inline">\(x, h, g, f\)</span> are all vectors of size 1000, then each Jacobian is a <span class="math inline">\(1000 \times 1000\)</span> matrix. Multiplying them is expensive (<span class="math inline">\(O(N^3)\)</span>).</p>
-<p><strong>However, in Backpropagation, we always start with a scalar Loss function.</strong> The final derivative <span class="math inline">\(\frac{\partial C}{\partial y}\)</span> is a row vector (size <span class="math inline">\(1 \times N\)</span>).</p>
-<p>So we are computing: <span class="math display">\[ \nabla C = \underbrace{\frac{\partial C}{\partial y}}_{1 \times N} \cdot \underbrace{J_f}_{N \times N} \cdot \underbrace{J_g}_{N \times N} \cdot \underbrace{J_h}_{N \times N} \]</span></p>
-<p>Notice the order of operations matters! 1. <strong>Jacobian-Matrix Product</strong>: If we multiply the matrices first (<span class="math inline">\(J_f \cdot J_g\)</span>), we do expensive matrix-matrix multiplication. 2. <strong>Vector-Jacobian Product (VJP)</strong>: If we multiply from left to right: * <span class="math inline">\(v_1 = \frac{\partial C}{\partial y} \cdot J_f\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_2 = v_1 \cdot J_g\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_3 = v_2 \cdot J_h\)</span> (Vector <span class="math inline">\(\times\)</span> Matrix <span class="math inline">\(\to\)</span> Vector)</p>
+<p><strong>However, in Backpropagation, we always start with a scalar Loss function.</strong> Because the loss is a scalar, <span class="math inline">\(\frac{\partial C}{\partial y}\)</span> is a <strong>column vector</strong> (size <span class="math inline">\(N \times 1\)</span>) — the gradient vector defined above.</p>
+<p>For the composition <span class="math inline">\(y = f(g(h(x)))\)</span>, the chain rule in column form is:</p>
+<p><span class="math display">\[ \frac{\partial C}{\partial x} = J_h^{T} \cdot J_g^{T} \cdot J_f^{T} \cdot \frac{\partial C}{\partial y} \]</span></p>
+<p>Notice the order of operations matters! 1. <strong>Jacobian-Matrix Product</strong>: If we multiply the Jacobians together first (<span class="math inline">\(J_h^{T} J_g^{T} J_f^{T}\)</span>), we do expensive matrix-matrix multiplication (<span class="math inline">\(O(N^3)\)</span>) and hold an <span class="math inline">\(N \times N\)</span> matrix. 2. <strong>Vector-Jacobian Product (VJP)</strong>: If we instead apply one Jacobian at a time to the incoming gradient: * <span class="math inline">\(v_f = J_f^{T} \, \frac{\partial C}{\partial y}\)</span> (Matrix <span class="math inline">\(\times\)</span> Vector <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_g = J_g^{T} \, v_f\)</span> (Matrix <span class="math inline">\(\times\)</span> Vector <span class="math inline">\(\to\)</span> Vector) * <span class="math inline">\(v_h = J_h^{T} \, v_g = \frac{\partial C}{\partial x}\)</span> (Matrix <span class="math inline">\(\times\)</span> Vector <span class="math inline">\(\to\)</span> Vector)</p>
+<pre><code>Each step is a matrix-vector product, so $O(N^2)$ per layer. Each product $J^{T} v$ is precisely the **Vector-Jacobian Product** — the transpose of $v^{T} J$ — which is why backprop multiplies the *transposed* Jacobians, travelling from the output layer backwards.</code></pre>
 <p>We <strong>never</strong> explicitly compute or store the full Jacobian matrix. We only compute the product of a vector with the Jacobian. This is much faster (<span class="math inline">\(O(N^2)\)</span>) and uses less memory.</p>
 <p>This is the secret sauce of efficient Backpropagation!</p>
 </section>
@@ -442,7 +443,7 @@ J = \frac{\partial a}{\partial z} = \begin{bmatrix}
 \begin{bmatrix}
 \frac{\partial C}{\partial W_{11}} &amp; \frac{\partial C}{\partial W_{12}} \\
 \frac{\partial C}{\partial W_{21}} &amp; \frac{\partial C}{\partial W_{22}}
-\end{bmatrix}\]</span>Substitute the result from step 3 (<span class="math inline">\(\delta_i \cdot a_k\)</span>):<span class="math display">\[\nabla W =
+\end{bmatrix}\]</span>Substitute the result above (<span class="math inline">\(\delta_i \cdot a_k\)</span>):<span class="math display">\[\nabla W =
 \begin{bmatrix}
 \delta_1 a_1 &amp; \delta_1 a_2 \\
 \delta_2 a_1 &amp; \delta_2 a_2
@@ -468,7 +469,7 @@ J = \frac{\partial a}{\partial z} = \begin{bmatrix}
 <p><strong>Explanation:</strong> 1. We propagate <span class="math inline">\(\delta^2\)</span> backwards through the weights <span class="math inline">\((W^2)^T\)</span>. 2. We multiply element-wise by the derivative of the activation function <span class="math inline">\(\sigma'(z^1)\)</span>.</p>
 <p>Putting it all together:</p>
 <p><span class="math display">\[
-\frac{\partial C}{\partial W^1} = \left( (W^2)^T \delta^2 \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
+\frac{\partial C}{\partial W^1} = \left( ((W^2)^T \delta^2) \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow (Eq \; 5)
 \]</span></p>
 <section id="summary-of-backpropagation-equations" class="level3">
 <h3 class="anchored" data-anchor-id="summary-of-backpropagation-equations">Summary of Backpropagation Equations</h3>
@@ -482,28 +483,28 @@ J = \frac{\partial a}{\partial z} = \begin{bmatrix}
 <section id="summary-of-backpropagation-equations-in-terms-of-numpy" class="level3">
 <h3 class="anchored" data-anchor-id="summary-of-backpropagation-equations-in-terms-of-numpy">Summary of Backpropagation Equations in Terms of Numpy</h3>
 <p>Here is how these equations translate to Python code using NumPy, assuming standard column vectors (shape <code>(N, 1)</code>).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward pass context:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># x, a1, a2 are column vectors</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># W1, W2 are weight matrices</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sigmoid_prime(z) is the derivative of activation</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute Output Error (Hadamard Product)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># '*' operator in numpy is element-wise multiplication (Hadamard)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>delta2 <span class="op">=</span> (a2 <span class="op">-</span> y) <span class="op">*</span> sigmoid_prime(z2) </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gradient for W2 (Outer Product)</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># We need shape (n_out, 1) @ (1, n_hidden) -&gt; (n_out, n_hidden)</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dC_dW2 <span class="op">=</span> np.matmul(delta2, a1.T)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative using einsum for outer product:</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># dC_dW2 = np.einsum('i,j-&gt;ij', delta2.flatten(), a1.flatten())</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Backpropagate Error to Hidden Layer</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrix multiplication (W2.T @ delta2) followed by Hadamard product</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>delta1 <span class="op">=</span> np.matmul(W2.T, delta2) <span class="op">*</span> sigmoid_prime(z1)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Gradient for W1 (Outer Product)</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>dC_dW1 <span class="op">=</span> np.matmul(delta1, x.T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward pass context:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># x, a1, a2 are column vectors</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># W1, W2 are weight matrices</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sigmoid_prime(z) is the derivative of activation</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute Output Error (Hadamard Product)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># '*' operator in numpy is element-wise multiplication (Hadamard)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>delta2 <span class="op">=</span> (a2 <span class="op">-</span> y) <span class="op">*</span> sigmoid_prime(z2) </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gradient for W2 (Outer Product)</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># We need shape (n_out, 1) @ (1, n_hidden) -&gt; (n_out, n_hidden)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>dC_dW2 <span class="op">=</span> np.matmul(delta2, a1.T)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative using einsum for outer product:</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># dC_dW2 = np.einsum('i,j-&gt;ij', delta2.flatten(), a1.flatten())</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Backpropagate Error to Hidden Layer</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrix multiplication (W2.T @ delta2) followed by Hadamard product</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>delta1 <span class="op">=</span> np.matmul(W2.T, delta2) <span class="op">*</span> sigmoid_prime(z1)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Gradient for W1 (Outer Product)</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>dC_dW1 <span class="op">=</span> np.matmul(delta1, x.T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="using-gradient-descent-to-find-the-optimal-weights-to-reduce-the-loss-function" class="level2">
@@ -530,7 +531,6 @@ J = \frac{\partial a}{\partial z} = \begin{bmatrix}
 <li><a href="http://neuralnetworksanddeeplearning.com/chap2.html">Neural Networks and Deep Learning - Michael Nielsen</a></li>
 <li><a href="https://colab.research.google.com/drive/1sMODrDCdR7lKF9cWcNNhhdLglxJRzmgK?usp=sharing">Colab Visualization</a></li>
 </ul>
-
 
 
 </section>

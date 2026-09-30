@@ -191,7 +191,11 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -212,10 +216,6 @@ window.Quarto = {
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -244,12 +244,12 @@ a^0 \rightarrow
     \,\rightarrow
     \underbrace{P(z^l)}_{\vec P/ \text{softmax} /a^{l}}
     \,\rightarrow
-    \underbrace{L ( \vec P, \vec Y)}_{\text{CrossEntropyLoss}}
+    \underbrace{C ( \vec P, \vec Y)}_{\text{CrossEntropyLoss}}
 \end{aligned}
 }
 \]</span></p>
 <p><span class="math inline">\(Y\)</span> is the target vector or the Truth vector. This is a one hot encoded vector, example <span class="math inline">\(Y=[0,1,0]\)</span>, here the second element is the desired class.The training is done so that the CrossEntropyLoss is minimized using Gradient Descent algorithm.</p>
-<p><span class="math inline">\(P\)</span> is the Softmax output and is the activation of the last layer <span class="math inline">\(a^l\)</span>. This is a vector. All elements of the Softmax output add to 1; hence this is a probability distribution unlike a Sigmoid output.The Cross Entropy Loss <span class="math inline">\(L\)</span> is a Scalar.</p>
+<p><span class="math inline">\(P\)</span> is the Softmax output and is the activation of the last layer <span class="math inline">\(a^l\)</span>. This is a vector. All elements of the Softmax output add to 1; hence this is a probability distribution unlike a Sigmoid output.The Cross Entropy Loss <span class="math inline">\(C\)</span> is a Scalar.</p>
 <p>Note the Index notation is the representation an element of a Vector or a Tensor, and is easier to deal with while deriving out the equations.</p>
 <p><strong>Softmax</strong> (in Index notation)</p>
 <p>Below I am skipping the superscript part, which I used to represent the layers of the network.</p>
@@ -263,21 +263,21 @@ p_j = \frac{e^{z_j}}{\sum_k e^{z_k}}
 <p>Here <span class="math inline">\(y_i\)</span> is the indexed notation of an element in the target vector <span class="math inline">\(Y\)</span>.</p>
 <p><span class="math display">\[
 \begin{aligned}
-L = -\sum_j y_j \log p_j
+C = -\sum_j y_j \log p_j
 \end{aligned}
 \]</span></p>
 <hr>
-<p>There are too many articles related to Back propagation, many of which are very good.However many explain in terms of index notation and though it is illuminating, to really use this with code, you need to understand how it translates to Matrix notation via Matrix Calculus and with help form StackOverflow related sites.</p>
+<p>There are too many articles related to Back propagation, many of which are very good.However many explain in terms of index notation and though it is illuminating, to really use this with code, you need to understand how it translates to Matrix notation via Matrix Calculus and with help from StackOverflow related sites.</p>
 <section id="crossentropy-loss-with-respect-to-weights-in-last-layer" class="level3">
 <h3 class="anchored" data-anchor-id="crossentropy-loss-with-respect-to-weights-in-last-layer">CrossEntropy Loss with Respect to Weights in Last Layer</h3>
 <p><span class="math display">\[
 \mathbf {
-\frac {\partial L}{\partial W^l}
-=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}} \rightarrow \quad EqA1
+\frac {\partial C}{\partial W^l}
+=  \color{red}{\frac {\partial C}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}} \rightarrow \quad EqA1
 }
 \]</span></p>
 <p>Where <span class="math display">\[
-L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\color{red}{z_j}}} {\sum_k e^{z_k}}
+C = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\color{red}{z_j}}} {\sum_k e^{z_k}}
 \]</span></p>
 <p>If you are confused with the indexes, just take a short example and substitute. Basically i,j,k etc are dummy indices used to illustrate in index notation the vectors.</p>
 <p>I am going to drop the superscript <span class="math inline">\(l\)</span> denoting the layer number henceforth and focus on the index notation for the softmax vector <span class="math inline">\(P\)</span> and target vector <span class="math inline">\(Y\)</span></p>
@@ -285,7 +285,7 @@ L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\
 <p><span class="math display">\[
 \color{red}{
 \begin{aligned}
-\frac {\partial L}{\partial z_i} = \frac {\partial ({-\sum_k y_k \log {p_k})}}{\partial z_i}
+\frac {\partial C}{\partial z_i} = \frac {\partial ({-\sum_k y_k \log {p_k})}}{\partial z_i}
    \\ \\ \text {taking the summation outside} \\ \\
    = -\sum_k y_k\frac {\partial ({ \log {p_k})}}{\partial z_i}
   \\ \\ \color{grey}{\text {since }
@@ -295,7 +295,7 @@ L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\
 \end{aligned}
 }
 \]</span></p>
-<p>The last term <span class="math inline">\(\frac {\partial { p_k}}{\partial z_i}\)</span> is the derivative of Softmax with respect to its inputs also called logits. This is easy to derive and there are many sites that describe it. Example [Derivative of SoftMax Antoni Parellada]. The more rigorous derivative via the Jacobian matrix is here <a href="https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/">The Softmax function and its derivative-Eli Bendersky</a></p>
+<p>The last term <span class="math inline">\(\frac {\partial { p_k}}{\partial z_i}\)</span> is the derivative of Softmax with respect to its inputs also called logits. This is easy to derive and there are many sites that describe it. Example <a href="https://stats.stackexchange.com/a/267988/191675">Derivative of SoftMax Antoni Parellada</a>. The more rigorous derivative via the Jacobian matrix is here <a href="https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/">The Softmax function and its derivative-Eli Bendersky</a></p>
 <p><span class="math display">\[
 \color{red}
   {
@@ -312,19 +312,15 @@ L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\
 <p><span class="math display">\[
   \color{red}{
   \begin{aligned}
-\frac {\partial L}{\partial z_i} = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
+\frac {\partial C}{\partial z_i} = -\sum_k y_k \cdot \frac {1}{p_k} \cdot \frac {\partial { p_k}}{\partial z_i}
+\\ \\ \text{using the Softmax derivative above with } i \to k,\ j \to i \text{ (the indices are dummies)}
 \\ \\
-  =-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_i(\delta_{ij} -p_j)
-\\ \\ \text{these i and j are dummy indices and we can rewrite  this as}
-\\ \\
-=-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_k(\delta_{ik} -p_i)
+  =-\sum_k y_k \cdot \frac {1}{p_k} \cdot p_k(\delta_{ik} -p_i)
 \\ \\ \text{taking the two cases and adding in above equation } \\ \\
 \delta_{ik} = 1 \text{ when i =k} \text{ and }
    \delta_{ik} = 0 \text{ when i} \ne \text{k}
    \\ \\
    = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
-    \\ \\
-     = [- y_i \cdot \frac {1}{p_i} \cdot p_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot \frac {1}{p_k} \cdot p_k(0 -p_i) ]
   \\ \\
      = [- y_i(1 -p_i)]+[-\sum_{k \ne i}  y_k \cdot (0 -p_i) ]
       \\ \\
@@ -338,21 +334,21 @@ L = -\sum_k y_k \log {\color{red}{p_k}} \quad \text{and} \quad p_j = \frac {e^{\
      \\ \\
      = p_i - y_i
      \\ \\
-     \frac {\partial L}{\partial z^l}  = p_i - y_i \rightarrow \quad \text{EqA1.1}
+     \frac {\partial C}{\partial z^l}  = p_i - y_i \rightarrow \quad \text{EqA1.1}
 \end{aligned}
 }
 \]</span></p>
 <p>We need to put this back in <span class="math inline">\(EqA1\)</span>. We now need to calculate the second term, to complete the equation</p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac {\partial L}{\partial W^l}
-=  \color{red}{\frac {\partial L}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}}
+\frac {\partial C}{\partial W^l}
+=  \color{red}{\frac {\partial C}{\partial z^l}} \cdot \color{green}{\frac {\partial z^l}{\partial W^l}}
 \\ \\
 z^{l} = (W^l a^{l-1}+b^l)
 \\
 \color{green}{\frac {\partial z^l}{\partial W^l} = (a^{l-1})^T}
 \\ \\ \text{Putting all together} \\ \\
-\frac {\partial L}{\partial W^l} = (p - y) \cdot (a^{l-1})^T \quad  \rightarrow \quad \mathbf  {EqA1}
+\frac {\partial C}{\partial W^l} = (p - y) \cdot (a^{l-1})^T \quad  \rightarrow \quad \mathbf  {EqA1}
 \end{aligned}
 \]</span></p>
 </section>
@@ -361,7 +357,7 @@ z^{l} = (W^l a^{l-1}+b^l)
 <h2 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h2>
 <p>Using Gradient descent we can keep adjusting the last layer like</p>
 <p><span class="math display">\[
-     W{^l} = W{^l} -\alpha \cdot \frac {\partial L}{\partial W^l}
+     W{^l} = W{^l} -\eta \cdot \frac {\partial C}{\partial W^l}
 \]</span></p>
 <p>Now let’s do the derivation for the inner layers</p>
 </section>
@@ -370,20 +366,20 @@ z^{l} = (W^l a^{l-1}+b^l)
 <p>The trick here is to find the derivative of the Loss with respect to the inner layer as a composition of the partial derivative we computed earlier. And also to compose each partial derivative as partial derivative with respect to either <span class="math inline">\(z^x\)</span> or <span class="math inline">\(w^x\)</span> but not with respect to <span class="math inline">\(a^x\)</span>. This is to make derivatives easier and intuitive to compute.</p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac {\partial L}{\partial W^{l-1}}
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+\frac {\partial C}{\partial W^{l-1}}
+=  \color{blue}{\frac {\partial C}{\partial z^{l-1}}} \cdot
      \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} \rightarrow \text{EqA2}
 \end{aligned}
 \]</span></p>
-<p>We represent the first part in terms of what we computed earlier ie <span class="math inline">\(\color{blue}{\frac {\partial L}{\partial z^{l}}}\)</span></p>
+<p>We represent the first part in terms of what we computed earlier ie <span class="math inline">\(\color{blue}{\frac {\partial C}{\partial z^{l}}}\)</span></p>
 <p><span class="math display">\[
 \begin{aligned}
-\color{blue}{\frac {\partial L}{\partial z^{l-1}}} =
-\color{blue}{\frac {\partial L}{\partial z^{l}}}.
+\color{blue}{\frac {\partial C}{\partial z^{l-1}}} =
+\color{blue}{\frac {\partial C}{\partial z^{l}}}.
     \frac {\partial z^{l}}{\partial a^{l-1}}.
     \frac {\partial a^{l-1}}{\partial z^{l-1}} \rightarrow \text{ Eq with respect to Prev Layer}
   \\ \\
-  \color{blue}{\frac {\partial L}{\partial z^{l}}} = \color{blue}{(p_i- y_i)}
+  \color{blue}{\frac {\partial C}{\partial z^{l}}} = \color{blue}{(p_i- y_i)}
   \text{ from the previous layer (from EqA1.1) }
   \\ \\
    z^l = w^l a^{l-1}+b^l
@@ -394,21 +390,21 @@ a^{l-1} = \sigma (z^{l-1})     \text{ which makes }
 \frac {\partial a^{l-1}}{\partial z^{l-1}} = \sigma \color{red}{'} (z^{l-1} )
 \\ \\ \text{ Putting together we get the first part of Eq A2 }
 \\\\
-\color{blue}{\frac {\partial L}{\partial z^{l-1}}} = \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
+\color{blue}{\frac {\partial C}{\partial z^{l-1}}} = \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma \color{red}{'} (z^{l-1} ) \rightarrow \text{EqA2.1 }
 \\ \\
 z^{l-1} = W^{l-1} a^{l-2}+b^{l-1}
     \text{ which makes }
     \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}=(a^{l-2})^T}
 \\ \\
-\frac {\partial L}{\partial W^{l-1}}
-=  \color{blue}{\frac {\partial L}{\partial z^{l-1}}} \cdot
+\frac {\partial C}{\partial W^{l-1}}
+=  \color{blue}{\frac {\partial C}{\partial z^{l-1}}} \cdot
      \color{green}{\frac {\partial z^{l-1}}{\partial W^{l-1}}} = \left( \left( (W^l)^T \cdot \color{blue}{(p- y)} \right) \odot \sigma '(z^{l-1} ) \right) \cdot \color{green}{(a^{l-2})^T}
 \end{aligned}
 \]</span></p>
 </section>
 <section id="some-implementation-details" class="level2">
 <h2 class="anchored" data-anchor-id="some-implementation-details">Some Implementation Details</h2>
-<p>For a detailed explanation of the Matrix Calculus, Jacobian, and Hadamard product used here, please refer to <strong>Chapter 6: Back Propagation - Matrix Calculus</strong>.</p>
+<p>For a detailed explanation of the Matrix Calculus, Jacobian, and Hadamard product used here, please refer to <strong>Chapter 5: Back Propagation - Matrix Calculus</strong>.</p>
 <p><strong>From Index Notation to Matrix Notation</strong></p>
 <p>The equations above use index notation for clarity. In practice, we use Matrix Notation which involves Transposes and Hadamard products as explained in the previous chapter.</p>
 <section id="implementation-in-python" class="level3">
@@ -420,7 +416,7 @@ z^{l-1} = W^{l-1} a^{l-2}+b^{l-1}
 <h2 class="anchored" data-anchor-id="gradient-descent-1">Gradient Descent</h2>
 <p>Using Gradient descent we can keep adjusting the inner layers like</p>
 <p><span class="math display">\[
-     W{^{l-1}} = W{^{l-1}} -\alpha \cdot \frac {\partial L}{\partial W^{l-1}}
+     W{^{l-1}} = W{^{l-1}} -\eta \cdot \frac {\partial C}{\partial W^{l-1}}
 \]</span></p>
 <p>Next: <a href="./7_neuralnetworkimpementation.html">Neural Network Implementation</a></p>
 </section>
@@ -430,13 +426,12 @@ z^{l-1} = W^{l-1} a^{l-2}+b^{l-1}
 <li><a href="https://bfeba431-a-62cb3a1a-s-sites.googlegroups.com/site/deeplearningcvpr2014/ranzato_cvpr2014_DLtutorial.pdf?attachauth=ANoY7cqPhkgQyNhJ9E7rmSk-RTdMYSYqpfJU2gPlb9cWH_4a1MbiYPq_0ihyuolPiYDkImyr9PmA-QwSuS8F3OMChiF97XTDD_luJqam70GvAC4X6G6KlU2r7Pv1rqkHaMbmXpdtXJHAveR_jWf1my_IojxFact87u2-1YXtfJIwYkhBwhMsYagICk-P6X9ktA0Pyjd601tboSlX_UGftX1vB57-tS6bdAkukhmSRLU-ZiF4RdJ_sI3YAGaaPYj1KLWFpkFa_-XG&amp;attredirects=1">Supervised Deep Learning - Marc’Aurelio Ranzato (DeepMind)</a> - Easier to follow (without explicit Matrix Calculus) though not really correct</li>
 <li><a href="https://www.ics.uci.edu/~pjsadows/notes.pdf">Notes on Backpropagation - Peter Sadowski</a> - Easy to follow but lacking in some aspects</li>
 <li><a href="https://eli.thegreenplace.net/2016/the-softmax-function-and-its-derivative/">The Softmax function and its derivative - Eli Bendersky</a> - Slightly hard to follow using the Jacobian</li>
-<li><a href="https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/%5D">Backpropagation In Convolutional Neural Networks - Jefkine</a> - More difficult to follow with proper index notations (I could not) and probably correct</li>
+<li><a href="https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/">Backpropagation In Convolutional Neural Networks - Jefkine</a> - More difficult to follow with proper index notations (I could not) and probably correct</li>
 <li><a href="https://web.iitd.ac.in/~pmvs/courses/mcl702/notation.pdf">A Primer on Index Notation - John Crimaldi</a></li>
 <li><a href="https://arxiv.org/pdf/1802.01528.pdf">The Matrix Calculus You Need For Deep Learning - Terence Parr &amp; Jeremy Howard</a></li>
 <li><a href="http://neuralnetworksanddeeplearning.com/chap2.html">Neural Networks and Deep Learning - Michael Nielsen</a></li>
 <li><a href="https://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function">Derivative of Softmax Activation - Alijah Ahmed</a></li>
 </ul>
-
 
 
 </section>

@@ -1,0 +1,7 @@
+/* Additions to pandoc's default EPUB stylesheet. */
+img { max-width: 100%; height: auto; }
+figure { margin: 1em 0; text-align: center; }
+figcaption { font-size: 0.9em; }
+pre { white-space: pre-wrap; word-wrap: break-word; font-size: 0.8em; }
+math[display="block"] { overflow-x: auto; max-width: 100%; }
+blockquote { margin: 1em 0; padding-left: 1em; border-left: 3px solid #ccc; }

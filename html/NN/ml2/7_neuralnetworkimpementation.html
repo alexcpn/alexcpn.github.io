@@ -226,21 +226,22 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
   <li><a href="#neural-network-implementation" id="toc-neural-network-implementation" class="nav-link active" data-scroll-target="#neural-network-implementation">Neural Network Implementation</a>
   <ul class="collapse">
   <li><a href="#a-two-layered-neural-network-in-python" id="toc-a-two-layered-neural-network-in-python" class="nav-link" data-scroll-target="#a-two-layered-neural-network-in-python">A Two layered Neural Network in Python</a></li>
+  <li><a href="#the-same-network-with-softmax-and-cross-entropy" id="toc-the-same-network-with-softmax-and-cross-entropy" class="nav-link" data-scroll-target="#the-same-network-with-softmax-and-cross-entropy">The Same Network with Softmax and Cross Entropy</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -250,7 +251,7 @@ window.Quarto = {
 
 <section id="neural-network-implementation" class="level1">
 <h1>Neural Network Implementation</h1>
-<p>With the derivative of the Cost function derived from the last chapter, we can code the network</p>
+<p>With the derivatives of the Cost function derived in Chapter 5 (MSE loss with Sigmoid activation), we can code the network. At the end of the chapter we switch the output layer to the Softmax and Cross Entropy Loss from Chapter 6.</p>
 <p>We will use matrices to represent input and weight matrices.</p>
 <blockquote class="blockquote">
 <p><strong>Important Note on Matrix Conventions</strong></p>
@@ -275,28 +276,27 @@ window.Quarto = {
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  [</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">0</span>],</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">1</span>],</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">0</span>],</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">1</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">1</span>],</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      [<span class="dv">0</span>]</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Note you can change the output and try to train the Neural network</p>
-<p>This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.</p>
+<p>This is a 4*1 matrix that represents the expected output. That is for input [0,0,1] the output is [0], for [0,1,1] it is [1], for [1,0,1] it is [1] and for [1,1,1] it is [0].</p>
 <p><strong>A neural network is implemented as a set of matrices representing the weights of the network.</strong></p>
 <p>Let’s create a two layered network. Before that please note the formula for the neural network</p>
 <p>So basically the output at layer l is the dot product of the weight matrix of layer l and input of the previous layer.</p>
 <p>Now let’s see how the matrix dot product works based on the shape of matrices.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[m<span class="op">*</span>n].[n<span class="op">*</span>x] <span class="op">=</span> [m<span class="op">*</span>x]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>[m<span class="op">*</span>x].[x<span class="op">*</span>y] <span class="op">=</span> [m<span class="op">*</span>y]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>[m*n].[n*h] = [m*h]
+[m*h].[h*k] = [m*k]</code></pre>
 <p>We take the <span class="math inline">\([m*n]\)</span> as the input matrix this is a <span class="math inline">\([4*3]\)</span> matrix.</p>
-<p>Similarly the output <span class="math inline">\(y\)</span> is a <span class="math inline">\([4*1]\)</span> matrix; so we have <span class="math inline">\([m*y] =[4*1]\)</span></p>
+<p>Similarly the output is a <span class="math inline">\([4*1]\)</span> matrix; so we have <span class="math inline">\([m*k] = [4*1]\)</span></p>
 <p>So we have</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m<span class="op">=</span><span class="dv">4</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span>?</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span><span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m<span class="op">=</span><span class="dv">4</span>   <span class="co"># rows: the 4 training examples</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n<span class="op">=</span><span class="dv">3</span>   <span class="co"># input features</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>h<span class="op">=</span><span class="dv">4</span>   <span class="co"># hidden units (a free choice, we pick 4)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">1</span>   <span class="co"># output features</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Lets then create our two weight matrices of the above shapes, that represent the two layers of the neural network.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> x</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.random.random((<span class="dv">3</span>,<span class="dv">4</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> np.random.random((<span class="dv">4</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>weight1 <span class="op">=</span> np.random.random((n,h))   <span class="co"># (3,4): input -&gt; hidden</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>weight2 <span class="op">=</span> np.random.random((h,k))   <span class="co"># (4,1): hidden -&gt; output</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>We can have an array of the weights to loop through, but for the time being let’s hard-code these. Note that ‘np’ stands for the popular numpy array library in Python.</p>
 <p>We also need to code in our non-linearity. We will use the Sigmoid function here.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
@@ -307,9 +307,9 @@ window.Quarto = {
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> sigmoid(x)<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>sigmoid(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>With this we can have the output of first, second and third layer, using our equation of neural network forward propagation.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a0 <span class="op">=</span> x</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(np.dot(a0,w1))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(np.dot(a0,weight1))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(np.dot(a1,w2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(np.dot(a1,weight2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>a2 is the calculated output from randomly initialized weights. So lets calculate the error by subtracting this from the expected value and taking the MSE.</p>
 <p><span class="math display">\[
 C = \frac{1}{2} \|y-a^l\|^2
@@ -324,19 +324,15 @@ w^2 = w^2 - (\frac {\partial C}{\partial w^2} )*learningRate \\ \\
 w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 \end{aligned}
 \]</span></p>
-<p>Let’s update the weights as per the formula derived in the previous chapter:</p>
+<p>Let’s update the weights as per the formulas derived in Chapter 5 (Backpropagation with Matrix Calculus):</p>
 <p><span class="math display">\[
-\mathbf{
-\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
-}
+\delta^2 = (a^2 - y) \odot \sigma'(z^2)
 \]</span></p>
 <p><span class="math display">\[
-\delta^2 = (a^2-y)
+\frac {\partial C}{\partial w^2} = \delta^2 \, (a^1)^T \quad \rightarrow \text{Eq (3)}
 \]</span></p>
 <p><span class="math display">\[
-\mathbf{
-\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
-}
+\frac {\partial C}{\partial w^1} = \left( \left((w^2)^T \delta^2\right) \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow \text{Eq (5)}
 \]</span></p>
 <section id="a-two-layered-neural-network-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="a-two-layered-neural-network-in-python">A Two layered Neural Network in Python</h2>
@@ -398,45 +394,44 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 <span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Initial Output </span><span class="ch">\n</span><span class="st">"</span>,a2)</span>
 <span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Backward Pass - Backpropagation </span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  delta2  <span class="op">=</span> (a2<span class="op">-</span>y)</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  dC_da2  <span class="op">=</span> (a2<span class="op">-</span>y)</span>
 <span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (A) ---&gt; dC_dw2 = delta2*derv_sigmoid(z2)*a1.T</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Error term of the last layer: delta^2 = (a^2 - y) * sigmoid'(z^2)</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (3), row/batch form ---&gt; dC_dw2 = a1.T . delta2</span></span>
 <span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
 <span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>  dC_dw2_1  <span class="op">=</span> delta2<span class="op">*</span>derv_sigmoid(z2) </span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  dC_dw2  <span class="op">=</span> a1.T.dot(dC_dw2_1)</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>  delta2  <span class="op">=</span> dC_da2<span class="op">*</span>derv_sigmoid(z2)</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  dC_dw2  <span class="op">=</span> a1.T.dot(delta2)</span>
 <span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculating change of Cost/Loss wrto weight of 2nd/last layer</span></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (B)---&gt; dC_dw1 = derv_sigmoid(z1)*delta2*derv_sigmoid(z2)*weight2*a0.T</span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dC_dw1 = derv_sigmoid(z1)*dC_dw2*weight2_1*a0.T</span></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span>  np.dot(dC_dw2_1, weight2.T) <span class="op">*</span> derv_sigmoid(z1)</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span> a0.T.dot(dC_dw1)</span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Gradient descent</span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  weight2 <span class="op">=</span> weight2 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw2)</span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  weight1 <span class="op">=</span> weight1 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw1)</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Error term of the hidden layer: (delta2 . w2.T) * sigmoid'(z^1)</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Eq (5), row/batch form ---&gt; dC_dw1 = a0.T . ((delta2 . w2.T) * sigmoid'(z1))</span></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span>  np.dot(delta2, weight2.T) <span class="op">*</span> derv_sigmoid(z1)</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span> a0.T.dot(dC_dw1)</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Gradient descent</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  weight2 <span class="op">=</span> weight2 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw2)</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  weight1 <span class="op">=</span> weight1 <span class="op">-</span> learningRate<span class="op">*</span>(dC_dw1)</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"New output"</span>,a2)</span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Training is done, weight2 and weight2 are primed for output y</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets test out, two ones in input and one zero, output should be One</span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]])</span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>z1<span class="op">=</span> np.dot(x,weight1)</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(z1) </span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>z2<span class="op">=</span> np.dot(a1,weight2)</span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(z2) </span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output after Training is </span><span class="ch">\n</span><span class="st">"</span>,a2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"New output"</span>,a2)</span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co"># Training is done, weight2 and weight2 are primed for output y</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets test out, two ones in input and one zero, output should be One</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]])</span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>z1<span class="op">=</span> np.dot(x,weight1)</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>a1 <span class="op">=</span> sigmoid(z1) </span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>z2<span class="op">=</span> np.dot(a1,weight2)</span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>a2 <span class="op">=</span> sigmoid(z2) </span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output after Training is </span><span class="ch">\n</span><span class="st">"</span>,a2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Output</p>
 <pre class="console"><code>Initial Output 
  [[ 0.758]
@@ -449,7 +444,96 @@ New output [[ 0.028]
  [ 0.090]]
 Output after Training is 
  [[ 0.925]]</code></pre>
-<p>We have trained the NW for getting the output similar to <span class="math inline">\(y\)</span>; that is [0,1,0,1]</p>
+<p>We have trained the NW for getting the output similar to <span class="math inline">\(y\)</span>; that is [0,1,1,0]</p>
+</section>
+<section id="the-same-network-with-softmax-and-cross-entropy" class="level2">
+<h2 class="anchored" data-anchor-id="the-same-network-with-softmax-and-cross-entropy">The Same Network with Softmax and Cross Entropy</h2>
+<p>The network above uses the MSE loss with a Sigmoid output from Chapter 5. Let’s now switch the output layer to the Softmax and Cross Entropy Loss we derived in Chapter 6. Three things change:</p>
+<ol type="1">
+<li>The target is <strong>one-hot encoded</strong>. With two classes, output 0 becomes <span class="math inline">\([1,0]\)</span> and output 1 becomes <span class="math inline">\([0,1]\)</span>, so <span class="math inline">\(y\)</span> is now a <span class="math inline">\([4*2]\)</span> matrix and the last weight matrix is <span class="math inline">\([4*2]\)</span>.</li>
+<li>The output activation is <strong>Softmax</strong>, so each row of <span class="math inline">\(a^2\)</span> is a probability distribution over the two classes.</li>
+<li>The error term at the output is simply (EqA1.1)</li>
+</ol>
+<p><span class="math display">\[
+\delta^2 = \frac{\partial C}{\partial z^2} = p - y
+\]</span></p>
+<p>There is no separate <span class="math inline">\(\sigma'(z^2)\)</span> factor; the derivative of Softmax cancels against the derivative of Cross Entropy. The hidden layer is unchanged and uses EqA2.1:</p>
+<p><span class="math display">\[
+\delta^1 = \left( (W^2)^T \delta^2 \right) \odot \sigma'(z^1)
+\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(formatter<span class="op">=</span>{<span class="st">'float'</span>: <span class="st">'</span><span class="sc">{: 0.3f}</span><span class="st">'</span>.<span class="bu">format</span>})</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>x))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> derv_sigmoid(x):</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sigmoid(x)<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>sigmoid(x))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># softmax over each row (each row is one example)</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(z):</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    e <span class="op">=</span> np.exp(z <span class="op">-</span> np.<span class="bu">max</span>(z, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>))  <span class="co"># subtract max for numerical stability</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> e <span class="op">/</span> np.<span class="bu">sum</span>(e, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_entropy(p, y):</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>np.<span class="bu">sum</span>(y <span class="op">*</span> np.log(p))</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>learningRate <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([ [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>],[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>],[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>] ])</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># the same labels as before, now one-hot encoded over two classes</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># class 0 -&gt; [1,0], class 1 -&gt; [0,1]</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([ [<span class="dv">1</span>,<span class="dv">0</span>],[<span class="dv">0</span>,<span class="dv">1</span>],[<span class="dv">0</span>,<span class="dv">1</span>],[<span class="dv">1</span>,<span class="dv">0</span>] ])</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>weight1 <span class="op">=</span> np.random.random((<span class="dv">3</span>,<span class="dv">4</span>))   <span class="co"># input -&gt; hidden</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>weight2 <span class="op">=</span> np.random.random((<span class="dv">4</span>,<span class="dv">2</span>))   <span class="co"># hidden -&gt; 2 output classes</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>a0 <span class="op">=</span> x</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>iterations <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,iterations):</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Forward pass</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  z1 <span class="op">=</span> np.dot(a0,weight1)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  a1 <span class="op">=</span> sigmoid(z1)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  z2 <span class="op">=</span> np.dot(a1,weight2)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  a2 <span class="op">=</span> softmax(z2)            <span class="co"># a2 is P, the Softmax output</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">iter</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Initial Loss"</span>, <span class="bu">round</span>(cross_entropy(a2,y),<span class="dv">3</span>))</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Backward pass</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EqA1.1 ---&gt; delta2 = dC_dz2 = p - y</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># No separate sigmoid'(z2) term: Softmax + Cross Entropy cancel it out</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  delta2 <span class="op">=</span> a2 <span class="op">-</span> y</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  dC_dw2 <span class="op">=</span> a1.T.dot(delta2)                      <span class="co"># EqA1, row/batch form</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EqA2.1 ---&gt; delta1 = (delta2 . w2.T) * sigmoid'(z1)</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="co">#---------------------------------------------------------------</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>  delta1 <span class="op">=</span> np.dot(delta2, weight2.T) <span class="op">*</span> derv_sigmoid(z1)</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>  dC_dw1 <span class="op">=</span> a0.T.dot(delta1)                      <span class="co"># EqA2, row/batch form</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gradient descent</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>  weight2 <span class="op">=</span> weight2 <span class="op">-</span> learningRate<span class="op">*</span>dC_dw2</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>  weight1 <span class="op">=</span> weight1 <span class="op">-</span> learningRate<span class="op">*</span>dC_dw1</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final Loss"</span>, <span class="bu">round</span>(cross_entropy(a2,y),<span class="dv">3</span>))</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Class probabilities after training </span><span class="ch">\n</span><span class="st">"</span>, a2)</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted class"</span>, np.argmax(a2, axis<span class="op">=</span><span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Output</p>
+<pre class="console"><code>Initial Loss 3.286
+Final Loss 0.009
+Class probabilities after training 
+ [[ 0.999  0.001]
+ [ 0.003  0.997]
+ [ 0.001  0.999]
+ [ 0.995  0.005]]
+Predicted class [0 1 1 0]</code></pre>
+<p>The predicted classes are again [0,1,1,0]. Compare the two backward passes: only the line computing <code>delta2</code> is different. This is why Softmax with Cross Entropy is the standard output layer for classification; the gradient at the output is just the difference between the predicted probabilities and the truth.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
@@ -458,7 +542,6 @@ Output after Training is
 <li><a href="https://colab.research.google.com/drive/1uB6N4qN_-0n8z8ppTSkUQU8-AgHiD5zD?usp=sharing">Colab Notebook</a></li>
 </ul>
 <p><a href="./index.html">Index</a></p>
-
 
 
 </section>

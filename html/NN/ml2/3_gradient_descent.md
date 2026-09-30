@@ -27,7 +27,7 @@ $$
 For any layer $l$, the activation $a^l$ is calculated as:
 
 $$
-  a^{l} = \sigma(w^l a^{l-1} + b^l)
+  a^{l} = \sigma(W^l a^{l-1} + b^l)
 $$
 
 where $a^0 = x$ (the input).
@@ -45,7 +45,7 @@ The activation function then introduces *non-linearity*, allowing the network to
 Without activation:
 
 $$
-f(x) = W_L W_{L-1} \dots W_1 x
+f(x) = W^{L} W^{L-1} \dots W^{1} x
 $$
 
 This collapses to:
@@ -59,7 +59,7 @@ Still one big linear transformation and hence one hyperplane; the problems of no
 
 So the concept of Vectors, Matrices and Hyperplanes remain the same as before. Let us explore the chain of functions part here
 
-A neural network with $L$ layers can be represented as a nested function:$$f(x) = f_L(...f_2(f_1(x))...)$$
+A neural network with $L$ layers can be represented as a nested function:$$f(x) = f^{L}(...f^{2}(f^{1}(x))...)$$
 
 Each "link" in the chain is a layer performing a linear transformation followed by a non-linear activation and cascading to the final output.
 
@@ -97,7 +97,7 @@ However neural network is a composition of vector spaces and linear transformati
 
 There are two or three facts to understand about gradient descent:
 
-1. It does not attempt to find the **global minimum**, but rather follows the **local slope** of the cost function and converges to a local minimum or a flat region. **Saddle point** is a good optimisation point.
+1. It does not attempt to find the **global minimum**, but rather follows the **local slope** of the cost function and converges to a critical point: a local minimum, a saddle point, or a flat region. A **saddle point** is a critical point where the gradient is zero but the point is not a minimum; in high dimensions such points are common, and an optimizer must escape them rather than settle on them.
 
 2. Gradients can **vanish or explode**, leading to slow or unstable convergence. The practical solution to control this is to use **learning rate** and using **adaptive learning rate** methods like **Adam** or **RMSprop**.
 
@@ -128,25 +128,25 @@ Let’s take it one layer at a time.
 
 Consider this simple system that composes two functions:
 
-$$L = g(f(x, w_1), w_2)$$
+$$o = g(f(x, w^1), w^2)$$
 
 Where:
 - $x$ is your input (fixed, given by your data)
-- $w_1$ and $w_2$ are **parameters you can adjust** (like weights in a neural network)
+- $w^1$ and $w^2$ are **parameters you can adjust** (like weights in a neural network)
 - $f$ is the first function (think: first layer)
 - $g$ is the second function (think: second layer)
-- $L$ is the final output
+- $o$ is the final output
 
   
 
 Let's make this concrete with simple linear functions:
 
-$$f(x, w_1) = x \cdot w_1 + b_1$$
-$$g(z, w_2) = z \cdot w_2 + b_2$$
+$$f(x, w^1) = x \cdot w^1 + b^1$$
+$$g(z, w^2) = z \cdot w^2 + b^2$$
 
 So the full composition is:
 
-$$L = g(f(x, w_1), w_2) = (x \cdot w_1 + b_1) \cdot w_2 + b_2$$
+$$o = g(f(x, w^1), w^2) = (x \cdot w^1 + b^1) \cdot w^2 + b^2$$
 
   
 
@@ -156,23 +156,23 @@ Let's pick actual values and see what happens:
 
 **Fixed values:**
 - Input: $x = 2.0$
-- Bias terms: $b_1 = 1.0$, $b_2 = 0.5$
+- Bias terms: $b^1 = 1.0$, $b^2 = 0.5$
 
 **Current parameter values:**
-- $w_1 = 0.5$
-- $w_2 = 1.5$
+- $w^1 = 0.5$
+- $w^2 = 1.5$
 
 **Step 1**: Compute intermediate result from first function:
 
-$$z = f(x, w_1) = 2.0  \times  0.5 + 1.0 = 2.0$$
+$$z = f(x, w^1) = 2.0  \times  0.5 + 1.0 = 2.0$$
 
 **Step 2**: Compute final output from second function:
 
-$$L = g(z, w_2) = 2.0  \times  1.5 + 0.5 = 3.5$$
+$$o = g(z, w^2) = 2.0  \times  1.5 + 0.5 = 3.5$$
 
   
 
-**The problem**: Suppose we want $L_{\text{target}} = 5.0$ instead!
+**The problem**: Suppose we want $o_{\text{target}} = 5.0$ instead!
 
   
 
@@ -180,11 +180,11 @@ Our current error is:
 
   
 
-$$E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125$$
+$$C = \frac{1}{2}(o - o_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}{2}(-1.5)^2 = 1.125$$
 
   
 
-**The million-dollar question**: How should we change $w_1$ and $w_2$ to reduce this error?
+**The million-dollar question**: How should we change $w^1$ and $w^2$ to reduce this error?
 
   
 
@@ -192,9 +192,9 @@ $$E = \frac{1}{2}(L - L_{\text{target}})^2 = \frac{1}{2}(3.5 - 5.0)^2 = \frac{1}
 
 Here's what we need to know:
 
-1.  **Should we increase or decrease $w_1$?** (Which direction?)
-2.  **How sensitive is $L$ to changes in $w_1$?** (How much?)
-3.  **Same questions for $w_2$.**
+1.  **Should we increase or decrease $w^1$?** (Which direction?)
+2.  **How sensitive is $o$ to changes in $w^1$?** (How much?)
+3.  **Same questions for $w^2$.**
 
   
 
@@ -202,17 +202,17 @@ This is where derivatives come in! Specifically, we need:
 
   
 
-$$\frac{\partial L}{\partial w_1} \quad  \text{and} \quad  \frac{\partial L}{\partial w_2}$$
+$$\frac{\partial o}{\partial w^1} \quad  \text{and} \quad  \frac{\partial o}{\partial w^2}$$
 
   
 
 These tell us:
 
--  **Sign**: Positive means "increase $w$ increases $L$", negative means the opposite
+-  **Sign**: Positive means "increase $w$ increases $o$", negative means the opposite
 
--  **Magnitude**: Larger absolute value means $L$ is more sensitive to changes in $w$
+-  **Magnitude**: Larger absolute value means $o$ is more sensitive to changes in $w$
 
-But there's a complication: $w_1$ doesn't directly affect $L$. It affects $f$, which then affects $g$, which then affects $L$. This is a **composition**, and we need to trace the effect through multiple steps.
+But there's a complication: $w^1$ doesn't directly affect $o$. It affects $f$, which then affects $g$, which then affects $o$. This is a **composition**, and we need to trace the effect through multiple steps.
 
 This is where the "Chain Rule" of Calculus comes into play.
 
@@ -221,22 +221,22 @@ This is where the "Chain Rule" of Calculus comes into play.
 Let's visualize how changes propagate:
 
 ```
-Change w₁ → Affects f → Changes z → Affects g → Changes L
+Change w¹ → Affects f → Changes z → Affects g → Changes o
       ↓            ↓         ↓               ↓
-      Δw₁        ∂f/∂w₁     Δz     ∂g/∂z     ΔL
+      Δw¹        ∂f/∂w¹     Δz     ∂g/∂z     Δo
 ```
 
-Similarly for $w_2$ (but $w_2$ directly affects $g$):
+Similarly for $w^2$ (but $w^2$ directly affects $g$):
 
 ```
-Change w₂ → Affects g → Changes L
+Change w² → Affects g → Changes o
 ↓ ↓ ↓
-Δw₂ ∂g/∂w₂ ΔL
+Δw² ∂g/∂w² Δo
 ```
 
   
 
-The key insight: **To find how $w_1$ affects $L$, we need to multiply the effects at each step.**
+The key insight: **To find how $w^1$ affects $o$, we need to multiply the effects at each step.**
 
   
 
@@ -248,59 +248,59 @@ This is the **chain rule** in action!
 
   
 
-For our composition $L = g(f(x, w_1), w_2)$, let's introduce a shorthand: call $z = f(x, w_1)$ the intermediate value.
+For our composition $o = g(f(x, w^1), w^2)$, let's introduce a shorthand: call $z = f(x, w^1)$ the intermediate value.
 
   
 
 Then:
 
-$$L = g(z, w_2)$$
+$$o = g(z, w^2)$$
 
   
 
-**Computing $\frac{\partial L}{\partial w_1}$:**
+**Computing $\frac{\partial o}{\partial w^1}$:**
 
 By the chain rule of calculus:
 
-$$\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot  \frac{\partial z}{\partial w_1}$$
+$$\frac{\partial o}{\partial w^1} = \frac{\partial o}{\partial z} \cdot  \frac{\partial z}{\partial w^1}$$
 
 Let's compute each piece:
 
-**Part 1**: How does $L$ change with $z$?
+**Part 1**: How does $o$ change with $z$?
 
-$$\frac{\partial L}{\partial z} = \frac{\partial}{\partial z}(z \cdot w_2 + b_2) = w_2 = 1.5$$
+$$\frac{\partial o}{\partial z} = \frac{\partial}{\partial z}(z \cdot w^2 + b^2) = w^2 = 1.5$$
 
-**Part 2**: How does $z$ change with $w_1$?
+**Part 2**: How does $z$ change with $w^1$?
 
-$$\frac{\partial z}{\partial w_1} = \frac{\partial}{\partial w_1}(x \cdot w_1 + b_1) = x = 2.0$$
+$$\frac{\partial z}{\partial w^1} = \frac{\partial}{\partial w^1}(x \cdot w^1 + b^1) = x = 2.0$$
 
 **Putting it together**:
 
-$$\frac{\partial L}{\partial w_1} = 1.5  \times  2.0 = 3.0$$
+$$\frac{\partial o}{\partial w^1} = 1.5  \times  2.0 = 3.0$$
 
-**Interpretation**: If we increase $w_1$ by 0.1, then $L$ increases by approximately $3.0  \times  0.1 = 0.3$.
+**Interpretation**: If we increase $w^1$ by 0.1, then $o$ increases by approximately $3.0  \times  0.1 = 0.3$.
 
-**Computing $\frac{\partial L}{\partial w_2}$:**
+**Computing $\frac{\partial o}{\partial w^2}$:**
 
-This is simpler because $w_2$ directly affects $g$:
+This is simpler because $w^2$ directly affects $g$:
 
-$$\frac{\partial L}{\partial w_2} = \frac{\partial}{\partial w_2}(z \cdot w_2 + b_2) = z = 2.0$$
+$$\frac{\partial o}{\partial w^2} = \frac{\partial}{\partial w^2}(z \cdot w^2 + b^2) = z = 2.0$$
 
-**Interpretation**: If we increase $w_2$ by 0.1, then $L$ increases by approximately $2.0  \times  0.1 = 0.2$.
+**Interpretation**: If we increase $w^2$ by 0.1, then $o$ increases by approximately $2.0  \times  0.1 = 0.2$.
 
 ### Making the Update: Gradient Descent
 
   
 
-Now we can adjust our parameters! Since we want to **increase** $L$ from 3.5 to 5.0, and both gradients are positive, we should increase both $w_1$ and $w_2$.
+Now we can adjust our parameters! Since we want to **increase** $o$ from 3.5 to 5.0, and both gradients are positive, we should increase both $w^1$ and $w^2$.
 
-Using gradient descent with learning rate $\alpha = 0.2$:
+Using gradient descent with learning rate $\eta = 0.2$:
 
-$$w_1^{\text{new}} = w_1 + \alpha  \cdot  \frac{\partial L}{\partial w_1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1$$
+$$(w^1)^{\text{new}} = w^1 + \eta  \cdot  \frac{\partial o}{\partial w^1} = 0.5 + 0.2  \times  3.0 = 0.5 + 0.6 = 1.1$$
 
-$$w_2^{\text{new}} = w_2 + \alpha  \cdot  \frac{\partial L}{\partial w_2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9$$
+$$(w^2)^{\text{new}} = w^2 + \eta  \cdot  \frac{\partial o}{\partial w^2} = 1.5 + 0.2  \times  2.0 = 1.5 + 0.4 = 1.9$$
 
-**Note**: We're adding (not subtracting) because we want to increase $L$. Normally in machine learning, we minimize error, so we'd use $w - \alpha  \cdot  \frac{\partial E}{\partial w}$.
+**Note**: We're adding (not subtracting) because we want to increase $o$. Normally in machine learning, we minimize error, so we'd use $w - \eta  \cdot  \frac{\partial C}{\partial w}$.
 
   
 
@@ -312,20 +312,20 @@ Let's recompute with the new weights:
 
 **Step 1**: New intermediate value:
 
-$$z^{\text{new}} = x \cdot w_1^{\text{new}} + b_1 = 2.0  \times  1.1 + 1.0 = 3.2$$
+$$z^{\text{new}} = x \cdot (w^1)^{\text{new}} + b^1 = 2.0  \times  1.1 + 1.0 = 3.2$$
 
 **Step 2**: New output:
 
-$$L^{\text{new}} = z^{\text{new}} \cdot w_2^{\text{new}} + b_2 = 3.2  \times  1.9 + 0.5 = 6.58$$
+$$o^{\text{new}} = z^{\text{new}} \cdot (w^2)^{\text{new}} + b^2 = 3.2  \times  1.9 + 0.5 = 6.58$$
 
 **Progress check**:
-- Before: $L = 3.5$ (error from target = 1.5)
-- After: $L = 6.58$ (error from target = -1.58)
+- Before: $o = 3.5$ (error from target = 1.5)
+- After: $o = 6.58$ (error from target = -1.58)
 - We overshot! But that's okay - we moved in the right direction
 
-With a smaller learning rate (say $\alpha = 0.1$), we'd get:
-- $w_1^{\text{new}} = 0.8$, $w_2^{\text{new}} = 1.7$
-- $z^{\text{new}} = 2.6$, $L^{\text{new}} = 4.92$
+With a smaller learning rate (say $\eta = 0.1$), we'd get:
+- $(w^1)^{\text{new}} = 0.8$, $(w^2)^{\text{new}} = 1.7$
+- $z^{\text{new}} = 2.6$, $o^{\text{new}} = 4.92$
 - Much closer to our target of 5.0!
 
     
@@ -336,61 +336,61 @@ This is how Gradient Descent works in a nutshell. The same concepts carry over i
 Let's apply this to a simple neural network with one hidden layer.
 We have:
 *   **Input**: $x$
-*   **Hidden Layer**: 1 neuron with weight $w_1$, bias $b_1$, activation $\sigma$
-*   **Output Layer**: 1 neuron with weight $w_2$, bias $b_2$, activation $\sigma$
+*   **Hidden Layer**: 1 neuron with weight $w^1$, bias $b^1$, activation $\sigma$
+*   **Output Layer**: 1 neuron with weight $w^2$, bias $b^2$, activation $\sigma$
 *   **Target**: $y$
 
 **Forward Pass:**
-1.  $z_1 = w_1 x + b_1$
-2.  $a_1 = \sigma(z_1)$
-3.  $z_2 = w_2 a_1 + b_2$
-4.  $a_2 = \sigma(z_2)$ (This is our prediction $\hat{y}$)
+1.  $z^1 = w^1 x + b^1$
+2.  $a^1 = \sigma(z^1)$
+3.  $z^2 = w^2 a^1 + b^2$
+4.  $a^2 = \sigma(z^2)$ (This is our prediction $\hat{y}$)
 
 **Loss Function:**
 We use the Mean Squared Error (MSE) for this single example:
-$$ C = \frac{1}{2}(y - a_2)^2 $$
+$$ C = \frac{1}{2}(y - a^2)^2 $$
 
 **Goal:**
-Find $\frac{\partial C}{\partial w_1}, \frac{\partial C}{\partial b_1}, \frac{\partial C}{\partial w_2}, \frac{\partial C}{\partial b_2}$ to update the weights.
+Find $\frac{\partial C}{\partial w^1}, \frac{\partial C}{\partial b^1}, \frac{\partial C}{\partial w^2}, \frac{\partial C}{\partial b^2}$ to update the weights.
 
 **Backward Pass (Deriving Gradients):**
 
 **Layer 2 (Output Layer):**
-We want how $C$ changes with $w_2$.
-$$ \frac{\partial C}{\partial w_2} = \frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_2} $$
+We want how $C$ changes with $w^2$.
+$$ \frac{\partial C}{\partial w^2} = \frac{\partial C}{\partial a^2} \cdot \frac{\partial a^2}{\partial z^2} \cdot \frac{\partial z^2}{\partial w^2} $$
 
-*   $\frac{\partial C}{\partial a_2} = -(y - a_2)$ (Derivative of $\frac{1}{2}(y-a)^2$)
-*   $\frac{\partial a_2}{\partial z_2} = \sigma'(z_2)$ (Derivative of activation)
-*   $\frac{\partial z_2}{\partial w_2} = a_1$
+*   $\frac{\partial C}{\partial a^2} = (a^2 - y)$ (Derivative of $\frac{1}{2}(y-a)^2$)
+*   $\frac{\partial a^2}{\partial z^2} = \sigma'(z^2)$ (Derivative of activation)
+*   $\frac{\partial z^2}{\partial w^2} = a^1$
 
 So,
-$$ \frac{\partial C}{\partial w_2} = -(y - a_2) \sigma'(z_2) a_1 $$
+$$ \frac{\partial C}{\partial w^2} = (a^2 - y) \sigma'(z^2) a^1 $$
 
-Let's define the "error term" for layer 2 as $\delta_2 = -(y - a_2) \sigma'(z_2)$.
+Let's define the "error term" for layer 2 as $\delta^2 = (a^2 - y) \sigma'(z^2)$.
 Then:
-$$ \frac{\partial C}{\partial w_2} = \delta_2 a_1 $$
-$$ \frac{\partial C}{\partial b_2} = \delta_2 \cdot 1 = \delta_2 $$
+$$ \frac{\partial C}{\partial w^2} = \delta^2 a^1 $$
+$$ \frac{\partial C}{\partial b^2} = \delta^2 \cdot 1 = \delta^2 $$
 
 **Layer 1 (Hidden Layer):**
-We want how $C$ changes with $w_1$. The path is longer: $w_1 \to z_1 \to a_1 \to z_2 \to a_2 \to C$.
-$$ \frac{\partial C}{\partial w_1} = \underbrace{\frac{\partial C}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2}}_{\delta_2} \cdot \frac{\partial z_2}{\partial a_1} \cdot \frac{\partial a_1}{\partial z_1} \cdot \frac{\partial z_1}{\partial w_1} $$
+We want how $C$ changes with $w^1$. The path is longer: $w^1 \to z^1 \to a^1 \to z^2 \to a^2 \to C$.
+$$ \frac{\partial C}{\partial w^1} = \underbrace{\frac{\partial C}{\partial a^2} \cdot \frac{\partial a^2}{\partial z^2}}_{\delta^2} \cdot \frac{\partial z^2}{\partial a^1} \cdot \frac{\partial a^1}{\partial z^1} \cdot \frac{\partial z^1}{\partial w^1} $$
 
-*   We know the first part is $\delta_2$.
-*   $\frac{\partial z_2}{\partial a_1} = w_2$
-*   $\frac{\partial a_1}{\partial z_1} = \sigma'(z_1)$
-*   $\frac{\partial z_1}{\partial w_1} = x$
+*   We know the first part is $\delta^2$.
+*   $\frac{\partial z^2}{\partial a^1} = w^2$
+*   $\frac{\partial a^1}{\partial z^1} = \sigma'(z^1)$
+*   $\frac{\partial z^1}{\partial w^1} = x$
 
 So,
-$$ \frac{\partial C}{\partial w_1} = \delta_2 \cdot w_2 \cdot \sigma'(z_1) \cdot x $$
+$$ \frac{\partial C}{\partial w^1} = \delta^2 \cdot w^2 \cdot \sigma'(z^1) \cdot x $$
 
-Let's define the error term for layer 1 as $\delta_1 = \delta_2 w_2 \sigma'(z_1)$.
+Let's define the error term for layer 1 as $\delta^1 = \delta^2 w^2 \sigma'(z^1)$.
 Then:
-$$ \frac{\partial C}{\partial w_1} = \delta_1 x $$
-$$ \frac{\partial C}{\partial b_1} = \delta_1 $$
+$$ \frac{\partial C}{\partial w^1} = \delta^1 x $$
+$$ \frac{\partial C}{\partial b^1} = \delta^1 $$
 
 **The Update:**
-$$ w_1 \leftarrow w_1 - \eta \delta_1 x $$
-$$ w_2 \leftarrow w_2 - \eta \delta_2 a_1 $$
+$$ w^1 \leftarrow w^1 - \eta \delta^1 x $$
+$$ w^2 \leftarrow w^2 - \eta \delta^2 a^1 $$
 
 This pattern—calculating an error term $\delta$ at the output and propagating it back using the weights—is why it's called **Backpropagation**.
 

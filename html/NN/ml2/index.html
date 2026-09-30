@@ -191,7 +191,11 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -199,13 +203,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#from-the-dot-product-to-multivariate-calculus-and-the-jacobian-with-python" id="toc-from-the-dot-product-to-multivariate-calculus-and-the-jacobian-with-python" class="nav-link" data-scroll-target="#from-the-dot-product-to-multivariate-calculus-and-the-jacobian-with-python">From the Dot Product to Multivariate Calculus and the Jacobian, with Python</a></li>
   <li><a href="#contents" id="toc-contents" class="nav-link" data-scroll-target="#contents">Contents</a></li>
+  <li><a href="#notation" id="toc-notation" class="nav-link" data-scroll-target="#notation">Notation</a></li>
   </ul></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -232,7 +233,17 @@ window.Quarto = {
 <li>Chapter 6: <a href="./6_backpropogation_softmax.html">Backpropagation with Softmax and Cross Entropy</a></li>
 <li>Chapter 7: <a href="./7_neuralnetworkimpementation.html">Neural Network Implementation</a></li>
 </ul>
-
+<hr>
+</section>
+<section id="notation" class="level2">
+<h2 class="anchored" data-anchor-id="notation">Notation</h2>
+<p>Symbols are defined in each chapter as they are introduced; a few conventions hold throughout:</p>
+<ul>
+<li><strong>Superscript = layer, subscript = component.</strong> <span class="math inline">\(a^2\)</span> is the activation of layer 2; <span class="math inline">\(p_i\)</span> is the <span class="math inline">\(i\)</span>-th element of vector <span class="math inline">\(p\)</span>.</li>
+<li><strong>Column vectors.</strong> A layer computes <span class="math inline">\(z^l = W^l a^{l-1} + b^l\)</span>, and gradients are column vectors, so an error is pushed back through a layer as <span class="math inline">\((W^l)^T \delta^l\)</span>.</li>
+<li><strong><span class="math inline">\(C\)</span></strong> is the cost (loss) and <strong><span class="math inline">\(\eta\)</span></strong> is the learning rate.</li>
+<li>Chapter 7’s NumPy code uses the row-vector / batch convention (<code>X @ W</code>); the note at the start of that chapter explains the transposition.</li>
+</ul>
 
 
 </section>

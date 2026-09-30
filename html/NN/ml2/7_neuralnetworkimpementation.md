@@ -1,7 +1,7 @@
 # Neural Network Implementation
 
 
-With the derivative of the Cost function derived from the last chapter, we can code the network
+With the derivatives of the Cost function derived in Chapter 5 (MSE loss with Sigmoid activation), we can code the network. At the end of the chapter we switch the output layer to the Softmax and Cross Entropy Loss from Chapter 6.
 
 We will use matrices to represent input and weight matrices.
  
@@ -34,13 +34,13 @@ y = np.array(
   [
       [0],
       [1],
-      [0],
-      [1]
+      [1],
+      [0]
   ])
 ```
 Note you can change the output and try to train the Neural network
 
-This is a 4*1 matrix that represent the expected output. That is for input [0,0,1] the output is [0] and for [0,1,1] the output is [1] etc.
+This is a 4*1 matrix that represents the expected output. That is for input [0,0,1] the output is [0], for [0,1,1] it is [1], for [1,0,1] it is [1] and for [1,1,1] it is [0].
 
 **A neural network is implemented as a set of matrices representing the weights of the network.**
 
@@ -50,30 +50,29 @@ So basically the output at layer l is the dot product of the weight matrix of la
 
 Now let's see how the matrix dot product works based on the shape of matrices.
 
-```python
-[m*n].[n*x] = [m*x]
-[m*x].[x*y] = [m*y]
+```text
+[m*n].[n*h] = [m*h]
+[m*h].[h*k] = [m*k]
 ```
 
 We take the $[m*n]$ as the input matrix this is a $[4*3]$ matrix.
 
-Similarly the output $y$ is a $[4*1]$ matrix; so we have $[m*y] =[4*1]$
+Similarly the output is a $[4*1]$ matrix; so we have $[m*k] = [4*1]$
 
 So we have
 
 ```python
-m=4
-n=3
-x=?
-y=1
+m=4   # rows: the 4 training examples
+n=3   # input features
+h=4   # hidden units (a free choice, we pick 4)
+k=1   # output features
 ```
 
 Lets then create our two weight matrices of the above shapes, that represent the two layers of the neural network.
 
 ```python
-w0 = x
-w1 = np.random.random((3,4))
-w2 = np.random.random((4,1))
+weight1 = np.random.random((n,h))   # (3,4): input -> hidden
+weight2 = np.random.random((h,k))   # (4,1): hidden -> output
 ```
 
 We can have an array of the weights to loop through, but for the time being let's hard-code these. Note that 'np' stands for the popular numpy array library in Python.
@@ -93,9 +92,9 @@ With this we can have the output of first, second and third layer, using our equ
 
 ```python
 a0 = x
-a1 = sigmoid(np.dot(a0,w1))
+a1 = sigmoid(np.dot(a0,weight1))
 
-a2 = sigmoid(np.dot(a1,w2))
+a2 = sigmoid(np.dot(a1,weight2))
 ```
 
 a2 is the calculated output from randomly initialized weights. So lets calculate the error by subtracting this from the expected value and taking the MSE.
@@ -121,23 +120,18 @@ w^1 = w^1 - (\frac {\partial C}{\partial w^1} )*learningRate
 \end{aligned}
 $$
 
-Let's update the weights as per the formula derived in the previous chapter:
-
+Let's update the weights as per the formulas derived in Chapter 5 (Backpropagation with Matrix Calculus):
 
 $$
-\mathbf{
-\frac {\partial C}{\partial w^1} = \sigma'(z^1) * (a^{0})^T*\delta^{2}*w^2.\sigma'(z^2) \quad \rightarrow \mathbb Eq \; (5)
-}
+\delta^2 = (a^2 - y) \odot \sigma'(z^2)
 $$
 
 $$
-\delta^2 = (a^2-y)
+\frac {\partial C}{\partial w^2} = \delta^2 \, (a^1)^T \quad \rightarrow \text{Eq (3)}
 $$
 
 $$
-\mathbf{
-\frac {\partial C}{\partial w^2}= \delta^{2}*\sigma^{'}(z^2) * (a^{1})^T \quad \rightarrow \mathbb Eq \; (3)
-}
+\frac {\partial C}{\partial w^1} = \left( \left((w^2)^T \delta^2\right) \odot \sigma'(z^1) \right) (a^0)^T \quad \rightarrow \text{Eq (5)}
 $$
 
 ## A Two layered Neural Network in Python
@@ -202,22 +196,21 @@ for iter in range(0,iterations):
     print("Initial Output \n",a2)
 
   # Backward Pass - Backpropagation 
-  delta2  = (a2-y)
+  dC_da2  = (a2-y)
   #---------------------------------------------------------------
-  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
-  # Eq (A) ---> dC_dw2 = delta2*derv_sigmoid(z2)*a1.T
+  # Error term of the last layer: delta^2 = (a^2 - y) * sigmoid'(z^2)
+  # Eq (3), row/batch form ---> dC_dw2 = a1.T . delta2
   #---------------------------------------------------------------
 
-  dC_dw2_1  = delta2*derv_sigmoid(z2) 
-  dC_dw2  = a1.T.dot(dC_dw2_1)
+  delta2  = dC_da2*derv_sigmoid(z2)
+  dC_dw2  = a1.T.dot(delta2)
   
   #---------------------------------------------------------------
-  # Calculating change of Cost/Loss wrto weight of 2nd/last layer
-  # Eq (B)---> dC_dw1 = derv_sigmoid(z1)*delta2*derv_sigmoid(z2)*weight2*a0.T
-  # dC_dw1 = derv_sigmoid(z1)*dC_dw2*weight2_1*a0.T
+  # Error term of the hidden layer: (delta2 . w2.T) * sigmoid'(z^1)
+  # Eq (5), row/batch form ---> dC_dw1 = a0.T . ((delta2 . w2.T) * sigmoid'(z1))
   #---------------------------------------------------------------
 
-  dC_dw1 =  np.dot(dC_dw2_1, weight2.T) * derv_sigmoid(z1)
+  dC_dw1 =  np.dot(delta2, weight2.T) * derv_sigmoid(z1)
   dC_dw1 = a0.T.dot(dC_dw1)
 
   #---------------------------------------------------------------
@@ -259,7 +252,106 @@ Output after Training is
  [[ 0.925]]
  ```
 
-We have trained the NW for getting the output similar to $y$; that is  [0,1,0,1]
+We have trained the NW for getting the output similar to $y$; that is [0,1,1,0]
+
+## The Same Network with Softmax and Cross Entropy
+
+The network above uses the MSE loss with a Sigmoid output from Chapter 5. Let's now switch the output layer to the Softmax and Cross Entropy Loss we derived in Chapter 6. Three things change:
+
+1. The target is **one-hot encoded**. With two classes, output 0 becomes $[1,0]$ and output 1 becomes $[0,1]$, so $y$ is now a $[4*2]$ matrix and the last weight matrix is $[4*2]$.
+2. The output activation is **Softmax**, so each row of $a^2$ is a probability distribution over the two classes.
+3. The error term at the output is simply (EqA1.1)
+
+$$
+\delta^2 = \frac{\partial C}{\partial z^2} = p - y
+$$
+
+There is no separate $\sigma'(z^2)$ factor; the derivative of Softmax cancels against the derivative of Cross Entropy. The hidden layer is unchanged and uses EqA2.1:
+
+$$
+\delta^1 = \left( (W^2)^T \delta^2 \right) \odot \sigma'(z^1)
+$$
+
+```python
+import numpy as np
+np.random.seed(1)
+np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+def derv_sigmoid(x):
+    return sigmoid(x)*(1-sigmoid(x))
+
+# softmax over each row (each row is one example)
+def softmax(z):
+    e = np.exp(z - np.max(z, axis=1, keepdims=True))  # subtract max for numerical stability
+    return e / np.sum(e, axis=1, keepdims=True)
+
+def cross_entropy(p, y):
+    return -np.sum(y * np.log(p))
+
+learningRate = 1
+
+x = np.array([ [0,0,1],[0,1,1],[1,0,1],[1,1,1] ])
+
+# the same labels as before, now one-hot encoded over two classes
+# class 0 -> [1,0], class 1 -> [0,1]
+y = np.array([ [1,0],[0,1],[0,1],[1,0] ])
+
+weight1 = np.random.random((3,4))   # input -> hidden
+weight2 = np.random.random((4,2))   # hidden -> 2 output classes
+
+a0 = x
+
+iterations = 1000
+for iter in range(0,iterations):
+
+  # Forward pass
+  z1 = np.dot(a0,weight1)
+  a1 = sigmoid(z1)
+  z2 = np.dot(a1,weight2)
+  a2 = softmax(z2)            # a2 is P, the Softmax output
+  if iter == 0:
+    print("Initial Loss", round(cross_entropy(a2,y),3))
+
+  # Backward pass
+  #---------------------------------------------------------------
+  # EqA1.1 ---> delta2 = dC_dz2 = p - y
+  # No separate sigmoid'(z2) term: Softmax + Cross Entropy cancel it out
+  #---------------------------------------------------------------
+  delta2 = a2 - y
+  dC_dw2 = a1.T.dot(delta2)                      # EqA1, row/batch form
+
+  #---------------------------------------------------------------
+  # EqA2.1 ---> delta1 = (delta2 . w2.T) * sigmoid'(z1)
+  #---------------------------------------------------------------
+  delta1 = np.dot(delta2, weight2.T) * derv_sigmoid(z1)
+  dC_dw1 = a0.T.dot(delta1)                      # EqA2, row/batch form
+
+  # Gradient descent
+  weight2 = weight2 - learningRate*dC_dw2
+  weight1 = weight1 - learningRate*dC_dw1
+
+print("Final Loss", round(cross_entropy(a2,y),3))
+print("Class probabilities after training \n", a2)
+print("Predicted class", np.argmax(a2, axis=1))
+```
+
+Output
+
+```console
+Initial Loss 3.286
+Final Loss 0.009
+Class probabilities after training 
+ [[ 0.999  0.001]
+ [ 0.003  0.997]
+ [ 0.001  0.999]
+ [ 0.995  0.005]]
+Predicted class [0 1 1 0]
+```
+
+The predicted classes are again [0,1,1,0]. Compare the two backward passes: only the line computing `delta2` is different. This is why Softmax with Cross Entropy is the standard output layer for classification; the gradient at the output is just the difference between the predicted probabilities and the truth.
 
 ## References
 
